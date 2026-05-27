@@ -4,6 +4,9 @@ import 'package:move_your_body/routing/app_router.dart';
 import 'utils/theme/app_themes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/theme/app_themes.dart';
+import './features/onboarding/presentation/welcome_screen.dart';
+
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
