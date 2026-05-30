@@ -5,7 +5,7 @@ import 'utils/theme/app_themes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/theme/app_themes.dart';
-import './features/onboarding/presentation/welcome_screen.dart';
+import 'features/onboarding/view/welcome_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
