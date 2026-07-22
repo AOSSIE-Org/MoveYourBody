@@ -97,8 +97,8 @@ jobs:
           # exempt-all-pr-assignees: true
 
           # @maintainer: Or exempt specific maintainer/bot accounts (comma-separated):
-          # exempt-issue-assignees: 'maintainer1,maintainer2'
-          # exempt-pr-assignees: 'maintainer1,maintainer2'
+          exempt-issue-assignees: 'DecodeX15'
+          exempt-pr-assignees: 'DecodeX15'
 
           # ── PR filtering ─────────────────────────────────────────────────────
           # @maintainer: Uncomment to process ONLY PRs that carry a specific label
