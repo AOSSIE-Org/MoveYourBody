@@ -22,6 +22,8 @@ import '../../features/home/screens/search_screen.dart';
 import 'package:move_your_body/features/stats/screens/stats_screen.dart';
 import 'package:move_your_body/features/stats/screens/past_session_details_screen.dart';
 import 'package:move_your_body/features/stats/screens/all_sessions_screen.dart';
+import 'package:move_your_body/features/home/screens/add_workout_screen.dart';
+import 'package:move_your_body/features/home/screens/create_custom_plan_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
@@ -97,22 +99,19 @@ final GoRouter appRouter = GoRouter(
           ],
         ),
 
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: AppRoutes.explore,
-              builder: (context, state) =>
-                  const Scaffold(body: Center(child: Text('Explore'))),
-            ),
-          ],
-        ),
+
 
         StatefulShellBranch(
           routes: [
             GoRoute(
               path: AppRoutes.add,
-              builder: (context, state) =>
-                  const Scaffold(body: Center(child: Text('Add Workout'))),
+              builder: (context, state) => const AddWorkoutScreen(),
+              routes: [
+                GoRoute(
+                  path: 'create-custom-plan',
+                  builder: (context, state) => const CreateCustomPlanScreen(),
+                ),
+              ],
             ),
           ],
         ),

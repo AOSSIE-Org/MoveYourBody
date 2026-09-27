@@ -8,7 +8,8 @@ class QuickPlanDatabaseService {
         ${QuickPlanTable.id} INTEGER PRIMARY KEY AUTOINCREMENT,
         ${QuickPlanTable.name} TEXT NOT NULL,
         ${QuickPlanTable.description} TEXT,
-        ${QuickPlanTable.imagePath} TEXT
+        ${QuickPlanTable.imagePath} TEXT,
+        ${QuickPlanTable.isCustom} INTEGER NOT NULL DEFAULT 0
       )
     ''');
 

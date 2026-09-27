@@ -39,7 +39,7 @@ class DatabaseService {
     debugPrint('DB PATH: $path');
     return openDatabase(
       path,
-      version: 7,
+      version: 8,
       onCreate: (db, version) async {
         await UserDatabaseService.createTable(db);
         await ExerciseDatabaseService.createTable(db);
@@ -73,6 +73,11 @@ class DatabaseService {
         if (oldVersion < 7) {
           await db.execute(
             'ALTER TABLE quick_plans ADD COLUMN image_path TEXT',
+          );
+        }
+        if (oldVersion < 8) {
+          await db.execute(
+            'ALTER TABLE quick_plans ADD COLUMN is_custom INTEGER NOT NULL DEFAULT 0',
           );
         }
       },
