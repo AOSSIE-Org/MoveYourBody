@@ -68,19 +68,25 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
     _startPhase(ExecutionPhase.preparation);
   }
 
-  void _handleVoiceCommand(VoiceCommand command) {
+  bool _handleVoiceCommand(VoiceCommand command) {
     debugPrint('Executing voice command: ${command.name}');
 
     switch (command) {
       case VoiceCommand.resume:
+        if (!state.isPaused) {
+          return false; 
+        }
         resumeTimer();
-        break;
+        return true;
       case VoiceCommand.pause:
+        if (state.isPaused) {
+          return false;
+        }
         pauseTimer();
-        break;
+        return true;
       case VoiceCommand.skip:
         skipToNext();
-        break;
+        return true;
     }
   }
 
@@ -207,9 +213,6 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
     if (!state.isPaused) return;
 
     state = state.copyWith(isPaused: false);
-    if (state.currentPhase == ExecutionPhase.workout) {
-      _speakCurrentExerciseInstructions();
-    }
   }
 
   void skipToNext() {

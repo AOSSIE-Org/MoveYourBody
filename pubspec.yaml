@@ -58,6 +58,8 @@ dependencies:
   flutter_local_notifications: ^22.3.1
   timezone: ^0.11.1
   flutter_timezone: ^5.1.0
+  record: ^7.1.1
+  fftea: ^1.5.0+1
   
 dev_dependencies:
   flutter_test:
@@ -99,6 +101,7 @@ flutter:
     - assets/models/model_quantized.onnx
     - assets/exercises.db
     - assets/animations/
+    - assets/voices/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
