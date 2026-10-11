@@ -10,21 +10,13 @@ class CustomBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bottomInset = MediaQuery.of(context).padding.bottom;
-
-    return BottomAppBar(
-      color: Colors.transparent,
-      elevation: 0,
-      padding: EdgeInsets.zero,
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 8),
       child: Padding(
-        padding: EdgeInsets.only(
-          left: 12,
-          right: 12,
-          top: 10,
-          bottom: bottomInset + 8,
-        ),
+        padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
         child: Container(
-          constraints: const BoxConstraints(minHeight: 64, maxHeight: 72),
+          height: 64,
           decoration: BoxDecoration(
             color: AppColors.background,
             borderRadius: BorderRadius.circular(15),
@@ -83,16 +75,14 @@ class CustomBottomNavBar extends StatelessWidget {
                   ),
                   if (isSelected) ...[
                     const SizedBox(width: 6),
-                    Flexible(
-                      child: Text(
-                        label,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                        ),
+                    Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ],

@@ -9,16 +9,32 @@ import 'package:move_your_body/features/home/widgets/home/search_bar.dart';
 import 'package:move_your_body/features/home/widgets/home/today_session_card.dart';
 import 'package:move_your_body/features/home/widgets/home/week_selector.dart';
 // import 'package:move_your_body/features/home/widgets/home/weekly_stats_card.dart';
+import 'package:move_your_body/features/home/widgets/disclaimer_dialog.dart';
+import 'package:move_your_body/features/onboarding/view_model/onboarding_view_model.dart';
 import '../../../core/widgets/app_scaffold.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final bottomInset = MediaQuery.of(context).padding.bottom;
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      DisclaimerDialog.showIfNeeded(context);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final quickPlanState = ref.watch(quickPlanViewModelProvider);
     final quickPlanViewModel = ref.read(quickPlanViewModelProvider.notifier);
+    final onboardingState = ref.watch(onboardingViewModelProvider);
+    final username = onboardingState.username ?? "User";
 
     ref.listen(quickPlanViewModelProvider, (previous, next) {
       if (next.tapStatus == QuickPlanStatus.error &&
@@ -35,16 +51,11 @@ class HomeScreen extends ConsumerWidget {
 
     return AppScaffold(
       child: SingleChildScrollView(
-        padding: EdgeInsets.only(
-          left: 20,
-          right: 20,
-          top: 16,
-          bottom: 70 + bottomInset,
-        ),
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const HomeAppBar(username: "Vaibhav"),
+            HomeAppBar(username: username),
             const SizedBox(height: 24),
             const HomeSearchBar(),
             const SizedBox(height: 22),

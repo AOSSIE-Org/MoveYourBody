@@ -42,19 +42,7 @@ class HomeAppBar extends StatelessWidget {
               onPressed: () {
                 NotificationSettingsDialog.show(context);
               },
-            ),
-            const SizedBox(width: 8),
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryLight],
-                ),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Icon(Icons.person, color: Colors.black),
-            ),
+            )
           ],
         ),
       ],
