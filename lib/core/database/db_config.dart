@@ -114,6 +114,8 @@ class DatabaseService {
 
     debugPrint('Copying exercises.db...');
 
+    await dbFile.parent.create(recursive: true);
+
     if (await dbFile.exists()) {
       await dbFile.delete();
     }

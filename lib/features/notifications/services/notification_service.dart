@@ -11,10 +11,14 @@ final notificationServiceProvider = Provider<NotificationService>((ref) {
 });
 
 class NotificationService {
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
   
+  NotificationService({FlutterLocalNotificationsPlugin? plugin})
+      : _flutterLocalNotificationsPlugin =
+            plugin ?? FlutterLocalNotificationsPlugin();
+
   bool _isInitialized = false;
+  bool get isInitialized => _isInitialized;
 
   Future<void> init() async {
     if (_isInitialized) return;

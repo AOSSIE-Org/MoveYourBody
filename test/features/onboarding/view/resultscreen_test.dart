@@ -14,17 +14,17 @@ void main() {
     ) async {
       await tester.pumpWidget(createWidgetUnderTest());
 
-      // 1. Title
-      expect(find.text('Collected Onboarding Data'), findsOneWidget);
+      expect(find.text('Profile'), findsOneWidget);
 
-      // 2. Default state should have "Not Provided" or empty values for fields since it's initial state
-      // At least 12 fields are rendered
-      expect(find.byType(Card), findsNWidgets(12));
-
-      // Check for specific labels
-      expect(find.text('Username'), findsOneWidget);
       expect(find.text('Age'), findsOneWidget);
-      expect(find.text('Target Body Region'), findsOneWidget);
+      expect(find.text('Weight'), findsOneWidget);
+      expect(find.text('Height'), findsOneWidget);
+
+      expect(find.text('Fitness Goals'), findsOneWidget);
+      expect(find.text('Health Profile'), findsOneWidget);
+      expect(find.text('Workout Preferences'), findsOneWidget);
+      expect(find.text('Target Body Regions'), findsOneWidget);
+      expect(find.text('Available Equipment'), findsOneWidget);
     });
   });
 }
