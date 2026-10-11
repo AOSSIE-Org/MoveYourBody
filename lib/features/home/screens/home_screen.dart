@@ -9,7 +9,7 @@ import 'package:move_your_body/features/home/widgets/home/search_bar.dart';
 import 'package:move_your_body/features/home/widgets/home/today_session_card.dart';
 import 'package:move_your_body/features/home/widgets/home/week_selector.dart';
 // import 'package:move_your_body/features/home/widgets/home/weekly_stats_card.dart';
-import 'package:move_your_body/features/home/widgets/disclaimer_dialog.dart';
+import 'package:move_your_body/features/home/widgets/home/disclaimer_dialog.dart';
 import 'package:move_your_body/features/onboarding/view_model/onboarding_view_model.dart';
 import '../../../core/widgets/app_scaffold.dart';
 
