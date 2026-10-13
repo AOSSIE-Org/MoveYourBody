@@ -6,7 +6,8 @@ import 'package:move_your_body/features/notifications/repositories/notification_
 import 'package:move_your_body/features/notifications/services/notification_service.dart';
 import 'package:move_your_body/features/notifications/widgets/notification_settings_dialog.dart';
 
-class MockNotificationRepository extends Mock implements NotificationRepository {}
+class MockNotificationRepository extends Mock
+    implements NotificationRepository {}
 
 class MockNotificationService extends Mock implements NotificationService {}
 
@@ -22,7 +23,9 @@ void main() {
     when(() => mockService.requestPermissions()).thenAnswer((_) async {});
     when(() => mockRepo.getNotificationTimes()).thenAnswer((_) async => []);
     when(() => mockRepo.saveNotificationTimes(any())).thenAnswer((_) async {});
-    when(() => mockService.scheduleDailyNotifications(any())).thenAnswer((_) async {});
+    when(
+      () => mockService.scheduleDailyNotifications(any()),
+    ).thenAnswer((_) async {});
   });
 
   Widget createWidgetUnderTest() {
@@ -32,33 +35,37 @@ void main() {
         notificationServiceProvider.overrideWithValue(mockService),
       ],
       child: const MaterialApp(
-        home: Scaffold(
-          body: NotificationSettingsDialog(),
-        ),
+        home: Scaffold(body: NotificationSettingsDialog()),
       ),
     );
   }
 
   group('NotificationSettingsDialog Tests', () {
-    testWidgets('renders dialog header and empty state when no reminders exist', (
+    testWidgets(
+      'renders dialog header and empty state when no reminders exist',
+      (WidgetTester tester) async {
+        when(() => mockRepo.getNotificationTimes()).thenAnswer((_) async => []);
+
+        await tester.pumpWidget(createWidgetUnderTest());
+        await tester.pumpAndSettle();
+
+        expect(find.text('Daily Reminders'), findsOneWidget);
+        expect(
+          find.text('Set times for your daily workout notifications.'),
+          findsOneWidget,
+        );
+        expect(find.text('No reminders set.'), findsOneWidget);
+        expect(find.text('Add Reminder'), findsOneWidget);
+        expect(find.byIcon(Icons.close), findsOneWidget);
+      },
+    );
+
+    testWidgets('renders reminder items when times exist', (
       WidgetTester tester,
     ) async {
-      when(() => mockRepo.getNotificationTimes()).thenAnswer((_) async => []);
-
-      await tester.pumpWidget(createWidgetUnderTest());
-      await tester.pumpAndSettle();
-
-      expect(find.text('Daily Reminders'), findsOneWidget);
-      expect(find.text('Set times for your daily workout notifications.'), findsOneWidget);
-      expect(find.text('No reminders set.'), findsOneWidget);
-      expect(find.text('Add Reminder'), findsOneWidget);
-      expect(find.byIcon(Icons.close), findsOneWidget);
-    });
-
-    testWidgets('renders reminder items when times exist', (WidgetTester tester) async {
-      when(() => mockRepo.getNotificationTimes()).thenAnswer(
-        (_) async => [const TimeOfDay(hour: 8, minute: 30)],
-      );
+      when(
+        () => mockRepo.getNotificationTimes(),
+      ).thenAnswer((_) async => [const TimeOfDay(hour: 8, minute: 30)]);
 
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.pumpAndSettle();
@@ -68,10 +75,12 @@ void main() {
       expect(find.byIcon(Icons.delete_outline), findsOneWidget);
     });
 
-    testWidgets('tapping delete icon removes the reminder', (WidgetTester tester) async {
-      when(() => mockRepo.getNotificationTimes()).thenAnswer(
-        (_) async => [const TimeOfDay(hour: 8, minute: 30)],
-      );
+    testWidgets('tapping delete icon removes the reminder', (
+      WidgetTester tester,
+    ) async {
+      when(
+        () => mockRepo.getNotificationTimes(),
+      ).thenAnswer((_) async => [const TimeOfDay(hour: 8, minute: 30)]);
 
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.pumpAndSettle();

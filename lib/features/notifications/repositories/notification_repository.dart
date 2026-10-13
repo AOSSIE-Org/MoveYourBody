@@ -12,7 +12,7 @@ class NotificationRepository {
   Future<List<TimeOfDay>> getNotificationTimes() async {
     final prefs = await SharedPreferences.getInstance();
     final timesString = prefs.getStringList(_keyNotificationTimes) ?? [];
-    
+
     return timesString.map((timeStr) {
       final parts = timeStr.split(':');
       if (parts.length == 2) {
@@ -27,7 +27,12 @@ class NotificationRepository {
 
   Future<void> saveNotificationTimes(List<TimeOfDay> times) async {
     final prefs = await SharedPreferences.getInstance();
-    final timesString = times.map((t) => '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}').toList();
+    final timesString = times
+        .map(
+          (t) =>
+              '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}',
+        )
+        .toList();
     await prefs.setStringList(_keyNotificationTimes, timesString);
   }
 }

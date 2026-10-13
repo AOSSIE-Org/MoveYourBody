@@ -84,9 +84,6 @@ class QuickPlanViewModel extends _$QuickPlanViewModel {
   }
 
   void resetTapStatus() {
-    state = state.copyWith(
-      tapStatus: QuickPlanStatus.idle,
-      errorMessage: null,
-    );
+    state = state.copyWith(tapStatus: QuickPlanStatus.idle, errorMessage: null);
   }
 }

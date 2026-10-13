@@ -31,13 +31,13 @@ class HomeViewModel extends _$HomeViewModel {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
       final sessionRepo = ref.read(sessionRepositoryProvider);
-      final incompleteSession =
-          await sessionRepo.getLatestIncompleteSession();
+      final incompleteSession = await sessionRepo.getLatestIncompleteSession();
 
       if (incompleteSession != null) {
         final exerciseRepo = ref.read(exerciseRepositoryProvider);
-        final exerciseIds =
-            incompleteSession.exercises.map((e) => e.exerciseId).toList();
+        final exerciseIds = incompleteSession.exercises
+            .map((e) => e.exerciseId)
+            .toList();
         final exercises = await exerciseRepo.getExercisesByIds(exerciseIds);
 
         state = state.copyWith(
@@ -62,9 +62,14 @@ class HomeViewModel extends _$HomeViewModel {
 
       final service = ref.read(recommendationServiceProvider);
       final localSessionRepo = ref.read(sessionRepositoryProvider);
-    
-      final recentExerciseIds = await localSessionRepo.getRecentExerciseIds(SafetyFilterService.sessionsToSkip);
-      final exercises = await service.recommendExercises(userData, recentExerciseIds);
+
+      final recentExerciseIds = await localSessionRepo.getRecentExerciseIds(
+        SafetyFilterService.sessionsToSkip,
+      );
+      final exercises = await service.recommendExercises(
+        userData,
+        recentExerciseIds,
+      );
 
       state = state.copyWith(
         recommendedExercises: exercises,

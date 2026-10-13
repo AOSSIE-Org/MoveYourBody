@@ -5,6 +5,7 @@ import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/core/model/user_data.dart';
 
 class MockExercise extends Mock implements Exercise {}
+
 class MockUserData extends Mock implements UserData {}
 
 void main() {
@@ -24,10 +25,7 @@ void main() {
       final ex2 = MockExercise();
       when(() => ex2.equipments).thenReturn([]);
 
-      final result = service.filterExercises(
-        exercises: [ex1, ex2],
-        user: user,
-      );
+      final result = service.filterExercises(exercises: [ex1, ex2], user: user);
 
       expect(result.length, 2);
     });

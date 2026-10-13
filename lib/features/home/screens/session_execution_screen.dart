@@ -79,7 +79,9 @@ class SessionExecutionScreen extends ConsumerWidget {
                 flex: 4,
                 child: ExecutionAnimationBox(
                   exercise: currentExercise,
-                  isResting: isResting || state.currentPhase == ExecutionPhase.preparation,
+                  isResting:
+                      isResting ||
+                      state.currentPhase == ExecutionPhase.preparation,
                   nextExercise: nextAnimExercise,
                 ),
               ),

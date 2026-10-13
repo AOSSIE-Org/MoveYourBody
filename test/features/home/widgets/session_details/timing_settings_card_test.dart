@@ -4,7 +4,9 @@ import 'package:move_your_body/features/home/widgets/session_details/timing_sett
 
 void main() {
   group('TimingSettingsCard', () {
-    testWidgets('renders labels and initial values correctly', (WidgetTester tester) async {
+    testWidgets('renders labels and initial values correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -22,12 +24,14 @@ void main() {
       expect(find.text('Preparation Time'), findsOneWidget);
       expect(find.text('Rest Time'), findsOneWidget);
 
-      expect(find.text('10'), findsOneWidget); 
+      expect(find.text('10'), findsOneWidget);
       expect(find.text('20'), findsOneWidget);
-      expect(find.text('sec'), findsNWidgets(2)); 
+      expect(find.text('sec'), findsNWidgets(2));
     });
 
-    testWidgets('calls onPreparationTimeChanged when buttons are tapped', (WidgetTester tester) async {
+    testWidgets('calls onPreparationTimeChanged when buttons are tapped', (
+      WidgetTester tester,
+    ) async {
       int? updatedPrepTime;
 
       await tester.pumpWidget(
@@ -51,7 +55,9 @@ void main() {
       expect(updatedPrepTime, 5);
     });
 
-    testWidgets('calls onRestTimeChanged when buttons are tapped', (WidgetTester tester) async {
+    testWidgets('calls onRestTimeChanged when buttons are tapped', (
+      WidgetTester tester,
+    ) async {
       int? updatedRestTime;
 
       await tester.pumpWidget(
@@ -75,7 +81,9 @@ void main() {
       expect(updatedRestTime, 15);
     });
 
-    testWidgets('updates values when typed manually in TextField', (WidgetTester tester) async {
+    testWidgets('updates values when typed manually in TextField', (
+      WidgetTester tester,
+    ) async {
       int? updatedPrepTime;
 
       await tester.pumpWidget(
@@ -95,7 +103,7 @@ void main() {
       expect(textFields, findsNWidgets(2));
       await tester.enterText(textFields.first, '45');
       await tester.testTextInput.receiveAction(TextInputAction.done);
-      
+
       expect(updatedPrepTime, 45);
     });
 

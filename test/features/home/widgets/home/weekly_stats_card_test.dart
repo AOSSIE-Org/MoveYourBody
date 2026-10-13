@@ -3,13 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:move_your_body/features/home/widgets/home/weekly_stats_card.dart';
 
 void main() {
-  testWidgets('WeeklyStatsCard renders all stats correctly', (WidgetTester tester) async {
+  testWidgets('WeeklyStatsCard renders all stats correctly', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: WeeklyStatsCard(),
-        ),
-      ),
+      const MaterialApp(home: Scaffold(body: WeeklyStatsCard())),
     );
 
     expect(find.text('3 / 5'), findsOneWidget);

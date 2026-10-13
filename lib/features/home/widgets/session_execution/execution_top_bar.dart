@@ -40,14 +40,19 @@ class ExecutionTopBar extends ConsumerWidget {
   }
 
   void _showExitConfirmation(BuildContext context, WidgetRef ref) {
-    final viewModel = ref.read(sessionExecutionViewModelProvider(sessionId).notifier);
+    final viewModel = ref.read(
+      sessionExecutionViewModelProvider(sessionId).notifier,
+    );
     viewModel.pauseTimer();
 
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surface,
-        title: const Text('End Workout?', style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'End Workout?',
+          style: TextStyle(color: Colors.white),
+        ),
         content: Text(
           'Are you sure you want to end this session early? Your progress so far is saved.',
           style: TextStyle(color: AppColors.textSecondary),
@@ -65,7 +70,10 @@ class ExecutionTopBar extends ConsumerWidget {
               Navigator.pop(ctx);
               Navigator.pop(context);
             },
-            child: const Text('End Session', style: TextStyle(color: Colors.redAccent)),
+            child: const Text(
+              'End Session',
+              style: TextStyle(color: Colors.redAccent),
+            ),
           ),
         ],
       ),

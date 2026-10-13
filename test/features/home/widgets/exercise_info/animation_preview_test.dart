@@ -15,7 +15,9 @@ void main() {
     databaseFactory = databaseFactoryFfi;
   });
 
-  testWidgets('AnimationPreview renders lottie placeholder for missing file', (WidgetTester tester) async {
+  testWidgets('AnimationPreview renders lottie placeholder for missing file', (
+    WidgetTester tester,
+  ) async {
     final mockExercise = MockExercise();
     when(() => mockExercise.exerciseId).thenReturn('test_exercise');
     when(() => mockExercise.isLottie).thenReturn(true);
@@ -24,15 +26,13 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(
-          home: Scaffold(
-            body: AnimationPreview(exercise: mockExercise),
-          ),
+          home: Scaffold(body: AnimationPreview(exercise: mockExercise)),
         ),
       ),
     );
 
     await tester.pumpAndSettle();
-    
+
     expect(find.text('Animation not available'), findsOneWidget);
     expect(find.byIcon(Icons.fitness_center_rounded), findsOneWidget);
   });

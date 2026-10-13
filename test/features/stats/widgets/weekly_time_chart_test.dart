@@ -37,9 +37,7 @@ void main() {
         sessionDuration: 3600,
       ),
       Session(
-        createdAt: startOfWeek.add(
-          const Duration(days: 2),
-        ),
+        createdAt: startOfWeek.add(const Duration(days: 2)),
         sessionStatus: SessionStatus.inProgress,
         sessionDuration: 500,
       ),

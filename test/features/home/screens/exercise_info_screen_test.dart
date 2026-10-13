@@ -10,7 +10,9 @@ void main() {
     databaseFactory = databaseFactoryFfi;
   });
 
-  testWidgets('ExerciseInfoScreen builds successfully', (WidgetTester tester) async {
+  testWidgets('ExerciseInfoScreen builds successfully', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       const ProviderScope(
         child: MaterialApp(

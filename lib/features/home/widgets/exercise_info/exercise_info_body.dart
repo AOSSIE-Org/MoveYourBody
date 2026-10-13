@@ -281,10 +281,7 @@ class ExerciseInfoBody extends StatelessWidget {
                     children: [
                       const Text(
                         "• ",
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
-                        ),
+                        style: TextStyle(color: Colors.white70, fontSize: 14),
                       ),
                       Expanded(
                         child: Text(

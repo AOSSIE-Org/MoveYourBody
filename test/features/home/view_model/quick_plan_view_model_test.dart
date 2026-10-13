@@ -23,24 +23,18 @@ void main() {
     setUp(() {
       mockRepo = MockQuickPlanRepository();
       container = ProviderContainer(
-        overrides: [
-          quickPlanRepositoryProvider.overrideWithValue(mockRepo),
-        ],
+        overrides: [quickPlanRepositoryProvider.overrideWithValue(mockRepo)],
       );
     });
 
-
-
     test('initializes plans correctly', () async {
       final plans = [
-        const QuickPlan(
-          id: 1,
-          name: 'Plan 1',
-          description: 'Desc 1',
-        )
+        const QuickPlan(id: 1, name: 'Plan 1', description: 'Desc 1'),
       ];
 
-      when(() => mockRepo.seedPlansIfNeeded(force: true)).thenAnswer((_) async {});
+      when(
+        () => mockRepo.seedPlansIfNeeded(force: true),
+      ).thenAnswer((_) async {});
       when(() => mockRepo.fetchAllPlans()).thenAnswer((_) async => plans);
 
       final initialState = container.read(quickPlanViewModelProvider);
@@ -54,7 +48,9 @@ void main() {
     });
 
     test('onPlanTapped handles success', () async {
-      when(() => mockRepo.seedPlansIfNeeded(force: true)).thenAnswer((_) async {});
+      when(
+        () => mockRepo.seedPlansIfNeeded(force: true),
+      ).thenAnswer((_) async {});
       when(() => mockRepo.fetchAllPlans()).thenAnswer((_) async => []);
 
       final session = Session(
@@ -63,10 +59,12 @@ void main() {
         sessionStatus: SessionStatus.created,
       );
 
-      when(() => mockRepo.createSessionFromPlan(1)).thenAnswer((_) async => session);
+      when(
+        () => mockRepo.createSessionFromPlan(1),
+      ).thenAnswer((_) async => session);
 
       final viewModel = container.read(quickPlanViewModelProvider.notifier);
-      
+
       final result = await viewModel.onPlanTapped(1);
 
       expect(result, session);
@@ -75,13 +73,17 @@ void main() {
     });
 
     test('onPlanTapped handles failure', () async {
-      when(() => mockRepo.seedPlansIfNeeded(force: true)).thenAnswer((_) async {});
+      when(
+        () => mockRepo.seedPlansIfNeeded(force: true),
+      ).thenAnswer((_) async {});
       when(() => mockRepo.fetchAllPlans()).thenAnswer((_) async => []);
 
-      when(() => mockRepo.createSessionFromPlan(1)).thenAnswer((_) async => null);
+      when(
+        () => mockRepo.createSessionFromPlan(1),
+      ).thenAnswer((_) async => null);
 
       final viewModel = container.read(quickPlanViewModelProvider.notifier);
-      
+
       final result = await viewModel.onPlanTapped(1);
 
       expect(result, isNull);

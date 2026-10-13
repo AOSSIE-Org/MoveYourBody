@@ -11,7 +11,11 @@ class AnimationPreview extends ConsumerStatefulWidget {
   final Exercise exercise;
   final double? height;
 
-  const AnimationPreview({super.key, required this.exercise, this.height = 280});
+  const AnimationPreview({
+    super.key,
+    required this.exercise,
+    this.height = 280,
+  });
 
   @override
   ConsumerState<AnimationPreview> createState() => _AnimationPreviewState();
@@ -38,10 +42,11 @@ class _AnimationPreviewState extends ConsumerState<AnimationPreview> {
       _videoController = null;
       _animationFile = null;
       _hasError = false;
-      
+
       oldController?.dispose();
 
-      if (!widget.exercise.isLottie && widget.exercise.animationLink.isNotEmpty) {
+      if (!widget.exercise.isLottie &&
+          widget.exercise.animationLink.isNotEmpty) {
         _loadAnimation();
       }
     }
@@ -88,7 +93,7 @@ class _AnimationPreviewState extends ConsumerState<AnimationPreview> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: widget.height, 
+      height: widget.height,
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),

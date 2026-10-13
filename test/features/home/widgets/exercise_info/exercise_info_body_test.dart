@@ -8,7 +8,9 @@ import 'package:move_your_body/core/model/exercise_data.dart';
 class MockExercise extends Mock implements Exercise {}
 
 void main() {
-  testWidgets('ExerciseInfoBody renders correctly with exercise data', (WidgetTester tester) async {
+  testWidgets('ExerciseInfoBody renders correctly with exercise data', (
+    WidgetTester tester,
+  ) async {
     final mockExercise = MockExercise();
     when(() => mockExercise.name).thenReturn('Jumping Jacks');
     when(() => mockExercise.overview).thenReturn('A great full body warmup.');
@@ -31,14 +33,12 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        child: MaterialApp(
-          home: ExerciseInfoBody(exercise: mockExercise),
-        ),
+        child: MaterialApp(home: ExerciseInfoBody(exercise: mockExercise)),
       ),
     );
 
     expect(find.text('Jumping Jacks'), findsWidgets);
-    
+
     expect(find.text('A great full body warmup.'), findsOneWidget);
 
     expect(find.textContaining('Stand tall'), findsOneWidget);

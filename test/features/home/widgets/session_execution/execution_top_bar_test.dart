@@ -32,7 +32,9 @@ void main() {
     Widget createTestWidget() {
       return ProviderScope(
         overrides: [
-          sessionExecutionViewModelProvider(1).overrideWith(() => mockViewModel),
+          sessionExecutionViewModelProvider(
+            1,
+          ).overrideWith(() => mockViewModel),
         ],
         child: const MaterialApp(
           home: Scaffold(
@@ -52,7 +54,9 @@ void main() {
       expect(find.byIcon(Icons.close), findsOneWidget);
     });
 
-    testWidgets('shows exit confirmation dialog on close tap', (WidgetTester tester) async {
+    testWidgets('shows exit confirmation dialog on close tap', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget());
       await tester.tap(find.byIcon(Icons.close));
       await tester.pumpAndSettle();

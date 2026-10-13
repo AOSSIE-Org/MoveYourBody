@@ -4,7 +4,9 @@ import 'package:move_your_body/core/widgets/feature_chip.dart';
 
 void main() {
   group('FeatureChip Widget Tests', () {
-    testWidgets('renders text and responds to tap', (WidgetTester tester) async {
+    testWidgets('renders text and responds to tap', (
+      WidgetTester tester,
+    ) async {
       bool tapped = false;
 
       await tester.pumpWidget(
@@ -27,15 +29,12 @@ void main() {
       expect(tapped, isTrue);
     });
 
-    testWidgets('renders properly with selected true', (WidgetTester tester) async {
+    testWidgets('renders properly with selected true', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: FeatureChip(
-              text: 'Strength',
-              selected: true,
-            ),
-          ),
+          home: Scaffold(body: FeatureChip(text: 'Strength', selected: true)),
         ),
       );
 

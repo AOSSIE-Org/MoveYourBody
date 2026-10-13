@@ -125,10 +125,7 @@ class _DurationInputState extends State<_DurationInput> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _StepperButton(
-          icon: Icons.remove,
-          onTap: _decrement,
-        ),
+        _StepperButton(icon: Icons.remove, onTap: _decrement),
         const SizedBox(width: 8),
         SizedBox(
           width: 48,
@@ -188,10 +185,7 @@ class _DurationInputState extends State<_DurationInput> {
           ),
         ),
         const SizedBox(width: 8),
-        _StepperButton(
-          icon: Icons.add,
-          onTap: _increment,
-        ),
+        _StepperButton(icon: Icons.add, onTap: _increment),
       ],
     );
   }

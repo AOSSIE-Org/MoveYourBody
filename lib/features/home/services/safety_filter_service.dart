@@ -15,7 +15,7 @@ class SafetyFilterService {
   }) {
     // 1. Health & Safety Filter
     List<Exercise> safeExercises = exercises;
-    
+
     if (user.healthIssueTags.isNotEmpty) {
       safeExercises = exercises.where((exercise) {
         return !_hasContraindications(
@@ -30,7 +30,9 @@ class SafetyFilterService {
       return safeExercises;
     }
 
-    final freshExercises = safeExercises.where((ex) => !recentExerciseIds.contains(ex.exerciseId)).toList();
+    final freshExercises = safeExercises
+        .where((ex) => !recentExerciseIds.contains(ex.exerciseId))
+        .toList();
     if (freshExercises.length < 3) {
       return safeExercises;
     }

@@ -4,14 +4,13 @@ import 'package:move_your_body/features/home/widgets/session_details/exercise_ti
 
 void main() {
   group('ExerciseTile', () {
-    testWidgets('renders title and initial duration correctly', (WidgetTester tester) async {
+    testWidgets('renders title and initial duration correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: ExerciseTile(
-              title: 'Push Ups',
-              durationSeconds: 30,
-            ),
+            body: ExerciseTile(title: 'Push Ups', durationSeconds: 30),
           ),
         ),
       );
@@ -22,7 +21,9 @@ void main() {
       expect(find.byIcon(Icons.info_outline_rounded), findsOneWidget);
     });
 
-    testWidgets('calls onInfoTap when info icon is tapped', (WidgetTester tester) async {
+    testWidgets('calls onInfoTap when info icon is tapped', (
+      WidgetTester tester,
+    ) async {
       bool tapped = false;
 
       await tester.pumpWidget(
@@ -41,27 +42,30 @@ void main() {
       expect(tapped, isTrue);
     });
 
-    testWidgets('calls onDurationChanged when increment and decrement are tapped', (WidgetTester tester) async {
-      int? changedDuration;
+    testWidgets(
+      'calls onDurationChanged when increment and decrement are tapped',
+      (WidgetTester tester) async {
+        int? changedDuration;
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: ExerciseTile(
-              title: 'Squats',
-              durationSeconds: 30,
-              onDurationChanged: (val) => changedDuration = val,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: ExerciseTile(
+                title: 'Squats',
+                durationSeconds: 30,
+                onDurationChanged: (val) => changedDuration = val,
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      await tester.tap(find.byIcon(Icons.add));
-      expect(changedDuration, 35);
-      changedDuration = null;
-      await tester.tap(find.byIcon(Icons.remove));
-      expect(changedDuration, 25);
-    });
+        await tester.tap(find.byIcon(Icons.add));
+        expect(changedDuration, 35);
+        changedDuration = null;
+        await tester.tap(find.byIcon(Icons.remove));
+        expect(changedDuration, 25);
+      },
+    );
 
     testWidgets('does not decrement below 5', (WidgetTester tester) async {
       int? changedDuration;
@@ -82,7 +86,9 @@ void main() {
       expect(changedDuration, isNull);
     });
 
-    testWidgets('calls onDurationChanged when text is submitted manually', (WidgetTester tester) async {
+    testWidgets('calls onDurationChanged when text is submitted manually', (
+      WidgetTester tester,
+    ) async {
       int? changedDuration;
 
       await tester.pumpWidget(
@@ -99,7 +105,7 @@ void main() {
 
       await tester.enterText(find.byType(TextField), '45');
       await tester.testTextInput.receiveAction(TextInputAction.done);
-      
+
       expect(changedDuration, 45);
     });
   });

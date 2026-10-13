@@ -32,7 +32,10 @@ class RecommendationService {
     this._equipmentFilterService,
   );
 
-  Future<List<Exercise>> recommendExercises(UserData user, List<String> recentExerciseIds) async {
+  Future<List<Exercise>> recommendExercises(
+    UserData user,
+    List<String> recentExerciseIds,
+  ) async {
     var exercises = await _exerciseRepository.getAllExercises();
     exercises = _safetyFilterService.filterExercises(
       exercises: exercises,

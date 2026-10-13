@@ -15,7 +15,10 @@ void main() {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
-      expect(() => container.read(exerciseInfoViewModelProvider('test_exercise')), returnsNormally);
+      expect(
+        () => container.read(exerciseInfoViewModelProvider('test_exercise')),
+        returnsNormally,
+      );
     });
   });
 }

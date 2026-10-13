@@ -37,5 +37,11 @@ jobs:
       - name: Install Flutter dependencies
         run: flutter pub get
 
+      - name: Verify code formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze project source
+        run: flutter analyze
+
       - name: Run Flutter tests
         run: flutter test

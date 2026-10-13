@@ -7,9 +7,7 @@ import 'package:record/record.dart';
 import 'voice_command_service.dart';
 
 class VoiceCommandDetector {
-  VoiceCommandDetector({
-    required this.onCommandDetected,
-  });
+  VoiceCommandDetector({required this.onCommandDetected});
 
   final ValueChanged<VoiceCommand> onCommandDetected;
 
@@ -221,20 +219,11 @@ class VoiceCommandDetector {
   Future<void> _loadTemplates() async {
     _templates.clear();
 
-    await _loadTemplate(
-      VoiceCommand.resume,
-      'assets/voices/start.wav',
-    );
+    await _loadTemplate(VoiceCommand.resume, 'assets/voices/start.wav');
 
-    await _loadTemplate(
-      VoiceCommand.pause,
-      'assets/voices/stop.wav',
-    );
+    await _loadTemplate(VoiceCommand.pause, 'assets/voices/stop.wav');
 
-    await _loadTemplate(
-      VoiceCommand.skip,
-      'assets/voices/skip.wav',
-    );
+    await _loadTemplate(VoiceCommand.skip, 'assets/voices/skip.wav');
 
     debugPrint(
       'VoiceDetector: loaded '
@@ -243,18 +232,12 @@ class VoiceCommandDetector {
     );
   }
 
-  Future<void> _loadTemplate(
-    VoiceCommand command,
-    String assetPath,
-  ) async {
+  Future<void> _loadTemplate(VoiceCommand command, String assetPath) async {
     try {
       final data = await rootBundle.load(assetPath);
 
       final samples = _decodeWavPcm16(
-        data.buffer.asUint8List(
-          data.offsetInBytes,
-          data.lengthInBytes,
-        ),
+        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
       );
 
       final trimmed = _trimSilence(samples);
@@ -275,9 +258,7 @@ class VoiceCommandDetector {
         );
       }
     } catch (e) {
-      debugPrint(
-        'VoiceDetector: failed to load $assetPath: $e',
-      );
+      debugPrint('VoiceDetector: failed to load $assetPath: $e');
     }
   }
 
@@ -306,13 +287,9 @@ class VoiceCommandDetector {
     int offset = 12;
 
     while (offset + 8 <= bytes.length) {
-      final chunkId =
-          String.fromCharCodes(bytes.sublist(offset, offset + 4));
+      final chunkId = String.fromCharCodes(bytes.sublist(offset, offset + 4));
 
-      final chunkSize = data.getUint32(
-        offset + 4,
-        Endian.little,
-      );
+      final chunkSize = data.getUint32(offset + 4, Endian.little);
 
       final chunkDataStart = offset + 8;
 
@@ -321,31 +298,16 @@ class VoiceCommandDetector {
           throw FormatException('Invalid WAV fmt chunk');
         }
 
-        audioFormat = data.getUint16(
-          chunkDataStart,
-          Endian.little,
-        );
+        audioFormat = data.getUint16(chunkDataStart, Endian.little);
 
-        numChannels = data.getUint16(
-          chunkDataStart + 2,
-          Endian.little,
-        );
+        numChannels = data.getUint16(chunkDataStart + 2, Endian.little);
 
-        sampleRate = data.getUint32(
-          chunkDataStart + 4,
-          Endian.little,
-        );
+        sampleRate = data.getUint32(chunkDataStart + 4, Endian.little);
 
-        bitsPerSample = data.getUint16(
-          chunkDataStart + 14,
-          Endian.little,
-        );
+        bitsPerSample = data.getUint16(chunkDataStart + 14, Endian.little);
       } else if (chunkId == 'data') {
         dataOffset = chunkDataStart;
-        dataLength = math.min(
-          chunkSize,
-          bytes.length - dataOffset,
-        );
+        dataLength = math.min(chunkSize, bytes.length - dataOffset);
         break;
       }
       offset = chunkDataStart + chunkSize + (chunkSize.isOdd ? 1 : 0);
@@ -360,9 +322,7 @@ class VoiceCommandDetector {
     }
 
     if (sampleRate != sampleRateExpected) {
-      throw FormatException(
-        'WAV must be 16 kHz. Found $sampleRate Hz',
-      );
+      throw FormatException('WAV must be 16 kHz. Found $sampleRate Hz');
     }
 
     if (bitsPerSample != 16) {
@@ -377,10 +337,7 @@ class VoiceCommandDetector {
     final samples = List<double>.filled(sampleCount, 0);
 
     for (int i = 0; i < sampleCount; i++) {
-      final value = data.getInt16(
-        dataOffset + i * 2,
-        Endian.little,
-      );
+      final value = data.getInt16(dataOffset + i * 2, Endian.little);
 
       samples[i] = value / 32768.0;
     }
@@ -398,11 +355,7 @@ class VoiceCommandDetector {
 
     final frameRms = <double>[];
 
-    for (
-      int start = 0;
-      start + frameSize <= audio.length;
-      start += hopSize
-    ) {
+    for (int start = 0; start + frameSize <= audio.length; start += hopSize) {
       double sum = 0;
 
       for (int i = 0; i < frameSize; i++) {
@@ -426,8 +379,7 @@ class VoiceCommandDetector {
     int first = 0;
     int last = frameRms.length - 1;
 
-    while (first < frameRms.length &&
-        frameRms[first] < threshold) {
+    while (first < frameRms.length && frameRms[first] < threshold) {
       first++;
     }
 
@@ -438,10 +390,7 @@ class VoiceCommandDetector {
     if (first > last) return [];
 
     final startSample = math.max(0, first * hopSize);
-    final endSample = math.min(
-      audio.length,
-      last * hopSize + frameSize,
-    );
+    final endSample = math.min(audio.length, last * hopSize + frameSize);
 
     return audio.sublist(startSample, endSample);
   }
@@ -462,34 +411,20 @@ class VoiceCommandDetector {
 
     final hamming = List<double>.generate(
       frameSize,
-      (i) =>
-          0.54 -
-          0.46 *
-              math.cos(
-                2 * math.pi * i / (frameSize - 1),
-              ),
+      (i) => 0.54 - 0.46 * math.cos(2 * math.pi * i / (frameSize - 1)),
     );
 
-    final filterBank = _createMelFilterBank(
-      filterCount,
-      fftSize,
-      sampleRate,
-    );
+    final filterBank = _createMelFilterBank(filterCount, fftSize, sampleRate);
 
     final features = <List<double>>[];
 
-    for (
-      int start = 0;
-      start + frameSize <= audio.length;
-      start += hopSize
-    ) {
+    for (int start = 0; start + frameSize <= audio.length; start += hopSize) {
       final frame = List<double>.filled(fftSize, 0);
 
       for (int i = 0; i < frameSize; i++) {
         final previous = i == 0 ? 0.0 : audio[start + i - 1];
 
-        final emphasized =
-            audio[start + i] - 0.97 * previous;
+        final emphasized = audio[start + i] - 0.97 * previous;
 
         frame[i] = emphasized * hamming[i];
       }
@@ -504,21 +439,14 @@ class VoiceCommandDetector {
       for (final filter in filterBank) {
         double energy = 0;
 
-        for (int k = 0;
-            k < filter.length && k < spectrum.length;
-            k++) {
+        for (int k = 0; k < filter.length && k < spectrum.length; k++) {
           energy += spectrum[k] * filter[k];
         }
 
-        logMelEnergies.add(
-          math.log(math.max(energy, 1e-10)),
-        );
+        logMelEnergies.add(math.log(math.max(energy, 1e-10)));
       }
 
-      final mfcc = List<double>.filled(
-        coefficientCount,
-        0,
-      );
+      final mfcc = List<double>.filled(coefficientCount, 0);
 
       for (int c = 0; c < coefficientCount; c++) {
         double sum = 0;
@@ -526,12 +454,7 @@ class VoiceCommandDetector {
         for (int m = 0; m < filterCount; m++) {
           sum +=
               logMelEnergies[m] *
-              math.cos(
-                math.pi *
-                    c *
-                    (m + 0.5) /
-                    filterCount,
-              );
+              math.cos(math.pi * c * (m + 0.5) / filterCount);
         }
 
         mfcc[c] = sum;
@@ -543,9 +466,7 @@ class VoiceCommandDetector {
     return _normalizeFeatures(features);
   }
 
-  List<List<double>> _normalizeFeatures(
-    List<List<double>> features,
-  ) {
+  List<List<double>> _normalizeFeatures(List<List<double>> features) {
     if (features.isEmpty) return features;
 
     final dimension = features.first.length;
@@ -606,19 +527,13 @@ class VoiceCommandDetector {
 
     final melPoints = List<double>.generate(
       filterCount + 2,
-      (i) =>
-          lowMel +
-          (highMel - lowMel) *
-              i /
-              (filterCount + 1),
+      (i) => lowMel + (highMel - lowMel) * i / (filterCount + 1),
     );
 
     final bins = melPoints.map((mel) {
       final hz = melToHz(mel);
 
-      return ((fftSize + 1) * hz / sampleRate)
-          .floor()
-          .clamp(0, fftSize ~/ 2);
+      return ((fftSize + 1) * hz / sampleRate).floor().clamp(0, fftSize ~/ 2);
     }).toList();
 
     final filters = <List<double>>[];
@@ -628,22 +543,17 @@ class VoiceCommandDetector {
       final center = bins[m];
       final right = bins[m + 1];
 
-      final filter = List<double>.filled(
-        fftSize ~/ 2 + 1,
-        0,
-      );
+      final filter = List<double>.filled(fftSize ~/ 2 + 1, 0);
 
       if (center > left) {
         for (int k = left; k < center; k++) {
-          filter[k] =
-              (k - left) / (center - left);
+          filter[k] = (k - left) / (center - left);
         }
       }
 
       if (right > center) {
         for (int k = center; k <= right; k++) {
-          filter[k] =
-              (right - k) / (right - center);
+          filter[k] = (right - k) / (right - center);
         }
       }
 
@@ -653,10 +563,7 @@ class VoiceCommandDetector {
     return filters;
   }
 
-  double _dtwDistance(
-    List<List<double>> a,
-    List<List<double>> b,
-  ) {
+  double _dtwDistance(List<List<double>> a, List<List<double>> b) {
     final n = a.length;
     final m = b.length;
 
@@ -666,47 +573,26 @@ class VoiceCommandDetector {
 
     final infinity = double.infinity;
 
-    final previous = List<double>.filled(
-      m + 1,
-      infinity,
-    );
+    final previous = List<double>.filled(m + 1, infinity);
 
-    final current = List<double>.filled(
-      m + 1,
-      infinity,
-    );
+    final current = List<double>.filled(m + 1, infinity);
 
     previous[0] = 0;
 
-    final band = math.max(
-      15,
-      (n - m).abs() + 10,
-    );
+    final band = math.max(15, (n - m).abs() + 10);
 
     for (int i = 1; i <= n; i++) {
-      current.fillRange(
-        0,
-        m + 1,
-        infinity,
-      );
+      current.fillRange(0, m + 1, infinity);
 
       final start = math.max(1, i - band);
       final end = math.min(m, i + band);
 
       for (int j = start; j <= end; j++) {
-        final cost = _euclideanDistance(
-          a[i - 1],
-          b[j - 1],
-        );
+        final cost = _euclideanDistance(a[i - 1], b[j - 1]);
 
-        current[j] = cost +
-            math.min(
-              previous[j],
-              math.min(
-                current[j - 1],
-                previous[j - 1],
-              ),
-            );
+        current[j] =
+            cost +
+            math.min(previous[j], math.min(current[j - 1], previous[j - 1]));
       }
 
       for (int j = 0; j <= m; j++) {
@@ -723,14 +609,8 @@ class VoiceCommandDetector {
     return distance / (n + m);
   }
 
-  double _euclideanDistance(
-    List<double> a,
-    List<double> b,
-  ) {
-    final length = math.min(
-      a.length,
-      b.length,
-    );
+  double _euclideanDistance(List<double> a, List<double> b) {
+    final length = math.min(a.length, b.length);
 
     double sum = 0;
 

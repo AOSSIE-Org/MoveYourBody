@@ -2,7 +2,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/features/home/repositories/quick_plan_repository.dart';
 
-
 part 'generated/create_custom_plan_view_model.g.dart';
 
 @riverpod
@@ -19,7 +18,7 @@ class CreateCustomPlanViewModel extends _$CreateCustomPlanViewModel {
       state = [...state, exercise];
     }
   }
-  
+
   void reorderExercises(int oldIndex, int newIndex) {
     if (oldIndex < newIndex) {
       newIndex -= 1;
@@ -31,10 +30,10 @@ class CreateCustomPlanViewModel extends _$CreateCustomPlanViewModel {
 
   Future<int?> saveCustomPlan(String planName) async {
     if (state.isEmpty || planName.trim().isEmpty) return null;
-    
+
     final repo = ref.read(quickPlanRepositoryProvider);
     final exerciseIds = state.map((e) => e.exerciseId).toList();
-    
+
     return await repo.createCustomPlan(planName.trim(), exerciseIds);
   }
 }

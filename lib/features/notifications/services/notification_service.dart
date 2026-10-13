@@ -12,10 +12,10 @@ final notificationServiceProvider = Provider<NotificationService>((ref) {
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
-  
+
   NotificationService({FlutterLocalNotificationsPlugin? plugin})
-      : _flutterLocalNotificationsPlugin =
-            plugin ?? FlutterLocalNotificationsPlugin();
+    : _flutterLocalNotificationsPlugin =
+          plugin ?? FlutterLocalNotificationsPlugin();
 
   bool _isInitialized = false;
   bool get isInitialized => _isInitialized;
@@ -32,15 +32,16 @@ class NotificationService {
 
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
-      requestSoundPermission: true,
-      requestBadgePermission: true,
-      requestAlertPermission: true,
-    );
+          requestSoundPermission: true,
+          requestBadgePermission: true,
+          requestAlertPermission: true,
+        );
 
-    final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsDarwin,
-    );
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+          android: initializationSettingsAndroid,
+          iOS: initializationSettingsDarwin,
+        );
 
     await _flutterLocalNotificationsPlugin.initialize(
       settings: initializationSettings,
@@ -58,16 +59,15 @@ class NotificationService {
     if (Platform.isIOS) {
       await _flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-          );
+            IOSFlutterLocalNotificationsPlugin
+          >()
+          ?.requestPermissions(alert: true, badge: true, sound: true);
     } else if (Platform.isAndroid) {
       final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
-          _flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>();
+          _flutterLocalNotificationsPlugin
+              .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin
+              >();
 
       await androidImplementation?.requestNotificationsPermission();
       await androidImplementation?.requestExactAlarmsPermission();
@@ -81,15 +81,16 @@ class NotificationService {
 
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
-      'daily_workout_channel',
-      'Daily Workout Reminders',
-      channelDescription: 'Reminders to complete your daily workouts',
-      importance: Importance.high,
-      priority: Priority.high,
-    );
+          'daily_workout_channel',
+          'Daily Workout Reminders',
+          channelDescription: 'Reminders to complete your daily workouts',
+          importance: Importance.high,
+          priority: Priority.high,
+        );
 
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
+    const NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+    );
 
     for (int i = 0; i < times.length; i++) {
       final time = times[i];
@@ -116,7 +117,7 @@ class NotificationService {
       time.hour,
       time.minute,
     );
-    
+
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }

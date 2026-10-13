@@ -122,7 +122,8 @@ class OnboardingViewModel extends _$OnboardingViewModel {
     required List<String> healthIssues,
   }) {
     final updatedGoals = Set<String>.from(state.goalTags)..addAll(goals);
-    final updatedHealthIssues = Set<String>.from(state.healthIssueTags)..addAll(healthIssues);
+    final updatedHealthIssues = Set<String>.from(state.healthIssueTags)
+      ..addAll(healthIssues);
 
     state = state.copyWith(
       goalTags: updatedGoals,

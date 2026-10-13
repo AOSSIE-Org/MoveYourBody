@@ -33,7 +33,9 @@ class SessionRepository {
         return null;
       }
 
-      final recentExerciseIds = await getRecentExerciseIds(SafetyFilterService.sessionsToSkip);
+      final recentExerciseIds = await getRecentExerciseIds(
+        SafetyFilterService.sessionsToSkip,
+      );
       final recommendedExercises = await _recommendationService
           .recommendExercises(userData, recentExerciseIds);
 
@@ -110,7 +112,8 @@ class SessionRepository {
 
       final sessionResult = await db.query(
         SessionScheduleTable.tableName,
-        where: '${SessionScheduleTable.sessionStatus} IN (?, ?) AND ${SessionScheduleTable.isQuickPlan} = 0',
+        where:
+            '${SessionScheduleTable.sessionStatus} IN (?, ?) AND ${SessionScheduleTable.isQuickPlan} = 0',
         whereArgs: [SessionStatus.created.name, SessionStatus.inProgress.name],
         orderBy: '${SessionScheduleTable.createdAt} DESC',
         limit: 1,
@@ -145,13 +148,16 @@ class SessionRepository {
     try {
       final db = await DatabaseService.instance.userDatabase;
 
-      final List<Map<String, dynamic>> sessionResult = await db.rawQuery('''
+      final List<Map<String, dynamic>> sessionResult = await db.rawQuery(
+        '''
         SELECT s.*, q.name AS ${SessionScheduleTable.quickPlanName}
         FROM ${SessionScheduleTable.tableName} s
         LEFT JOIN quick_plans q ON s.${SessionScheduleTable.quickPlanId} = q.id
         WHERE s.${SessionScheduleTable.id} = ?
         LIMIT 1
-      ''', [sessionId]);
+      ''',
+        [sessionId],
+      );
 
       if (sessionResult.isEmpty) {
         return null;
@@ -312,7 +318,7 @@ class SessionRepository {
   Future<List<String>> getRecentExerciseIds(int sessionCount) async {
     try {
       final db = await DatabaseService.instance.userDatabase;
-      
+
       final sessionResult = await db.query(
         SessionScheduleTable.tableName,
         columns: [SessionScheduleTable.id],
@@ -321,19 +327,25 @@ class SessionRepository {
         orderBy: '${SessionScheduleTable.createdAt} DESC',
         limit: sessionCount,
       );
-      
+
       if (sessionResult.isEmpty) return [];
-      
-      final sessionIds = sessionResult.map((e) => e[SessionScheduleTable.id] as int).toList();
-      
+
+      final sessionIds = sessionResult
+          .map((e) => e[SessionScheduleTable.id] as int)
+          .toList();
+
       final exerciseResult = await db.query(
         SessionExercisesTable.tableName,
         columns: [SessionExercisesTable.exerciseId],
-        where: '${SessionExercisesTable.sessionId} IN (${List.filled(sessionIds.length, '?').join(', ')})',
+        where:
+            '${SessionExercisesTable.sessionId} IN (${List.filled(sessionIds.length, '?').join(', ')})',
         whereArgs: sessionIds,
       );
-      
-      return exerciseResult.map((e) => e[SessionExercisesTable.exerciseId] as String).toSet().toList();
+
+      return exerciseResult
+          .map((e) => e[SessionExercisesTable.exerciseId] as String)
+          .toSet()
+          .toList();
     } catch (e, stackTrace) {
       debugPrint('Error getting recent exercise IDs: $e');
       debugPrint('$stackTrace');
@@ -344,15 +356,18 @@ class SessionRepository {
   Future<List<Session>> getLastThreeCompletedSessions() async {
     try {
       final db = await DatabaseService.instance.userDatabase;
-      
-      final List<Map<String, dynamic>> sessionResult = await db.rawQuery('''
+
+      final List<Map<String, dynamic>> sessionResult = await db.rawQuery(
+        '''
         SELECT s.*, q.name AS ${SessionScheduleTable.quickPlanName}
         FROM ${SessionScheduleTable.tableName} s
         LEFT JOIN quick_plans q ON s.${SessionScheduleTable.quickPlanId} = q.id
         WHERE s.${SessionScheduleTable.sessionStatus} = ?
         ORDER BY s.${SessionScheduleTable.createdAt} DESC
         LIMIT 3
-      ''', [SessionStatus.completed.name]);
+      ''',
+        [SessionStatus.completed.name],
+      );
 
       return sessionResult.map((e) => Session.fromMap(e)).toList();
     } catch (e, stackTrace) {
@@ -380,14 +395,18 @@ class SessionRepository {
   Future<void> debugPrintAllSessions() async {
     try {
       final db = await DatabaseService.instance.userDatabase;
-      
+
       final sessionResult = await db.query(SessionScheduleTable.tableName);
 
       debugPrint('=== ALL SESSIONS IN DATABASE ===');
       for (var sessionMap in sessionResult) {
         final session = Session.fromMap(sessionMap);
-        debugPrint('Session ID: ${session.id} | Status: ${session.sessionStatus.name}');
-        debugPrint('Duration: ${session.sessionDuration}s | Calories: ${session.caloriesBurned}');
+        debugPrint(
+          'Session ID: ${session.id} | Status: ${session.sessionStatus.name}',
+        );
+        debugPrint(
+          'Duration: ${session.sessionDuration}s | Calories: ${session.caloriesBurned}',
+        );
         debugPrint('Difficulty Feedback: ${session.difficultyFeedback}');
         debugPrint('Intensity Feedback: ${session.intensityFeedback}');
         debugPrint('----------------------------------');

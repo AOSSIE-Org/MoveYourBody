@@ -69,7 +69,9 @@ class BodyRegionScreen extends ConsumerWidget {
             const SizedBox(height: 20),
             ButtonCard(
               title: 'Cardio and Endurance',
-              selected: selectedBodyRegions.contains(BodyRegion.cardioAndEndurance.name),
+              selected: selectedBodyRegions.contains(
+                BodyRegion.cardioAndEndurance.name,
+              ),
               titleFontSize: 20,
               onTap: () {
                 onboardingNotifier.toggleTargetBodyRegion(
@@ -84,7 +86,9 @@ class BodyRegionScreen extends ConsumerWidget {
               selected: selectedBodyRegions.contains(BodyRegion.upperBody.name),
               titleFontSize: 20,
               onTap: () {
-                onboardingNotifier.toggleTargetBodyRegion(BodyRegion.upperBody.name);
+                onboardingNotifier.toggleTargetBodyRegion(
+                  BodyRegion.upperBody.name,
+                );
               },
             ),
 
@@ -106,7 +110,9 @@ class BodyRegionScreen extends ConsumerWidget {
               selected: selectedBodyRegions.contains(BodyRegion.lowerBody.name),
               titleFontSize: 20,
               onTap: () {
-                onboardingNotifier.toggleTargetBodyRegion(BodyRegion.lowerBody.name);
+                onboardingNotifier.toggleTargetBodyRegion(
+                  BodyRegion.lowerBody.name,
+                );
               },
             ),
 

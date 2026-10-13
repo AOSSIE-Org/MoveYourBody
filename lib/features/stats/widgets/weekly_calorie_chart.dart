@@ -38,10 +38,7 @@ class WeeklyCalorieChart extends StatelessWidget {
       return FlSpot(index.toDouble(), dailyCalories[index]);
     });
 
-    final gradientColors = [
-      Colors.orangeAccent,
-      Colors.deepOrange,
-    ];
+    final gradientColors = [Colors.orangeAccent, Colors.deepOrange];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

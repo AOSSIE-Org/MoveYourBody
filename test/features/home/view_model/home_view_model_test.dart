@@ -11,9 +11,13 @@ import 'package:move_your_body/core/model/user_data.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class MockSessionRepository extends Mock implements SessionRepository {}
+
 class MockExerciseRepository extends Mock implements ExerciseRepository {}
+
 class MockUserRepository extends Mock implements UserRepository {}
+
 class MockRecommendationService extends Mock implements RecommendationService {}
+
 class MockUserData extends Mock implements UserData {}
 
 void main() {
@@ -41,26 +45,31 @@ void main() {
           sessionRepositoryProvider.overrideWithValue(mockSessionRepo),
           exerciseRepositoryProvider.overrideWithValue(mockExerciseRepo),
           userRepositoryProvider.overrideWithValue(mockUserRepo),
-          recommendationServiceProvider.overrideWithValue(mockRecommendationService),
+          recommendationServiceProvider.overrideWithValue(
+            mockRecommendationService,
+          ),
         ],
       );
     });
 
-
-
     test('initial state has correct dates and loads data', () async {
-      when(() => mockSessionRepo.getLatestIncompleteSession()).thenAnswer((_) async => null);
+      when(
+        () => mockSessionRepo.getLatestIncompleteSession(),
+      ).thenAnswer((_) async => null);
       final user = MockUserData();
       when(() => mockUserRepo.getUserData()).thenAnswer((_) async => user);
-      when(() => mockSessionRepo.getRecentExerciseIds(any())).thenAnswer((_) async => []);
-      when(() => mockRecommendationService.recommendExercises(user, [])).thenAnswer((_) async => []);
+      when(
+        () => mockSessionRepo.getRecentExerciseIds(any()),
+      ).thenAnswer((_) async => []);
+      when(
+        () => mockRecommendationService.recommendExercises(user, []),
+      ).thenAnswer((_) async => []);
 
-      container.listen(homeViewModelProvider, (_, __) {});
+      container.listen(homeViewModelProvider, (_, _) {});
       final state = container.read(homeViewModelProvider);
-      
-      expect(state.currentWeekDays.length, 7);
-      expect(state.isLoading, isFalse); 
 
+      expect(state.currentWeekDays.length, 7);
+      expect(state.isLoading, isFalse);
 
       await Future.delayed(const Duration(milliseconds: 50));
 
@@ -77,10 +86,14 @@ void main() {
         exercises: [],
       );
 
-      when(() => mockSessionRepo.getLatestIncompleteSession()).thenAnswer((_) async => session);
-      when(() => mockExerciseRepo.getExercisesByIds([])).thenAnswer((_) async => []);
+      when(
+        () => mockSessionRepo.getLatestIncompleteSession(),
+      ).thenAnswer((_) async => session);
+      when(
+        () => mockExerciseRepo.getExercisesByIds([]),
+      ).thenAnswer((_) async => []);
 
-      container.listen(homeViewModelProvider, (_, __) {});
+      container.listen(homeViewModelProvider, (_, _) {});
       container.read(homeViewModelProvider);
       await Future.delayed(const Duration(milliseconds: 50));
 

@@ -27,15 +27,15 @@ class UserRepository {
     return UserData.fromMap(result.first);
   }
 
-  Future<void> updateDifficultyAndIntensity(String newDifficulty, String newIntensity) async {
+  Future<void> updateDifficultyAndIntensity(
+    String newDifficulty,
+    String newIntensity,
+  ) async {
     final db = await DatabaseService.instance.userDatabase;
-    await db.update(
-      UserTable.tableName,
-      {
-        UserTable.difficulty: newDifficulty,
-        UserTable.intensity: newIntensity,
-      },
-    );
+    await db.update(UserTable.tableName, {
+      UserTable.difficulty: newDifficulty,
+      UserTable.intensity: newIntensity,
+    });
   }
 
   Future<void> deleteUserData() async {

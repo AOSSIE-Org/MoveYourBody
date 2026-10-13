@@ -46,7 +46,7 @@ class DatabaseService {
         await TagsDatabaseService.createTable(db);
         await SessionScheduleDatabaseService.createTable(db);
         await SessionExercisesDatabaseService.createTable(db);
-        await QuickPlanDatabaseService.createTables(db);        
+        await QuickPlanDatabaseService.createTables(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {

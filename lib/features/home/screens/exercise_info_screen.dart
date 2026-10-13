@@ -28,9 +28,8 @@ class ExerciseInfoScreen extends ConsumerWidget {
 
         return ExerciseInfoBody(exercise: exercise);
       },
-      loading: () => const AppScaffold(
-        child: Center(child: CircularProgressIndicator()),
-      ),
+      loading: () =>
+          const AppScaffold(child: Center(child: CircularProgressIndicator())),
       error: (error, stack) => AppScaffold(
         child: Center(
           child: Text(
@@ -42,4 +41,3 @@ class ExerciseInfoScreen extends ConsumerWidget {
     );
   }
 }
-

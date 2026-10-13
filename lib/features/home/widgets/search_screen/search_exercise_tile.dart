@@ -6,11 +6,7 @@ class SearchExerciseTile extends StatelessWidget {
   final Exercise exercise;
   final VoidCallback? onInfoTap;
 
-  const SearchExerciseTile({
-    super.key,
-    required this.exercise,
-    this.onInfoTap,
-  });
+  const SearchExerciseTile({super.key, required this.exercise, this.onInfoTap});
 
   @override
   Widget build(BuildContext context) {
@@ -116,10 +112,7 @@ class _MiniBadge extends StatelessWidget {
   final String label;
   final Color color;
 
-  const _MiniBadge({
-    required this.label,
-    required this.color,
-  });
+  const _MiniBadge({required this.label, required this.color});
 
   @override
   Widget build(BuildContext context) {

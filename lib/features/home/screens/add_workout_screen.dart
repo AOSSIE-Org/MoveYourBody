@@ -18,7 +18,10 @@ class AddWorkoutScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text('My Workouts', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text(
+          'My Workouts',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -51,11 +54,15 @@ class AddWorkoutScreen extends ConsumerWidget {
                       final plan = plans[index];
                       return GestureDetector(
                         onTap: () async {
-                           final repo = ref.read(quickPlanRepositoryProvider);
-                           final session = await repo.createSessionFromPlan(plan.id);
-                           if (session != null && context.mounted) {
-                              context.push(AppRoutes.sessionDetailsPath(session.id!));
-                           }
+                          final repo = ref.read(quickPlanRepositoryProvider);
+                          final session = await repo.createSessionFromPlan(
+                            plan.id,
+                          );
+                          if (session != null && context.mounted) {
+                            context.push(
+                              AppRoutes.sessionDetailsPath(session.id!),
+                            );
+                          }
                         },
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 12.0),
@@ -63,7 +70,10 @@ class AddWorkoutScreen extends ConsumerWidget {
                           decoration: BoxDecoration(
                             color: AppColors.surface,
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: AppColors.divider, width: 1),
+                            border: Border.all(
+                              color: AppColors.divider,
+                              width: 1,
+                            ),
                           ),
                           child: Row(
                             children: [
@@ -73,7 +83,11 @@ class AddWorkoutScreen extends ConsumerWidget {
                                   color: AppColors.primary.withAlpha(30),
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(Icons.fitness_center, color: AppColors.primary, size: 28),
+                                child: const Icon(
+                                  Icons.fitness_center,
+                                  color: AppColors.primary,
+                                  size: 28,
+                                ),
                               ),
                               const SizedBox(width: 16),
                               Expanded(
@@ -86,7 +100,10 @@ class AddWorkoutScreen extends ConsumerWidget {
                                   ),
                                 ),
                               ),
-                              const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+                              const Icon(
+                                Icons.chevron_right,
+                                color: AppColors.textSecondary,
+                              ),
                             ],
                           ),
                         ),

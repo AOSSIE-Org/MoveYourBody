@@ -7,7 +7,9 @@ import 'package:move_your_body/core/model/exercise_data.dart';
 class MockExercise extends Mock implements Exercise {}
 
 void main() {
-  testWidgets('SearchExerciseTile renders exercise info correctly', (WidgetTester tester) async {
+  testWidgets('SearchExerciseTile renders exercise info correctly', (
+    WidgetTester tester,
+  ) async {
     final mockExercise = MockExercise();
     when(() => mockExercise.name).thenReturn('Push Ups');
     when(() => mockExercise.difficulty).thenReturn(Difficulty.intermediate);

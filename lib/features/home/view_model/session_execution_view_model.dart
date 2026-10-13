@@ -74,7 +74,7 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
     switch (command) {
       case VoiceCommand.resume:
         if (!state.isPaused) {
-          return false; 
+          return false;
         }
         resumeTimer();
         return true;
@@ -123,6 +123,7 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
       _speakCurrentExerciseInstructions();
     }
   }
+
   void _speakCurrentExerciseInstructions() {
     final exercise = state.exercises[state.currentExerciseIndex];
     final segments = exercise.instructions
@@ -235,7 +236,7 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
       remainingSeconds: 0,
       isPaused: true,
     );
-    
+
     final caloriesBurned = await _calculateEstimatedCalories();
 
     final repo = ref.read(sessionRepositoryProvider);

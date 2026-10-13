@@ -15,7 +15,7 @@ class CustomPlansViewModel extends _$CustomPlansViewModel {
     final repo = ref.read(quickPlanRepositoryProvider);
     return await repo.fetchCustomPlans();
   }
-  
+
   Future<void> refreshPlans() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => _fetchCustomPlans());

@@ -11,15 +11,13 @@ void main() {
     databaseFactory = databaseFactoryFfi;
   });
 
-  testWidgets('ExecutionControls renders play/pause, next, and time buttons', (WidgetTester tester) async {
+  testWidgets('ExecutionControls renders play/pause, next, and time buttons', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       const ProviderScope(
         child: MaterialApp(
-          home: Scaffold(
-            body: ExecutionControls(
-              sessionId: 1,
-            ),
-          ),
+          home: Scaffold(body: ExecutionControls(sessionId: 1)),
         ),
       ),
     );
@@ -27,7 +25,12 @@ void main() {
     expect(find.text('+10s'), findsOneWidget);
     expect(find.byIcon(Icons.fast_forward), findsOneWidget);
     expect(
-      find.byWidgetPredicate((w) => w is Icon && (w.icon == Icons.play_arrow_rounded || w.icon == Icons.pause_rounded)),
+      find.byWidgetPredicate(
+        (w) =>
+            w is Icon &&
+            (w.icon == Icons.play_arrow_rounded ||
+                w.icon == Icons.pause_rounded),
+      ),
       findsOneWidget,
     );
   });

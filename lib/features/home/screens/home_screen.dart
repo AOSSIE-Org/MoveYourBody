@@ -77,15 +77,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   : ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: quickPlanState.plans.length,
-                      separatorBuilder: (context, index) => const SizedBox(width: 16),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 16),
                       itemBuilder: (context, index) {
                         final plan = quickPlanState.plans[index];
                         final isThisPlanLoading =
-                            quickPlanState.tapStatus == QuickPlanStatus.loading && quickPlanState.tappedPlanId == plan.id;
+                            quickPlanState.tapStatus ==
+                                QuickPlanStatus.loading &&
+                            quickPlanState.tappedPlanId == plan.id;
 
                         return QuickPlanCard(
                           title: plan.name,
-                          imagePath: plan.imagePath ?? 'assets/images/fat_burn_blast.png',
+                          imagePath:
+                              plan.imagePath ??
+                              'assets/images/fat_burn_blast.png',
                           isLoading: isThisPlanLoading,
                           onTap: () async {
                             final session = await quickPlanViewModel

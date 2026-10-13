@@ -41,10 +41,10 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                 child: Text(
                   username,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 26,
-                        color: AppColors.primaryLight,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 26,
+                    color: AppColors.primaryLight,
+                  ),
                 ),
               ),
               const SizedBox(height: 32),
@@ -52,8 +52,14 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _MetricCard(title: 'Age', value: '${state.age ?? '-'}'),
-                  _MetricCard(title: 'Weight', value: '${state.weight ?? '-'} kg'),
-                  _MetricCard(title: 'Height', value: '${state.height ?? '-'} cm'),
+                  _MetricCard(
+                    title: 'Weight',
+                    value: '${state.weight ?? '-'} kg',
+                  ),
+                  _MetricCard(
+                    title: 'Height',
+                    value: '${state.height ?? '-'} cm',
+                  ),
                 ],
               ),
               const SizedBox(height: 32),
@@ -61,15 +67,16 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
               _ChipsWrap(items: state.goalTags.toList()),
               if (state.customGoal.isNotEmpty)
                 _InfoTile(
-                  icon: Icons.edit_note, 
-                  title: 'Other Goals:', 
+                  icon: Icons.edit_note,
+                  title: 'Other Goals:',
                   text: state.customGoal,
                 ),
               const SizedBox(height: 24),
               _SectionTitle(title: 'Health Profile'),
-              if (state.healthIssueTags.isEmpty && state.customHealthIssue.isEmpty)
+              if (state.healthIssueTags.isEmpty &&
+                  state.customHealthIssue.isEmpty)
                 const _InfoTile(
-                  icon: Icons.health_and_safety, 
+                  icon: Icons.health_and_safety,
                   title: 'Status:',
                   text: 'No health issues reported',
                 )
@@ -78,8 +85,8 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                   _ChipsWrap(items: state.healthIssueTags.toList()),
                 if (state.customHealthIssue.isNotEmpty)
                   _InfoTile(
-                    icon: Icons.medical_information, 
-                    title: 'Other Issues:', 
+                    icon: Icons.medical_information,
+                    title: 'Other Issues:',
                     text: state.customHealthIssue,
                   ),
               ],
@@ -131,16 +138,16 @@ class _MetricCard extends StatelessWidget {
         Text(
           value,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.primaryLight,
-              ),
+            fontWeight: FontWeight.bold,
+            color: AppColors.primaryLight,
+          ),
         ),
         const SizedBox(height: 4),
         Text(
           title,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.textSecondary,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
         ),
       ],
     );
@@ -157,9 +164,9 @@ class _SectionTitle extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
+        style: Theme.of(
+          context,
+        ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
       ),
     );
   }
@@ -177,9 +184,9 @@ class _ChipsWrap extends StatelessWidget {
         child: Text(
           'None selected',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.textSecondary,
-                fontStyle: FontStyle.italic,
-              ),
+            color: AppColors.textSecondary,
+            fontStyle: FontStyle.italic,
+          ),
         ),
       );
     }
@@ -192,14 +199,11 @@ class _ChipsWrap extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.card,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.border.withOpacity(0.3)),
+            border: Border.all(color: AppColors.border.withValues(alpha: 0.3)),
           ),
           child: Text(
             item,
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-            ),
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
           ),
         );
       }).toList(),
@@ -208,7 +212,11 @@ class _ChipsWrap extends StatelessWidget {
 }
 
 class _InfoTile extends StatelessWidget {
-  const _InfoTile({required this.icon, required this.title, required this.text});
+  const _InfoTile({
+    required this.icon,
+    required this.title,
+    required this.text,
+  });
   final IconData icon;
   final String title;
   final String text;
@@ -221,7 +229,7 @@ class _InfoTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border.withOpacity(0.1)),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.1)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,16 +243,16 @@ class _InfoTile extends StatelessWidget {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textSecondary,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   text,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textPrimary,
-                      ),
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ],
             ),
@@ -273,7 +281,7 @@ class _InfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border.withOpacity(0.2)),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,17 +290,14 @@ class _InfoCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             title,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.textSecondary,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),
         ],
       ),
