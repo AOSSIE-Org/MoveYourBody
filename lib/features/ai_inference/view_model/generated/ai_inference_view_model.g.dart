@@ -42,7 +42,7 @@ final class AiInferenceViewModelProvider
 }
 
 String _$aiInferenceViewModelHash() =>
-    r'38f5241113d53f483596f4eb3c51d331c72bbe9c';
+    r'cf225abfbea2622ecf2da5fb989e8672e0a56d7f';
 
 abstract class _$AiInferenceViewModel extends $Notifier<AiState> {
   AiState build();

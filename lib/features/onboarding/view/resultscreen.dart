@@ -61,7 +61,10 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
             const Center(
               child: Text(
                 'Collected Onboarding Data',
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
 
@@ -72,15 +75,30 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
               value: state.username?.toString() ?? '',
             ),
 
-            _DataTile(title: 'Age', value: state.age?.toString() ?? ''),
+            _DataTile(
+              title: 'Age',
+              value: state.age?.toString() ?? '',
+            ),
 
-            _DataTile(title: 'Height', value: '${state.height ?? ''} cm'),
+            _DataTile(
+              title: 'Height',
+              value: '${state.height ?? ''} cm',
+            ),
 
-            _DataTile(title: 'Weight', value: '${state.weight ?? ''} kg'),
+            _DataTile(
+              title: 'Weight',
+              value: '${state.weight ?? ''} kg',
+            ),
 
-            _DataTile(title: 'Goals', value: state.goalTags.join(', ')),
+            _DataTile(
+              title: 'Goals',
+              value: state.goalTags.join(', '),
+            ),
 
-            _DataTile(title: 'Custom Goal', value: state.customGoal),
+            _DataTile(
+              title: 'Custom Goal',
+              value: state.customGoal,
+            ),
 
             _DataTile(
               title: 'Health Issues',
@@ -92,16 +110,25 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
               value: state.customHealthIssue,
             ),
 
-            _DataTile(title: 'Difficulty', value: state.difficulty ?? ''),
+            _DataTile(
+              title: 'Difficulty',
+              value: state.difficulty ?? '',
+            ),
 
-            _DataTile(title: 'Intensity', value: state.intensity ?? ''),
+            _DataTile(
+              title: 'Intensity',
+              value: state.intensity ?? '',
+            ),
 
             _DataTile(
               title: 'Target Body Region',
               value: state.targetBodyRegion.join(', '),
             ),
 
-            _DataTile(title: 'Equipments', value: state.equipments.join(', ')),
+            _DataTile(
+              title: 'Equipments',
+              value: state.equipments.join(', '),
+            ),
 
             const SizedBox(height: 20),
 
@@ -110,7 +137,8 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.surface.withValues(alpha: 0.75),
+                      backgroundColor:
+                          colorScheme.surface.withValues(alpha: 0.75),
                       foregroundColor: colorScheme.onSurface,
                       side: BorderSide(
                         color: colorScheme.outline.withValues(alpha: 0.5),
@@ -144,7 +172,9 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                           debugPrint("No user found");
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('No user found in the database. Please complete onboarding first.'),
+                              content: Text(
+                                'No user found in the database. Please complete onboarding first.',
+                              ),
                             ),
                           );
                           return;
@@ -251,7 +281,8 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                             Text(
                               'Focus: ${exercise.bodyRegions.map((e) => e.name).join(", ")}',
                               style: textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.onSurface.withValues(alpha: 0.7),
+                                color: colorScheme.onSurface
+                                    .withValues(alpha: 0.7),
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -262,7 +293,8 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                                 style: textTheme.bodySmall?.copyWith(
-                                  color: colorScheme.onSurface.withValues(alpha: 0.6),
+                                  color: colorScheme.onSurface
+                                      .withValues(alpha: 0.6),
                                   height: 1.4,
                                 ),
                               ),
@@ -281,7 +313,10 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
 }
 
 class _DataTile extends StatelessWidget {
-  const _DataTile({required this.title, required this.value});
+  const _DataTile({
+    required this.title,
+    required this.value,
+  });
 
   final String title;
   final String value;
@@ -295,7 +330,12 @@ class _DataTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
 
             const SizedBox(height: 6),
 
