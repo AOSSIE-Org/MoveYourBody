@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
+import 'package:move_your_body/core/widgets/app_toast.dart';
+import 'package:move_your_body/core/widgets/onboarding_progress.dart';
 import 'package:move_your_body/features/onboarding/view_model/onboarding_view_model.dart';
 import '../../../core/widgets/app_scaffold.dart';
 import '../../../core/widgets/feature_chip.dart';
-import 'package:go_router/go_router.dart';
 
 class GoalScreen extends ConsumerWidget {
   const GoalScreen({super.key});
@@ -29,8 +31,10 @@ class GoalScreen extends ConsumerWidget {
     final selectedGoals = ref.watch(
       onboardingViewModelProvider.select((state) => state.goalTags),
     );
+    final customGoal = ref.watch(
+      onboardingViewModelProvider.select((state) => state.customGoal),
+    );
     final onboardingNotifier = ref.read(onboardingViewModelProvider.notifier);
-    final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     return AppScaffold(
@@ -39,36 +43,7 @@ class GoalScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () => context.pop(),
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                  tooltip: 'Go back',
-                ),
-
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      6,
-                      (index) => Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: index == 0 ? 8 : 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: index == 0
-                              ? colorScheme.primary
-                              : colorScheme.onSurface.withValues(alpha: 0.25),
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
+            const OnboardingProgress(currentStep: 0),
             const SizedBox(height: 10),
 
             Text(
@@ -119,6 +94,13 @@ class GoalScreen extends ConsumerWidget {
             SizedBox(
               child: ElevatedButton(
                 onPressed: () {
+                  if (selectedGoals.length < 3 && customGoal.trim().isEmpty) {
+                    AppToast.show(
+                      context,
+                      'Select at least 3 goals or enter yours',
+                    );
+                    return;
+                  }
                   context.push(AppRoutes.healthIssues);
                 },
                 child: const Text('Continue'),

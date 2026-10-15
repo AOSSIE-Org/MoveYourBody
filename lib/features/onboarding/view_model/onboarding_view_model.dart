@@ -74,15 +74,15 @@ class OnboardingViewModel extends _$OnboardingViewModel {
     state = state.copyWith(username: username);
   }
 
-  void setAge(int age) {
+  void setAge(int? age) {
     state = state.copyWith(age: age);
   }
 
-  void setWeight(double weight) {
+  void setWeight(double? weight) {
     state = state.copyWith(weight: weight);
   }
 
-  void setHeight(double height) {
+  void setHeight(double? height) {
     state = state.copyWith(height: height);
   }
 
@@ -115,3 +115,6 @@ class OnboardingViewModel extends _$OnboardingViewModel {
     await ref.read(userRepositoryProvider).saveUser(userData);
   }
 }
+
+// Backward-compatible alias for any consumer referencing onboardingProvider
+final onboardingProvider = onboardingViewModelProvider;

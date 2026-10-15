@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
+import 'package:move_your_body/core/widgets/app_toast.dart';
 import 'package:move_your_body/core/widgets/button_card.dart';
-
+import 'package:move_your_body/core/widgets/onboarding_progress.dart';
 import '../../../core/widgets/app_scaffold.dart';
 import '../view_model/onboarding_view_model.dart';
 
@@ -12,7 +13,6 @@ class IntensityScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     final selectedIntensity = ref.watch(
@@ -26,36 +26,7 @@ class IntensityScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            /// Progress
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () => context.pop(),
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                ),
-
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      6,
-                      (index) => Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: index == 2
-                              ? colorScheme.primary
-                              : colorScheme.onSurface.withValues(alpha: 0.25),
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
+            const OnboardingProgress(currentStep: 3),
             const SizedBox(height: 10),
 
             Text(
@@ -107,6 +78,10 @@ class IntensityScreen extends ConsumerWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
+                  if (selectedIntensity == null) {
+                    AppToast.show(context, 'Please select an intensity level');
+                    return;
+                  }
                   context.push(AppRoutes.targetBodyRegion);
                 },
                 child: const Text('Continue'),

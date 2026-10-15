@@ -14,13 +14,11 @@ class ButtonCard extends StatelessWidget {
   final String? subtitle;
   final bool selected;
   final VoidCallback onTap;
-
   final double? titleFontSize;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
 
     return Semantics(
       button: true,
@@ -39,7 +37,7 @@ class ButtonCard extends StatelessWidget {
               border: Border.all(
                 color: selected
                     ? colorScheme.primary
-                    : colorScheme.outline.withValues(alpha: 1),
+                    : colorScheme.outline.withValues(alpha: 0.25),
                 width: 2,
               ),
             ),
@@ -51,9 +49,9 @@ class ButtonCard extends StatelessWidget {
                   child: Text(
                     title,
                     textAlign: TextAlign.center,
-                    style: textTheme.titleLarge?.copyWith(
+                    style: TextStyle(
+                      fontSize: titleFontSize ?? 25,
                       fontWeight: FontWeight.w600,
-                      fontSize: titleFontSize,
                     ),
                   ),
                 ),
