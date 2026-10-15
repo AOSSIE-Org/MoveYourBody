@@ -10,3 +10,4 @@ targets:
         options:
           build_extensions:
             "^lib/{{path}}/{{file}}.dart": "lib/{{path}}/generated/{{file}}.g.dart"
+

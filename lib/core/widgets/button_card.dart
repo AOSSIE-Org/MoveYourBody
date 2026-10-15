@@ -14,8 +14,6 @@ class ButtonCard extends StatelessWidget {
   final String? subtitle;
   final bool selected;
   final VoidCallback onTap;
-
-  // Optional
   final double? titleFontSize;
 
   @override
@@ -57,10 +55,8 @@ class ButtonCard extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 if (subtitle != null) ...[
                   const SizedBox(height: 8),
-
                   Text(
                     subtitle!,
                     style: TextStyle(

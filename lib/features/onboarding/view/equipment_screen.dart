@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:template_flutter/core/widgets/button_card.dart';
-import 'package:template_flutter/core/widgets/onboarding_progress.dart';
+import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/routing/app_routes.dart';
+import 'package:move_your_body/core/widgets/button_card.dart';
+import 'package:move_your_body/core/widgets/onboarding_progress.dart';
 
 import '../../../core/widgets/app_scaffold.dart';
 import '../view_model/onboarding_view_model.dart';
@@ -13,9 +15,11 @@ class EquipmentScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
 
-    final onboardingState = ref.watch(onboardingProvider);
+    final selectedEquipments = ref.watch(
+      onboardingViewModelProvider.select((state) => state.equipments),
+    );
 
-    final onboardingNotifier = ref.read(onboardingProvider.notifier);
+    final onboardingNotifier = ref.read(onboardingViewModelProvider.notifier);
 
     return AppScaffold(
       child: Padding(
@@ -37,7 +41,7 @@ class EquipmentScreen extends ConsumerWidget {
               const SizedBox(height: 20),
               ButtonCard(
                 title: 'Yoga Mat',
-                selected: onboardingState.equipments.contains('Yoga Mat'),
+                selected: selectedEquipments.contains('Yoga Mat'),
                 titleFontSize: 20,
                 onTap: () {
                   onboardingNotifier.toggleEquipment('Yoga Mat');
@@ -47,7 +51,7 @@ class EquipmentScreen extends ConsumerWidget {
 
               ButtonCard(
                 title: 'Dumbbells',
-                selected: onboardingState.equipments.contains('Dumbbells'),
+                selected: selectedEquipments.contains('Dumbbells'),
                 titleFontSize: 20,
                 onTap: () {
                   onboardingNotifier.toggleEquipment('Dumbbells');
@@ -58,9 +62,7 @@ class EquipmentScreen extends ConsumerWidget {
 
               ButtonCard(
                 title: 'Resistance Bands',
-                selected: onboardingState.equipments.contains(
-                  'Resistance Bands',
-                ),
+                selected: selectedEquipments.contains('Resistance Bands'),
                 titleFontSize: 20,
                 onTap: () {
                   onboardingNotifier.toggleEquipment('Resistance Bands');
@@ -71,7 +73,7 @@ class EquipmentScreen extends ConsumerWidget {
 
               ButtonCard(
                 title: 'Pull-Up Bar',
-                selected: onboardingState.equipments.contains('Pull-Up Bar'),
+                selected: selectedEquipments.contains('Pull-Up Bar'),
                 titleFontSize: 20,
                 onTap: () {
                   onboardingNotifier.toggleEquipment('Pull-Up Bar');
@@ -81,9 +83,7 @@ class EquipmentScreen extends ConsumerWidget {
               const SizedBox(height: 20),
               ButtonCard(
                 title: 'Yoga Blocks and Belts ',
-                selected: onboardingState.equipments.contains(
-                  'Yoga Blocks and Belts ',
-                ),
+                selected: selectedEquipments.contains('Yoga Blocks and Belts '),
                 titleFontSize: 20,
                 onTap: () {
                   onboardingNotifier.toggleEquipment('Yoga Blocks and Belts ');
@@ -93,7 +93,7 @@ class EquipmentScreen extends ConsumerWidget {
               const SizedBox(height: 20),
               ButtonCard(
                 title: 'Exercise Bench',
-                selected: onboardingState.equipments.contains('Exercise Bench'),
+                selected: selectedEquipments.contains('Exercise Bench'),
                 titleFontSize: 20,
                 onTap: () {
                   onboardingNotifier.toggleEquipment('Exercise Bench');
@@ -105,7 +105,7 @@ class EquipmentScreen extends ConsumerWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/onboarding/userdata');
+                    context.push(AppRoutes.userData);
                   },
                   child: const Text('Continue'),
                 ),

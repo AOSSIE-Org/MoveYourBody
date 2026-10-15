@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:template_flutter/core/widgets/app_toast.dart';
-import 'package:template_flutter/core/widgets/button_card.dart';
-import 'package:template_flutter/core/widgets/onboarding_progress.dart';
-
+import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/routing/app_routes.dart';
+import 'package:move_your_body/core/widgets/app_toast.dart';
+import 'package:move_your_body/core/widgets/button_card.dart';
+import 'package:move_your_body/core/widgets/onboarding_progress.dart';
 import '../../../core/widgets/app_scaffold.dart';
 import '../view_model/onboarding_view_model.dart';
 
@@ -14,9 +15,11 @@ class DifficultyScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
 
-    final onboardingState = ref.watch(onboardingProvider);
+    final selectedDifficulty = ref.watch(
+      onboardingViewModelProvider.select((state) => state.difficulty),
+    );
 
-    final onboardingNotifier = ref.read(onboardingProvider.notifier);
+    final onboardingNotifier = ref.read(onboardingViewModelProvider.notifier);
 
     return AppScaffold(
       child: Padding(
@@ -40,7 +43,7 @@ class DifficultyScreen extends ConsumerWidget {
               title: 'Beginner',
               subtitle:
                   'New to fitness, rarely exercise or returning after a long break.',
-              selected: onboardingState.difficulty == 'Beginner',
+              selected: selectedDifficulty == 'Beginner',
               onTap: () {
                 onboardingNotifier.setDifficulty('Beginner');
               },
@@ -52,7 +55,7 @@ class DifficultyScreen extends ConsumerWidget {
               title: 'Intermediate',
               subtitle:
                   'Exercise regularly and have a basic fitness foundation.',
-              selected: onboardingState.difficulty == 'Intermediate',
+              selected: selectedDifficulty == 'Intermediate',
               onTap: () {
                 onboardingNotifier.setDifficulty('Intermediate');
               },
@@ -64,7 +67,7 @@ class DifficultyScreen extends ConsumerWidget {
               title: 'Advanced',
               subtitle:
                   'Train consistently with strong endurance and strength.',
-              selected: onboardingState.difficulty == 'Advanced',
+              selected: selectedDifficulty == 'Advanced',
               onTap: () {
                 onboardingNotifier.setDifficulty('Advanced');
               },
@@ -76,12 +79,11 @@ class DifficultyScreen extends ConsumerWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  if (onboardingState.difficulty == null) {
+                  if (selectedDifficulty == null) {
                     AppToast.show(context, 'Please select a difficulty level');
                     return;
-                  } else {
-                    Navigator.pushNamed(context, '/onboarding/intensity');
                   }
+                  context.push(AppRoutes.intensity);
                 },
                 child: const Text('Continue'),
               ),

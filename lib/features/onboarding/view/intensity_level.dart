@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:template_flutter/core/widgets/app_toast.dart';
-import 'package:template_flutter/core/widgets/button_card.dart';
-import 'package:template_flutter/core/widgets/onboarding_progress.dart';
-
+import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/routing/app_routes.dart';
+import 'package:move_your_body/core/widgets/app_toast.dart';
+import 'package:move_your_body/core/widgets/button_card.dart';
+import 'package:move_your_body/core/widgets/onboarding_progress.dart';
 import '../../../core/widgets/app_scaffold.dart';
 import '../view_model/onboarding_view_model.dart';
 
@@ -14,9 +15,11 @@ class IntensityScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
 
-    final onboardingState = ref.watch(onboardingProvider);
+    final selectedIntensity = ref.watch(
+      onboardingViewModelProvider.select((state) => state.intensity),
+    );
 
-    final onboardingNotifier = ref.read(onboardingProvider.notifier);
+    final onboardingNotifier = ref.read(onboardingViewModelProvider.notifier);
 
     return AppScaffold(
       child: Padding(
@@ -40,7 +43,7 @@ class IntensityScreen extends ConsumerWidget {
               title: 'Light',
               subtitle:
                   'Easy-paced workouts focused on mobility, consistency, and recovery.',
-              selected: onboardingState.intensity == 'Light',
+              selected: selectedIntensity == 'Light',
               onTap: () {
                 onboardingNotifier.setIntensity('Light');
               },
@@ -52,7 +55,7 @@ class IntensityScreen extends ConsumerWidget {
               title: 'Moderate',
               subtitle:
                   'Balanced challenge to improve endurance, fitness and strength.',
-              selected: onboardingState.intensity == 'Moderate',
+              selected: selectedIntensity == 'Moderate',
               onTap: () {
                 onboardingNotifier.setIntensity('Moderate');
               },
@@ -64,7 +67,7 @@ class IntensityScreen extends ConsumerWidget {
               title: 'High',
               subtitle:
                   'Demanding sessions designed to maximize performance and results.',
-              selected: onboardingState.intensity == 'High',
+              selected: selectedIntensity == 'High',
               onTap: () {
                 onboardingNotifier.setIntensity('High');
               },
@@ -75,14 +78,11 @@ class IntensityScreen extends ConsumerWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  if (onboardingState.intensity == null) {
+                  if (selectedIntensity == null) {
                     AppToast.show(context, 'Please select an intensity level');
                     return;
-                  } else {
-                    Navigator.of(
-                      context,
-                    ).pushNamed('/onboarding/target-body-region');
                   }
+                  context.push(AppRoutes.targetBodyRegion);
                 },
                 child: const Text('Continue'),
               ),

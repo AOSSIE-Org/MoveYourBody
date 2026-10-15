@@ -16,6 +16,7 @@ class AppTheme {
       primary: AppColors.primary,
       secondary: AppColors.primaryLight,
       surface: AppColors.surface,
+      outline: AppColors.divider,
     ),
 
     appBarTheme: const AppBarTheme(

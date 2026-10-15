@@ -1,9 +1,10 @@
 // this file to just that what we are collection for onboarding and then we will use this data to show the result in the result screen
-// after mentor review this will be removed 
+// after mentor review this will be removed
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:move_your_body/features/ai_inference/repositories/tag_setup_repository.dart';
+import '../repository/user_repository.dart';
 import '../../../core/widgets/app_scaffold.dart';
 import '../view_model/onboarding_view_model.dart';
 
@@ -12,7 +13,7 @@ class ResultScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(onboardingProvider);
+    final state = ref.watch(onboardingViewModelProvider);
 
     return AppScaffold(
       child: SingleChildScrollView(
@@ -86,12 +87,23 @@ class ResultScreen extends ConsumerWidget {
 
             _DataTile(
               title: 'Target Body Region',
-              value: state.targetbodyRegion.join(', '),
+              value: state.targetBodyRegion.join(', '),
             ),
 
             _DataTile(
               title: 'Equipments',
               value: state.equipments.join(', '),
+            ),
+
+            ElevatedButton(
+              onPressed: () async {
+                await ref.read(userRepositoryProvider).deleteUserData();
+                await ref
+                    .read(tagSetupRepositoryProvider)
+                    .debugPrintAllCachedTags(); 
+                // await UserRepository().debugPrintUserData();
+              },
+              child: const Text('Get Tags details from DB'),
             ),
           ],
         ),

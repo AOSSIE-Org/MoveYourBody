@@ -1,10 +1,16 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../model/onboarding_state.dart';
+import 'dart:typed_data';
+import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../model/onboarding_data.dart';
+import "../../../core/model/user_data.dart";
 
-class OnboardingViewModel extends Notifier<OnboardingState> {
+part 'generated/onboarding_view_model.g.dart';
+
+@Riverpod(keepAlive: true)
+class OnboardingViewModel extends _$OnboardingViewModel {
   @override
-  OnboardingState build() {
-    return const OnboardingState();
+  OnboardingData build() {
+    return const OnboardingData();
   }
 
   void toggleGoal(String goal) {
@@ -45,13 +51,13 @@ class OnboardingViewModel extends Notifier<OnboardingState> {
   }
 
   void toggleTargetBodyRegion(String region) {
-    final updatedRegions = Set<String>.from(state.targetbodyRegion);
+    final updatedRegions = Set<String>.from(state.targetBodyRegion);
     if (updatedRegions.contains(region)) {
       updatedRegions.remove(region);
     } else {
       updatedRegions.add(region);
     }
-    state = state.copyWith(targetbodyRegion: updatedRegions);
+    state = state.copyWith(targetBodyRegion: updatedRegions);
   }
 
   void toggleEquipment(String equipment) {
@@ -68,6 +74,10 @@ class OnboardingViewModel extends Notifier<OnboardingState> {
     state = state.copyWith(username: username);
   }
 
+  void setAge(int? age) {
+    state = state.copyWith(age: age);
+  }
+
   void setWeight(double? weight) {
     state = state.copyWith(weight: weight);
   }
@@ -76,12 +86,35 @@ class OnboardingViewModel extends Notifier<OnboardingState> {
     state = state.copyWith(height: height);
   }
 
-  void setAge(int? age) {
-    state = state.copyWith(age: age);
+  void loadFromUserData(UserData user) {
+    state = state.copyWith(
+      username: user.username,
+      age: user.age,
+      height: user.height,
+      weight: user.weight,
+      goalTags: user.goalTags.toSet(),
+      customGoal: user.customGoal,
+      healthIssueTags: user.healthIssueTags.toSet(),
+      customHealthIssue: user.customHealthIssue,
+      difficulty: user.difficulty,
+      intensity: user.intensity,
+      targetBodyRegion: user.targetBodyRegion.toSet(),
+      equipments: user.equipments.toSet(),
+    );
+  }
+
+  Future<void> saveAndCompleteOnboarding({
+    required Uint8List? goalEmbed,
+    required Uint8List? healthEmbed,
+  }) async {
+    state = state.copyWith(
+      goalEmbeddings: goalEmbed,
+      healthIssueEmbeddings: healthEmbed,
+    );
+    final userData = state.toUserdata();
+    await ref.read(userRepositoryProvider).saveUser(userData);
   }
 }
 
-final onboardingProvider =
-    NotifierProvider<OnboardingViewModel, OnboardingState>(
-      OnboardingViewModel.new,
-    );
+// Backward-compatible alias for any consumer referencing onboardingProvider
+final onboardingProvider = onboardingViewModelProvider;

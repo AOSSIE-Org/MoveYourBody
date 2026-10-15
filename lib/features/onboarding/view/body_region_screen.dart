@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:template_flutter/core/widgets/app_toast.dart';
-import 'package:template_flutter/core/widgets/button_card.dart';
-import 'package:template_flutter/core/widgets/onboarding_progress.dart';
+import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/routing/app_routes.dart';
+import 'package:move_your_body/core/widgets/app_toast.dart';
+import 'package:move_your_body/core/widgets/button_card.dart';
+import 'package:move_your_body/core/widgets/onboarding_progress.dart';
 
 import '../../../core/widgets/app_scaffold.dart';
 import '../view_model/onboarding_view_model.dart';
@@ -14,12 +16,14 @@ class BodyRegionScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
 
-    final onboardingState = ref.watch(onboardingProvider);
+    final selectedBodyRegions = ref.watch(
+      onboardingViewModelProvider.select((state) => state.targetBodyRegion),
+    );
 
-    final onboardingNotifier = ref.read(onboardingProvider.notifier);
+    final onboardingNotifier = ref.read(onboardingViewModelProvider.notifier);
 
     return AppScaffold(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
@@ -37,9 +41,7 @@ class BodyRegionScreen extends ConsumerWidget {
             const SizedBox(height: 20),
             ButtonCard(
               title: 'Cardio and Endurance',
-              selected: onboardingState.targetbodyRegion.contains(
-                'Cardio and Endurance',
-              ),
+              selected: selectedBodyRegions.contains('Cardio and Endurance'),
               titleFontSize: 20,
               onTap: () {
                 onboardingNotifier.toggleTargetBodyRegion(
@@ -51,7 +53,7 @@ class BodyRegionScreen extends ConsumerWidget {
 
             ButtonCard(
               title: 'Upper Body',
-              selected: onboardingState.targetbodyRegion.contains('Upper Body'),
+              selected: selectedBodyRegions.contains('Upper Body'),
               titleFontSize: 20,
               onTap: () {
                 onboardingNotifier.toggleTargetBodyRegion('Upper Body');
@@ -62,9 +64,7 @@ class BodyRegionScreen extends ConsumerWidget {
 
             ButtonCard(
               title: 'Core Strength',
-              selected: onboardingState.targetbodyRegion.contains(
-                'Core Strength',
-              ),
+              selected: selectedBodyRegions.contains('Core Strength'),
               titleFontSize: 20,
               onTap: () {
                 onboardingNotifier.toggleTargetBodyRegion('Core Strength');
@@ -75,7 +75,7 @@ class BodyRegionScreen extends ConsumerWidget {
 
             ButtonCard(
               title: 'Lower Body',
-              selected: onboardingState.targetbodyRegion.contains('Lower Body'),
+              selected: selectedBodyRegions.contains('Lower Body'),
               titleFontSize: 20,
               onTap: () {
                 onboardingNotifier.toggleTargetBodyRegion('Lower Body');
@@ -85,7 +85,7 @@ class BodyRegionScreen extends ConsumerWidget {
             const SizedBox(height: 20),
             ButtonCard(
               title: 'Mobility and Flexibility',
-              selected: onboardingState.targetbodyRegion.contains(
+              selected: selectedBodyRegions.contains(
                 'Mobility and Flexibility',
               ),
               titleFontSize: 20,
@@ -96,21 +96,20 @@ class BodyRegionScreen extends ConsumerWidget {
               },
             ),
 
-            const Spacer(),
+            const SizedBox(height: 30),
 
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  if (onboardingState.targetbodyRegion.isEmpty) {
+                  if (selectedBodyRegions.isEmpty) {
                     AppToast.show(
                       context,
                       'Please select atleast one target body region',
                     );
                     return;
-                  } else {
-                    Navigator.pushNamed(context, '/onboarding/equipments');
                   }
+                  context.push(AppRoutes.equipments);
                 },
                 child: const Text('Continue'),
               ),
