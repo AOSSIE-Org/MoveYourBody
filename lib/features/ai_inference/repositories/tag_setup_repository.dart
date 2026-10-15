@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:move_your_body/features/ai_inference/repositories/ai_repository.dart';
@@ -36,8 +37,10 @@ class TagSetupRepository {
         uniqueInjuries.addAll(contraStr.split(';').map((e) => e.trim()));
       }
     }
-    print(uniqueGoals.length);
-    print(uniqueInjuries.length);
+    debugPrint(
+      "Tag seeding: ${uniqueGoals.length} goals, "
+      "${uniqueInjuries.length} injuries found",
+    );
     await _processSet(db, uniqueGoals, TagType.goal);
     await _processSet(db, uniqueInjuries, TagType.injury);
   }
@@ -45,34 +48,46 @@ class TagSetupRepository {
   Future<void> _processSet(Database db, Set<String> tags, TagType type) async {
     final aiRepo = _ref.read(aiModelRepositoryProvider);
 
+    // Load every cached tag of this type in one query instead of one query
+    // per tag.
+    final List<Map<String, dynamic>> existingRows = await db.query(
+      TagsTable.tableName,
+      columns: [TagsTable.tagName],
+      where: '${TagsTable.tagType} = ? AND ${TagsTable.embedding} IS NOT NULL',
+      whereArgs: [type.name],
+    );
+    final Set<String> cached = existingRows
+        .map((row) => row[TagsTable.tagName] as String)
+        .toSet();
+
+    final List<Tag> newTags = [];
+    int failed = 0;
+
     for (String tagName in tags) {
-      if (tagName.isEmpty) continue;
-      final List<Map<String, dynamic>> existing = await db.query(
-        TagsTable.tableName,
-        where: '${TagsTable.tagName} = ? AND ${TagsTable.tagType} = ?',
-        whereArgs: [tagName, type.name],
-      );
-      if (existing.isEmpty) {
-        final Uint8List? embeddingBytes = await aiRepo.generateEmbedding(
-          tagName,
-        );
+      if (tagName.isEmpty || cached.contains(tagName)) continue;
 
-        if (embeddingBytes != null) {
-          final newTag = Tag(
-            tagName: tagName,
-            tagType: type,
-            embedding: embeddingBytes,
-          );
-
-          await db.insert(TagsTable.tableName, newTag.toMap());
-          print("Local Inference Complete & Cached: [$type] $tagName");
-        }
-      } else {
-        print(
-          "Entry found in Cache, skipping model inference: [$type] $tagName",
-        );
+      final Uint8List? embeddingBytes = await aiRepo.generateEmbedding(tagName);
+      if (embeddingBytes == null) {
+        failed++;
+        continue;
       }
+      newTags.add(
+        Tag(tagName: tagName, tagType: type, embedding: embeddingBytes),
+      );
     }
+
+    if (newTags.isNotEmpty) {
+      final batch = db.batch();
+      for (final tag in newTags) {
+        batch.insert(TagsTable.tableName, tag.toMap());
+      }
+      await batch.commit(noResult: true);
+    }
+
+    debugPrint(
+      "Tag seeding [${type.name}]: ${cached.length} cached, "
+      "${newTags.length} embedded, $failed failed",
+    );
   }
 
   Future<void> debugPrintAllCachedTags() async {
@@ -83,12 +98,12 @@ class TagSetupRepository {
         TagsTable.tableName,
       );
 
-      print("================ DB VERIFICATION START ================");
-      print("Total Tags Found in Database: ${maps.length}");
+      debugPrint("================ DB VERIFICATION START ================");
+      debugPrint("Total Tags Found in Database: ${maps.length}");
 
       if (maps.isEmpty) {
-        print("❌ No tags found in the database.");
-        print("=====================================================");
+        debugPrint("❌ No tags found in the database.");
+        debugPrint("=====================================================");
         return;
       }
 
@@ -96,14 +111,14 @@ class TagSetupRepository {
         final tag = Tag.fromMap(map);
 
         final int embeddingLength = tag.embedding?.length ?? 0;
-  
-        print(
+
+        debugPrint(
           "📌 ID: ${tag.id} | Name: ${tag.tagName} | Type: ${tag.tagType.name} | Embedding Size: $embeddingLength bytes",
         );
       }
-      print("================= DB VERIFICATION END =================");
+      debugPrint("================= DB VERIFICATION END =================");
     } catch (e) {
-      print("❌ Error reading tags from database: $e");
+      debugPrint("❌ Error reading tags from database: $e");
     }
   }
 }

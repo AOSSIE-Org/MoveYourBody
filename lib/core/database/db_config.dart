@@ -1,6 +1,7 @@
 import 'package:move_your_body/core/database/schema/exercise_schema.dart';
 import 'package:move_your_body/core/database/schema/tags_schema.dart';
 import 'package:move_your_body/core/database/schema/user_schema.dart';
+import 'package:move_your_body/core/database/tables/tags_table.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/foundation.dart';
@@ -24,7 +25,7 @@ class DatabaseService {
     debugPrint('DB PATH: $path');
     return openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: (db, version) async {
         await UserDatabaseService.createTable(db);
         await ExerciseDatabaseService.createTable(db);
@@ -34,6 +35,11 @@ class DatabaseService {
         if (oldVersion < 2) {
           await ExerciseDatabaseService.createTable(db);
           await TagsDatabaseService.createTable(db);
+        }
+        if (oldVersion < 3) {
+          // Embeddings switched from CLS-token to mean pooling, so cached
+          // vectors are no longer comparable. Clear them to force re-seeding.
+          await db.delete(TagsTable.tableName);
         }
       },
     );

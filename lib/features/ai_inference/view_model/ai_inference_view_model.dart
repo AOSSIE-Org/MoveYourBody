@@ -74,7 +74,10 @@ class AiInferenceViewModel extends _$AiInferenceViewModel {
       final embeddingBytes = await aiModelRepo.generateEmbedding(query);
 
       if (embeddingBytes != null) {
-        final float32Buffer = embeddingBytes.buffer.asFloat32List();
+        final float32Buffer = embeddingBytes.buffer.asFloat32List(
+          embeddingBytes.offsetInBytes,
+          embeddingBytes.lengthInBytes ~/ Float32List.bytesPerElement,
+        );
         final List<double> userEmbedding = float32Buffer.toList();
 
         if (!ref.mounted) return;
