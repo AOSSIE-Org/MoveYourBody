@@ -14,6 +14,7 @@ class OnnxService {
 
   OrtSession? _session;
   Future<void>? _initFuture;
+  bool _closed = false;
   final _ort = OnnxRuntime();
 
   bool get isInitialized => _session != null;
@@ -23,6 +24,9 @@ class OnnxService {
   /// retried by calling [init] again.
   Future<void> init() {
     if (_session != null) return Future.value();
+    if (_closed) {
+      return Future.error(StateError("OnnxService has been closed"));
+    }
     return _initFuture ??= _loadSession().whenComplete(() {
       if (_session == null) _initFuture = null;
     });
@@ -32,7 +36,13 @@ class OnnxService {
     try {
       debugPrint("AIService: Initializing ONNX Runtime...");
       final stopwatch = Stopwatch()..start();
-      _session = await _ort.createSessionFromAsset(_modelAsset);
+      final session = await _ort.createSessionFromAsset(_modelAsset);
+      if (_closed) {
+        // close() ran while the model was loading; don't keep the session.
+        await session.close();
+        return;
+      }
+      _session = session;
       debugPrint(
         "AIService: Model loaded successfully in ${stopwatch.elapsedMilliseconds}ms.",
       );
@@ -110,6 +120,7 @@ class OnnxService {
   }
 
   Future<void> close() async {
+    _closed = true;
     final session = _session;
     _session = null;
     _initFuture = null;

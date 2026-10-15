@@ -35,7 +35,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       await aiModelRepo.initModel();
 
       print("🚀 Pipeline Phase 2: Syncing Static JSON Tags to DB...");
-      await tagSetupRepo.processAndSeedTags();
+      final tagsSeeded = await tagSetupRepo.ensureTagsSeeded();
 
       Uint8List? customGoalBytes;
       Uint8List? customHealthBytes;
@@ -56,7 +56,11 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
             healthEmbed: customHealthBytes,
           );
 
-      ref.read(aiInferenceViewModelProvider.notifier).setEngineReady();
+      if (tagsSeeded) {
+        ref.read(aiInferenceViewModelProvider.notifier).setEngineReady();
+      } else {
+        debugPrint("⚠️ Tag seeding incomplete: AI engine not marked ready.");
+      }
 
       if (!mounted) return;
 

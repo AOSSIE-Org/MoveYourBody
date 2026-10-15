@@ -14,7 +14,21 @@ class TagSetupRepository {
   final Ref _ref;
   TagSetupRepository(this._ref);
 
-  Future<void> processAndSeedTags() async {
+  /// Runs [processAndSeedTags], retrying tags that failed to embed, and
+  /// returns whether every tag ended up with a cached embedding.
+  Future<bool> ensureTagsSeeded({int maxAttempts = 2}) async {
+    for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+      if (await processAndSeedTags()) return true;
+      debugPrint("Tag seeding incomplete (attempt $attempt/$maxAttempts)");
+    }
+    return false;
+  }
+
+  /// Embeds and caches every goal/injury tag from the exercise data.
+  ///
+  /// Returns `true` only when every tag has a cached embedding. Tags that
+  /// fail are left without one, so they are retried on the next call.
+  Future<bool> processAndSeedTags() async {
     final db = await DatabaseService.instance.database;
 
     final String jsonString = await rootBundle.loadString(
@@ -41,53 +55,96 @@ class TagSetupRepository {
       "Tag seeding: ${uniqueGoals.length} goals, "
       "${uniqueInjuries.length} injuries found",
     );
-    await _processSet(db, uniqueGoals, TagType.goal);
-    await _processSet(db, uniqueInjuries, TagType.injury);
-  }
-
-  Future<void> _processSet(Database db, Set<String> tags, TagType type) async {
-    final aiRepo = _ref.read(aiModelRepositoryProvider);
-
-    // Load every cached tag of this type in one query instead of one query
-    // per tag.
+    // Load every existing tag in one query instead of one query per tag.
+    // `tag_name` is unique across types, so rows are keyed by name only.
     final List<Map<String, dynamic>> existingRows = await db.query(
       TagsTable.tableName,
-      columns: [TagsTable.tagName],
-      where: '${TagsTable.tagType} = ? AND ${TagsTable.embedding} IS NOT NULL',
-      whereArgs: [type.name],
+      columns: [TagsTable.tagName, TagsTable.embedding],
     );
-    final Set<String> cached = existingRows
-        .map((row) => row[TagsTable.tagName] as String)
-        .toSet();
+    final Map<String, bool> existing = {
+      for (final row in existingRows)
+        row[TagsTable.tagName] as String: row[TagsTable.embedding] != null,
+    };
 
-    final List<Tag> newTags = [];
+    final goalFailures = await _processSet(
+      db,
+      uniqueGoals,
+      TagType.goal,
+      existing,
+    );
+    final injuryFailures = await _processSet(
+      db,
+      uniqueInjuries,
+      TagType.injury,
+      existing,
+    );
+    return goalFailures + injuryFailures == 0;
+  }
+
+  /// Embeds tags that are missing or have a null embedding, and returns the
+  /// number of tags that could not be embedded.
+  Future<int> _processSet(
+    Database db,
+    Set<String> tags,
+    TagType type,
+    Map<String, bool> existing,
+  ) async {
+    final aiRepo = _ref.read(aiModelRepositoryProvider);
+
+    final batch = db.batch();
+    int cached = 0;
+    int inserted = 0;
+    int updated = 0;
     int failed = 0;
 
     for (String tagName in tags) {
-      if (tagName.isEmpty || cached.contains(tagName)) continue;
+      if (tagName.isEmpty) continue;
+      final hasEmbedding = existing[tagName];
+      if (hasEmbedding == true) {
+        cached++;
+        continue;
+      }
 
       final Uint8List? embeddingBytes = await aiRepo.generateEmbedding(tagName);
       if (embeddingBytes == null) {
         failed++;
         continue;
       }
-      newTags.add(
-        Tag(tagName: tagName, tagType: type, embedding: embeddingBytes),
-      );
+
+      if (hasEmbedding == false) {
+        // Row exists without an embedding: fill it in rather than inserting
+        // a duplicate name.
+        batch.update(
+          TagsTable.tableName,
+          {TagsTable.embedding: embeddingBytes},
+          where: '${TagsTable.tagName} = ?',
+          whereArgs: [tagName],
+        );
+        updated++;
+      } else {
+        batch.insert(
+          TagsTable.tableName,
+          Tag(
+            tagName: tagName,
+            tagType: type,
+            embedding: embeddingBytes,
+          ).toMap(),
+          conflictAlgorithm: ConflictAlgorithm.ignore,
+        );
+        inserted++;
+      }
+      existing[tagName] = true;
     }
 
-    if (newTags.isNotEmpty) {
-      final batch = db.batch();
-      for (final tag in newTags) {
-        batch.insert(TagsTable.tableName, tag.toMap());
-      }
+    if (inserted + updated > 0) {
       await batch.commit(noResult: true);
     }
 
     debugPrint(
-      "Tag seeding [${type.name}]: ${cached.length} cached, "
-      "${newTags.length} embedded, $failed failed",
+      "Tag seeding [${type.name}]: $cached cached, $inserted inserted, "
+      "$updated updated, $failed failed",
     );
+    return failed;
   }
 
   Future<void> debugPrintAllCachedTags() async {

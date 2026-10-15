@@ -43,10 +43,16 @@ class AiInferenceViewModel extends _$AiInferenceViewModel {
       final aiModelRepo = ref.read(aiModelRepositoryProvider);
       final tagSetupRepo = ref.read(tagSetupRepositoryProvider);
       await aiModelRepo.initModel();
-      await tagSetupRepo.processAndSeedTags();
+      final tagsSeeded = await tagSetupRepo.ensureTagsSeeded();
 
       if (!ref.mounted) return;
 
+      if (!tagsSeeded) {
+        debugPrint(
+          "AI Lifecycle: Some tags have no embedding; engine not marked ready.",
+        );
+        return;
+      }
       state = state.copyWith(isReady: true);
       debugPrint("AI Lifecycle: Pipeline is READY and Cached");
     } catch (e) {
