@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
 import 'package:move_your_body/core/widgets/app_toast.dart';
 import 'package:move_your_body/core/widgets/button_card.dart';
@@ -41,11 +42,13 @@ class BodyRegionScreen extends ConsumerWidget {
             const SizedBox(height: 20),
             ButtonCard(
               title: 'Cardio and Endurance',
-              selected: selectedBodyRegions.contains('Cardio and Endurance'),
+              selected: selectedBodyRegions.contains(
+                BodyRegion.cardioAndEndurance.name,
+              ),
               titleFontSize: 20,
               onTap: () {
                 onboardingNotifier.toggleTargetBodyRegion(
-                  'Cardio and Endurance',
+                  BodyRegion.cardioAndEndurance.name,
                 );
               },
             ),
@@ -53,10 +56,14 @@ class BodyRegionScreen extends ConsumerWidget {
 
             ButtonCard(
               title: 'Upper Body',
-              selected: selectedBodyRegions.contains('Upper Body'),
+              selected: selectedBodyRegions.contains(
+                BodyRegion.upperBody.name,
+              ),
               titleFontSize: 20,
               onTap: () {
-                onboardingNotifier.toggleTargetBodyRegion('Upper Body');
+                onboardingNotifier.toggleTargetBodyRegion(
+                  BodyRegion.upperBody.name,
+                );
               },
             ),
 
@@ -64,10 +71,10 @@ class BodyRegionScreen extends ConsumerWidget {
 
             ButtonCard(
               title: 'Core Strength',
-              selected: selectedBodyRegions.contains('Core Strength'),
+              selected: selectedBodyRegions.contains(BodyRegion.core.name),
               titleFontSize: 20,
               onTap: () {
-                onboardingNotifier.toggleTargetBodyRegion('Core Strength');
+                onboardingNotifier.toggleTargetBodyRegion(BodyRegion.core.name);
               },
             ),
 
@@ -75,10 +82,14 @@ class BodyRegionScreen extends ConsumerWidget {
 
             ButtonCard(
               title: 'Lower Body',
-              selected: selectedBodyRegions.contains('Lower Body'),
+              selected: selectedBodyRegions.contains(
+                BodyRegion.lowerBody.name,
+              ),
               titleFontSize: 20,
               onTap: () {
-                onboardingNotifier.toggleTargetBodyRegion('Lower Body');
+                onboardingNotifier.toggleTargetBodyRegion(
+                  BodyRegion.lowerBody.name,
+                );
               },
             ),
 
@@ -86,12 +97,12 @@ class BodyRegionScreen extends ConsumerWidget {
             ButtonCard(
               title: 'Mobility and Flexibility',
               selected: selectedBodyRegions.contains(
-                'Mobility and Flexibility',
+                BodyRegion.mobilityAndFlexibility.name,
               ),
               titleFontSize: 20,
               onTap: () {
                 onboardingNotifier.toggleTargetBodyRegion(
-                  'Mobility and Flexibility',
+                  BodyRegion.mobilityAndFlexibility.name,
                 );
               },
             ),

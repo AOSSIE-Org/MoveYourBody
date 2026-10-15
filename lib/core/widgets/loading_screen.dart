@@ -2,10 +2,12 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/model/tag_data.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
 import 'package:move_your_body/features/ai_inference/repositories/ai_repository.dart';
 import 'package:move_your_body/features/ai_inference/repositories/tag_setup_repository.dart';
 import 'package:move_your_body/features/ai_inference/view_model/ai_inference_view_model.dart';
+import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
 import 'package:move_your_body/features/onboarding/view_model/onboarding_view_model.dart';
 import '../../../../core/theme/app_colors.dart';
 
@@ -41,26 +43,59 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       Uint8List? customHealthBytes;
 
       if (onboardingData.customGoal.trim().isNotEmpty) {
-        print("🧠 Pipeline Phase 3: Generating embedding for Custom Goal: '${onboardingData.customGoal}'");
-        customGoalBytes = await aiModelRepo.generateEmbedding(onboardingData.customGoal.trim());
+        print(
+          "🧠 Pipeline Phase 3: Generating embedding for Custom Goal: '${onboardingData.customGoal}'",
+        );
+        customGoalBytes = await aiModelRepo.generateEmbedding(
+          onboardingData.customGoal.trim(),
+        );
       }
 
       if (onboardingData.customHealthIssue.trim().isNotEmpty) {
-        print("🧠 Pipeline Phase 4: Generating embedding for Custom Injury: '${onboardingData.customHealthIssue}'");
-        customHealthBytes = await aiModelRepo.generateEmbedding(onboardingData.customHealthIssue.trim());
+        print(
+          "🧠 Pipeline Phase 4: Generating embedding for Custom Injury: '${onboardingData.customHealthIssue}'",
+        );
+        customHealthBytes = await aiModelRepo.generateEmbedding(
+          onboardingData.customHealthIssue.trim(),
+        );
       }
-
-      print("💾 Pipeline Phase 5: Saving complete profile to UserTable...");
-      await ref.read(onboardingViewModelProvider.notifier).saveAndCompleteOnboarding(
+      final goalMatches = await tagSetupRepo.findTopMatches(
+        type: TagType.goal,
+        userEmbedding: customGoalBytes,
+        limit: 3,
+        threshold: 0.60,
+      );
+      final healthMatches = await tagSetupRepo.findTopMatches(
+        type: TagType.injury,
+        userEmbedding: customHealthBytes,
+        limit: 3,
+        threshold: 0.60,
+      );
+      await ref
+          .read(onboardingViewModelProvider.notifier)
+          .saveAndCompleteOnboarding(
             goalEmbed: customGoalBytes,
             healthEmbed: customHealthBytes,
           );
+
+      await ref
+          .read(tagSetupRepositoryProvider)
+          .updateResolvedTags(goals: goalMatches, injuries: healthMatches);
+      ref
+          .read(onboardingViewModelProvider.notifier)
+          .updateResolvedTags(goals: goalMatches, healthIssues: healthMatches);
+      await ref.read(userRepositoryProvider).debugPrintUserData();
+      print(
+        "💾 Pipeline Phase 5: Saving complete profile to UserTable and extracting top tags.",
+      );
 
       ref.read(aiInferenceViewModelProvider.notifier).setEngineReady();
 
       if (!mounted) return;
 
-      print("🎯 Pipeline Perfect: All operations complete. Redirecting to Results.");
+      print(
+        "🎯 Pipeline Perfect: All operations complete. Redirecting to Results.",
+      );
       context.go(AppRoutes.result);
     } catch (e) {
       print("❌ Critical Pipeline Crash: $e");
@@ -92,7 +127,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
                         color: AppColors.primary.withValues(alpha: 0.05),
                         blurRadius: 20,
                         spreadRadius: 2,
-                      )
+                      ),
                     ],
                   ),
                   child: Column(
@@ -103,12 +138,14 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
                         width: 60,
                         child: CircularProgressIndicator(
                           strokeWidth: 4.5,
-                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.primary,
+                          ),
                           backgroundColor: AppColors.card,
                         ),
                       ),
                       const SizedBox(height: 32),
-                      
+
                       Text(
                         'Personalizing Your Plan',
                         textAlign: TextAlign.center,
@@ -118,7 +155,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      
+
                       Text(
                         'Our local AI model is executing secure mathematical vector inferences on your profile parameters to finalize custom exercise routines natively.',
                         textAlign: TextAlign.center,
@@ -131,9 +168,12 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
                   ),
                 ),
                 const SizedBox(height: 40),
-                
+
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.card,
                     borderRadius: BorderRadius.circular(30),

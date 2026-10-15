@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
 import 'package:move_your_body/core/widgets/button_card.dart';
 import 'package:move_your_body/core/widgets/onboarding_progress.dart';
@@ -41,31 +42,20 @@ class EquipmentScreen extends ConsumerWidget {
               const SizedBox(height: 20),
               ButtonCard(
                 title: 'Yoga Mat',
-                selected: selectedEquipments.contains('Yoga Mat'),
+                selected: selectedEquipments.contains(Equipment.yogaMat.name),
                 titleFontSize: 20,
                 onTap: () {
-                  onboardingNotifier.toggleEquipment('Yoga Mat');
+                  onboardingNotifier.toggleEquipment(Equipment.yogaMat.name);
                 },
               ),
               const SizedBox(height: 20),
 
               ButtonCard(
                 title: 'Dumbbells',
-                selected: selectedEquipments.contains('Dumbbells'),
+                selected: selectedEquipments.contains(Equipment.dumbbells.name),
                 titleFontSize: 20,
                 onTap: () {
-                  onboardingNotifier.toggleEquipment('Dumbbells');
-                },
-              ),
-
-              const SizedBox(height: 20),
-
-              ButtonCard(
-                title: 'Resistance Bands',
-                selected: selectedEquipments.contains('Resistance Bands'),
-                titleFontSize: 20,
-                onTap: () {
-                  onboardingNotifier.toggleEquipment('Resistance Bands');
+                  onboardingNotifier.toggleEquipment(Equipment.dumbbells.name);
                 },
               ),
 
@@ -73,30 +63,45 @@ class EquipmentScreen extends ConsumerWidget {
 
               ButtonCard(
                 title: 'Pull-Up Bar',
-                selected: selectedEquipments.contains('Pull-Up Bar'),
+                selected: selectedEquipments.contains(Equipment.pullUpBar.name),
                 titleFontSize: 20,
                 onTap: () {
-                  onboardingNotifier.toggleEquipment('Pull-Up Bar');
+                  onboardingNotifier.toggleEquipment(Equipment.pullUpBar.name);
+                },
+              ),
+
+              const SizedBox(height: 20),
+
+              ButtonCard(
+                title: 'Stability Ball',
+                selected: selectedEquipments.contains(
+                  Equipment.stabilityBall.name,
+                ),
+                titleFontSize: 20,
+                onTap: () {
+                  onboardingNotifier.toggleEquipment(
+                    Equipment.stabilityBall.name,
+                  );
                 },
               ),
 
               const SizedBox(height: 20),
               ButtonCard(
-                title: 'Yoga Blocks and Belts ',
-                selected: selectedEquipments.contains('Yoga Blocks and Belts '),
+                title: 'Jump Rope',
+                selected: selectedEquipments.contains(Equipment.jumpRope.name),
                 titleFontSize: 20,
                 onTap: () {
-                  onboardingNotifier.toggleEquipment('Yoga Blocks and Belts ');
+                  onboardingNotifier.toggleEquipment(Equipment.jumpRope.name);
                 },
               ),
 
               const SizedBox(height: 20),
               ButtonCard(
                 title: 'Exercise Bench',
-                selected: selectedEquipments.contains('Exercise Bench'),
+                selected: selectedEquipments.contains(Equipment.bench.name),
                 titleFontSize: 20,
                 onTap: () {
-                  onboardingNotifier.toggleEquipment('Exercise Bench');
+                  onboardingNotifier.toggleEquipment(Equipment.bench.name);
                 },
               ),
               const SizedBox(height: 30),
