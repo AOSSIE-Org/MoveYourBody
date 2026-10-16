@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
 import 'package:move_your_body/core/widgets/app_toast.dart';
 import 'package:move_your_body/core/widgets/button_card.dart';
@@ -43,9 +44,9 @@ class IntensityScreen extends ConsumerWidget {
               title: 'Light',
               subtitle:
                   'Easy-paced workouts focused on mobility, consistency, and recovery.',
-              selected: selectedIntensity == 'Light',
+              selected: selectedIntensity == Intensity.low.name,
               onTap: () {
-                onboardingNotifier.setIntensity('Light');
+                onboardingNotifier.setIntensity(Intensity.low.name);
               },
             ),
 
@@ -55,9 +56,9 @@ class IntensityScreen extends ConsumerWidget {
               title: 'Moderate',
               subtitle:
                   'Balanced challenge to improve endurance, fitness and strength.',
-              selected: selectedIntensity == 'Moderate',
+              selected: selectedIntensity == Intensity.moderate.name,
               onTap: () {
-                onboardingNotifier.setIntensity('Moderate');
+                onboardingNotifier.setIntensity(Intensity.moderate.name);
               },
             ),
 
@@ -67,9 +68,9 @@ class IntensityScreen extends ConsumerWidget {
               title: 'High',
               subtitle:
                   'Demanding sessions designed to maximize performance and results.',
-              selected: selectedIntensity == 'High',
+              selected: selectedIntensity == Intensity.high.name,
               onTap: () {
-                onboardingNotifier.setIntensity('High');
+                onboardingNotifier.setIntensity(Intensity.high.name);
               },
             ),
 

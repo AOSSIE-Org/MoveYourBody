@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
 import 'package:move_your_body/core/widgets/app_toast.dart';
 import 'package:move_your_body/core/widgets/button_card.dart';
@@ -43,9 +44,9 @@ class DifficultyScreen extends ConsumerWidget {
               title: 'Beginner',
               subtitle:
                   'New to fitness, rarely exercise or returning after a long break.',
-              selected: selectedDifficulty == 'Beginner',
+              selected: selectedDifficulty == Difficulty.beginner.name,
               onTap: () {
-                onboardingNotifier.setDifficulty('Beginner');
+                onboardingNotifier.setDifficulty(Difficulty.beginner.name);
               },
             ),
 
@@ -55,9 +56,9 @@ class DifficultyScreen extends ConsumerWidget {
               title: 'Intermediate',
               subtitle:
                   'Exercise regularly and have a basic fitness foundation.',
-              selected: selectedDifficulty == 'Intermediate',
+              selected: selectedDifficulty == Difficulty.intermediate.name,
               onTap: () {
-                onboardingNotifier.setDifficulty('Intermediate');
+                onboardingNotifier.setDifficulty(Difficulty.intermediate.name);
               },
             ),
 
@@ -67,9 +68,9 @@ class DifficultyScreen extends ConsumerWidget {
               title: 'Advanced',
               subtitle:
                   'Train consistently with strong endurance and strength.',
-              selected: selectedDifficulty == 'Advanced',
+              selected: selectedDifficulty == Difficulty.advanced.name,
               onTap: () {
-                onboardingNotifier.setDifficulty('Advanced');
+                onboardingNotifier.setDifficulty(Difficulty.advanced.name);
               },
             ),
 

@@ -55,6 +55,8 @@ class UserRepository {
     debugPrint(user?.targetBodyRegion.toString());
     debugPrint(user?.equipments.toString());
     debugPrint(user?.isOnboarded.toString());
+    debugPrint(user?.healthIssueEmbeddings.toString());
+    debugPrint(user?.goalEmbeddings.toString());
     debugPrint('===================');
   }
 }

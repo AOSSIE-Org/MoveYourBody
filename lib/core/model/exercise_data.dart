@@ -26,7 +26,7 @@ enum Difficulty { beginner, intermediate, advanced }
 
 enum Intensity { low, moderate, high }
 
-enum Equipment { stabilityBall, bench, dumbbells, yogaMat, jumpRope }
+enum Equipment { stabilityBall, bench, dumbbells, yogaMat, jumpRope, pullUpBar}
 
 class Exercise {
   final String exerciseId;
@@ -224,5 +224,54 @@ class Exercise {
           return Equipment.stabilityBall;
       }
     }).toList();
+  }
+
+  factory Exercise.fromMap(Map<String, dynamic> map) {
+    return Exercise(
+      exerciseId: map[ExerciseTable.exerciseId],
+      name: map[ExerciseTable.name],
+
+      type: ExerciseType.values.byName(map[ExerciseTable.type]),
+
+      primaryMuscles: List<String>.from(
+        jsonDecode(map[ExerciseTable.primaryMuscles]),
+      ),
+
+      secondaryMuscles: List<String>.from(
+        jsonDecode(map[ExerciseTable.secondaryMuscles]),
+      ),
+
+      bodyRegions: (jsonDecode(map[ExerciseTable.bodyRegions]) as List)
+          .map((e) => BodyRegion.values.byName(e))
+          .toList(),
+
+      movementPattern: map[ExerciseTable.movementPattern],
+
+      difficulty: Difficulty.values.byName(map[ExerciseTable.difficulty]),
+
+      intensity: Intensity.values.byName(map[ExerciseTable.intensity]),
+
+      goalTags: List<String>.from(jsonDecode(map[ExerciseTable.goalTags])),
+
+      estimatedTime: map[ExerciseTable.estimatedTime],
+
+      overview: map[ExerciseTable.overview],
+
+      benefits: map[ExerciseTable.benefits],
+
+      contraindications: List<String>.from(
+        jsonDecode(map[ExerciseTable.contraindications]),
+      ),
+
+      instructions: map[ExerciseTable.instructions],
+
+      isLottie: map[ExerciseTable.isLottie] == 1,
+
+      equipments: (jsonDecode(map[ExerciseTable.equipments]) as List)
+          .map((e) => Equipment.values.byName(e))
+          .toList(),
+
+      animationLink: map[ExerciseTable.animationLink],
+    );
   }
 }
