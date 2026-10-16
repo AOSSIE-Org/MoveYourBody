@@ -348,3 +348,5 @@ build/
 .flutter-plugins-dependencies
 lib/generated/
 
+# Jupyter
+.ipynb_checkpoints/

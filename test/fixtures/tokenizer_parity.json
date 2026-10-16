@@ -1,0 +1,1533 @@
+{
+ "generated_by": "notebooks/onnx_pipeline_validation.ipynb",
+ "vocab": "assets/models/vocab.txt",
+ "cases": [
+  {
+   "source": "tag",
+   "input": "abdominal",
+   "ids": [
+    101,
+    21419,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "athletic_performance",
+   "ids": [
+    101,
+    5188,
+    2836,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "back",
+   "ids": [
+    101,
+    2067,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "back_pain_relief",
+   "ids": [
+    101,
+    2067,
+    3255,
+    4335,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "balance",
+   "ids": [
+    101,
+    5703,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "bodyweight",
+   "ids": [
+    101,
+    2303,
+    11179,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "breathing",
+   "ids": [
+    101,
+    5505,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "cardio",
+   "ids": [
+    101,
+    4003,
+    3695,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "chest_opening",
+   "ids": [
+    101,
+    3108,
+    3098,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "conditioning",
+   "ids": [
+    101,
+    14372,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "coordination",
+   "ids": [
+    101,
+    12016,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "core",
+   "ids": [
+    101,
+    4563,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "core_stability",
+   "ids": [
+    101,
+    4563,
+    9211,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "core_strength",
+   "ids": [
+    101,
+    4563,
+    3997,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "detox",
+   "ids": [
+    101,
+    20010,
+    11636,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "digestion",
+   "ids": [
+    101,
+    17886,
+    3258,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "endurance",
+   "ids": [
+    101,
+    14280,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "fat_burn",
+   "ids": [
+    101,
+    6638,
+    6402,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "flexibility",
+   "ids": [
+    101,
+    16991,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "focus",
+   "ids": [
+    101,
+    3579,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "functional",
+   "ids": [
+    101,
+    8360,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "glutes",
+   "ids": [
+    101,
+    1043,
+    7630,
+    4570,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "grip_strength",
+   "ids": [
+    101,
+    6218,
+    3997,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "hip_activation",
+   "ids": [
+    101,
+    5099,
+    13791,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "lower_body",
+   "ids": [
+    101,
+    2896,
+    2303,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "lower_body_strength",
+   "ids": [
+    101,
+    2896,
+    2303,
+    3997,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "mindfulness",
+   "ids": [
+    101,
+    2568,
+    20938,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "mobility",
+   "ids": [
+    101,
+    12969,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "muscle_building",
+   "ids": [
+    101,
+    6740,
+    2311,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "posterior_chain",
+   "ids": [
+    101,
+    15219,
+    4677,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "posture",
+   "ids": [
+    101,
+    16819,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "power",
+   "ids": [
+    101,
+    2373,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "recovery",
+   "ids": [
+    101,
+    7233,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "rehabilitation",
+   "ids": [
+    101,
+    11252,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "relaxation",
+   "ids": [
+    101,
+    23370,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "shoulder_stability",
+   "ids": [
+    101,
+    3244,
+    9211,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "sleep",
+   "ids": [
+    101,
+    3637,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "stability",
+   "ids": [
+    101,
+    9211,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "strength",
+   "ids": [
+    101,
+    3997,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "stress_relief",
+   "ids": [
+    101,
+    6911,
+    4335,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "toning",
+   "ids": [
+    101,
+    16525,
+    3070,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "upper_body",
+   "ids": [
+    101,
+    3356,
+    2303,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "warm_up",
+   "ids": [
+    101,
+    4010,
+    2039,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "warmup",
+   "ids": [
+    101,
+    4010,
+    6279,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "IT_band_syndrome",
+   "ids": [
+    101,
+    2009,
+    2316,
+    8715,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "SI_joint_instability",
+   "ids": [
+    101,
+    9033,
+    4101,
+    18549,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "abdominal_strain",
+   "ids": [
+    101,
+    21419,
+    10178,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "achilles_tendon_injury",
+   "ids": [
+    101,
+    23167,
+    7166,
+    2239,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "acute_elbow_injury",
+   "ids": [
+    101,
+    11325,
+    8999,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "acute_hip_injury",
+   "ids": [
+    101,
+    11325,
+    5099,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "acute_lower_back_pain",
+   "ids": [
+    101,
+    11325,
+    2896,
+    2067,
+    3255,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "ankle_injury",
+   "ids": [
+    101,
+    10792,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "ankle_instability",
+   "ids": [
+    101,
+    10792,
+    18549,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "arthritis",
+   "ids": [
+    101,
+    27641,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "back_injury",
+   "ids": [
+    101,
+    2067,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "balance_disorders",
+   "ids": [
+    101,
+    5703,
+    10840,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "balance_issues",
+   "ids": [
+    101,
+    5703,
+    3314,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "balance_problems",
+   "ids": [
+    101,
+    5703,
+    3471,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "bicep_tendon_injury",
+   "ids": [
+    101,
+    12170,
+    3401,
+    2361,
+    7166,
+    2239,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "broken_limb_bones",
+   "ids": [
+    101,
+    3714,
+    15291,
+    5944,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "calf_strain",
+   "ids": [
+    101,
+    19134,
+    10178,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "carpal_tunnel",
+   "ids": [
+    101,
+    29267,
+    2389,
+    5234,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "cervical_spine_injury",
+   "ids": [
+    101,
+    28711,
+    8560,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "diarrhea",
+   "ids": [
+    101,
+    22939,
+    12171,
+    20192,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "elbow_injury",
+   "ids": [
+    101,
+    8999,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "elbow_pain",
+   "ids": [
+    101,
+    8999,
+    3255,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "elbow_tendinitis",
+   "ids": [
+    101,
+    8999,
+    7166,
+    5498,
+    7315,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "forearm_strain",
+   "ids": [
+    101,
+    16148,
+    10178,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "glaucoma",
+   "ids": [
+    101,
+    1043,
+    17298,
+    9006,
+    2050,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "groin_injury",
+   "ids": [
+    101,
+    20092,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "groin_strain",
+   "ids": [
+    101,
+    20092,
+    10178,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "hamstring_injury",
+   "ids": [
+    101,
+    10654,
+    3367,
+    4892,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "hamstring_strain",
+   "ids": [
+    101,
+    10654,
+    3367,
+    4892,
+    10178,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "hamstring_tear",
+   "ids": [
+    101,
+    10654,
+    3367,
+    4892,
+    7697,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "headaches",
+   "ids": [
+    101,
+    14978,
+    2015,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "heart_condition",
+   "ids": [
+    101,
+    2540,
+    4650,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "heart_conditions",
+   "ids": [
+    101,
+    2540,
+    3785,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "hernia",
+   "ids": [
+    101,
+    2014,
+    6200,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "herniated_disc",
+   "ids": [
+    101,
+    2014,
+    6200,
+    3064,
+    5860,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "high_blood_pressure",
+   "ids": [
+    101,
+    2152,
+    2668,
+    3778,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "hip_flexor_injury",
+   "ids": [
+    101,
+    5099,
+    23951,
+    2953,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "hip_flexor_strain",
+   "ids": [
+    101,
+    5099,
+    23951,
+    2953,
+    10178,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "hip_injury",
+   "ids": [
+    101,
+    5099,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "hip_pain",
+   "ids": [
+    101,
+    5099,
+    3255,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "hip_replacement",
+   "ids": [
+    101,
+    5099,
+    6110,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "insomnia",
+   "ids": [
+    101,
+    16021,
+    5358,
+    6200,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "joint_injuries",
+   "ids": [
+    101,
+    4101,
+    6441,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "joint_pain",
+   "ids": [
+    101,
+    4101,
+    3255,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "knee_injury",
+   "ids": [
+    101,
+    6181,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "knee_pain",
+   "ids": [
+    101,
+    6181,
+    3255,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "knee_replacement",
+   "ids": [
+    101,
+    6181,
+    6110,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "low_blood_pressure",
+   "ids": [
+    101,
+    2659,
+    2668,
+    3778,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "lower_back_injury",
+   "ids": [
+    101,
+    2896,
+    2067,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "lower_back_pain",
+   "ids": [
+    101,
+    2896,
+    2067,
+    3255,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "lumbar_stenosis",
+   "ids": [
+    101,
+    11320,
+    11201,
+    2099,
+    26261,
+    27109,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "menstruation",
+   "ids": [
+    101,
+    2273,
+    3367,
+    6820,
+    3370,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "migraine",
+   "ids": [
+    101,
+    19117,
+    26456,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "neck_injury",
+   "ids": [
+    101,
+    3300,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "neuromuscular_disorders",
+   "ids": [
+    101,
+    11265,
+    10976,
+    7606,
+    15431,
+    10840,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "osteoarthritis_of_knee",
+   "ids": [
+    101,
+    9808,
+    2618,
+    10441,
+    15265,
+    14778,
+    2483,
+    1997,
+    6181,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "osteoporosis",
+   "ids": [
+    101,
+    9808,
+    2618,
+    7361,
+    14604,
+    6190,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "peptic_ulcer",
+   "ids": [
+    101,
+    27233,
+    4588,
+    17359,
+    17119,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "plantar_fasciitis",
+   "ids": [
+    101,
+    3269,
+    2906,
+    6904,
+    11020,
+    6137,
+    7315,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "post_abdominal_surgery",
+   "ids": [
+    101,
+    2695,
+    21419,
+    5970,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "post_ankle_surgery",
+   "ids": [
+    101,
+    2695,
+    10792,
+    5970,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "post_elbow_surgery",
+   "ids": [
+    101,
+    2695,
+    8999,
+    5970,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "post_hip_surgery",
+   "ids": [
+    101,
+    2695,
+    5099,
+    5970,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "post_knee_surgery",
+   "ids": [
+    101,
+    2695,
+    6181,
+    5970,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "post_shoulder_surgery",
+   "ids": [
+    101,
+    2695,
+    3244,
+    5970,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "post_spinal_surgery",
+   "ids": [
+    101,
+    2695,
+    16492,
+    5970,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "pregnancy",
+   "ids": [
+    101,
+    10032,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "respiratory_disorders",
+   "ids": [
+    101,
+    16464,
+    10840,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "rotator_cuff_injury",
+   "ids": [
+    101,
+    18672,
+    8844,
+    26450,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "rotator_cuff_tear",
+   "ids": [
+    101,
+    18672,
+    8844,
+    26450,
+    7697,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "sciatica",
+   "ids": [
+    101,
+    16596,
+    12070,
+    2050,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "scoliosis",
+   "ids": [
+    101,
+    8040,
+    29401,
+    6190,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "shoulder_impingement",
+   "ids": [
+    101,
+    3244,
+    17727,
+    23496,
+    3672,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "shoulder_injury",
+   "ids": [
+    101,
+    3244,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "shoulder_pain",
+   "ids": [
+    101,
+    3244,
+    3255,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "shoulder_replacement",
+   "ids": [
+    101,
+    3244,
+    6110,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "spinal_conditions",
+   "ids": [
+    101,
+    16492,
+    3785,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "spinal_disc_problems",
+   "ids": [
+    101,
+    16492,
+    5860,
+    3471,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "spinal_disorders",
+   "ids": [
+    101,
+    16492,
+    10840,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "spinal_injury",
+   "ids": [
+    101,
+    16492,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "spinal_stenosis",
+   "ids": [
+    101,
+    16492,
+    26261,
+    27109,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "spinal_surgery",
+   "ids": [
+    101,
+    16492,
+    5970,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "spine_issues",
+   "ids": [
+    101,
+    8560,
+    3314,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "stiff_hamstrings",
+   "ids": [
+    101,
+    10551,
+    10654,
+    3367,
+    4892,
+    2015,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "trapezius_strain",
+   "ids": [
+    101,
+    8132,
+    9351,
+    4173,
+    10178,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "varicose_veins",
+   "ids": [
+    101,
+    13075,
+    11261,
+    3366,
+    9607,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "vertigo",
+   "ids": [
+    101,
+    28246,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "wrist_injury",
+   "ids": [
+    101,
+    7223,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "tag",
+   "input": "wrist_pain",
+   "ids": [
+    101,
+    7223,
+    3255,
+    102
+   ]
+  },
+  {
+   "source": "query",
+   "input": "I want to lose belly fat",
+   "ids": [
+    101,
+    1045,
+    2215,
+    2000,
+    4558,
+    7579,
+    6638,
+    102
+   ]
+  },
+  {
+   "source": "query",
+   "input": "build stronger legs",
+   "ids": [
+    101,
+    3857,
+    6428,
+    3456,
+    102
+   ]
+  },
+  {
+   "source": "query",
+   "input": "improve flexibility",
+   "ids": [
+    101,
+    5335,
+    16991,
+    102
+   ]
+  },
+  {
+   "source": "query",
+   "input": "reduce stress",
+   "ids": [
+    101,
+    5547,
+    6911,
+    102
+   ]
+  },
+  {
+   "source": "query",
+   "input": "get fit and healthy",
+   "ids": [
+    101,
+    2131,
+    4906,
+    1998,
+    7965,
+    102
+   ]
+  },
+  {
+   "source": "query",
+   "input": "better sleep",
+   "ids": [
+    101,
+    2488,
+    3637,
+    102
+   ]
+  },
+  {
+   "source": "query",
+   "input": "my knee hurts",
+   "ids": [
+    101,
+    2026,
+    6181,
+    13403,
+    102
+   ]
+  },
+  {
+   "source": "query",
+   "input": "lower back pain",
+   "ids": [
+    101,
+    2896,
+    2067,
+    3255,
+    102
+   ]
+  },
+  {
+   "source": "query",
+   "input": "shoulder injury",
+   "ids": [
+    101,
+    3244,
+    4544,
+    102
+   ]
+  },
+  {
+   "source": "query",
+   "input": "high blood pressure",
+   "ids": [
+    101,
+    2152,
+    2668,
+    3778,
+    102
+   ]
+  },
+  {
+   "source": "query",
+   "input": "I had knee surgery",
+   "ids": [
+    101,
+    1045,
+    2018,
+    6181,
+    5970,
+    102
+   ]
+  },
+  {
+   "source": "query",
+   "input": "sprained ankle",
+   "ids": [
+    101,
+    11867,
+    27361,
+    10792,
+    102
+   ]
+  }
+ ]
+}
