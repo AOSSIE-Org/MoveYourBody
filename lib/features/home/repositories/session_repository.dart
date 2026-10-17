@@ -243,4 +243,68 @@ class SessionRepository {
       return null;
     }
   }
+
+  Future<void> updateSessionStatus(int sessionId, SessionStatus status) async {
+    try {
+      final db = await DatabaseService.instance.database;
+      await db.update(
+        SessionScheduleTable.tableName,
+        {SessionScheduleTable.sessionStatus: status.name},
+        where: '${SessionScheduleTable.id} = ?',
+        whereArgs: [sessionId],
+      );
+    } catch (e) {
+      debugPrint('Error updating session status: $e');
+    }
+  }
+
+  Future<void> updateSessionExerciseStatus({
+    required int sessionExerciseId,
+    required ExerciseStatus status,
+    required int performedDuration,
+  }) async {
+    try {
+      final db = await DatabaseService.instance.database;
+      await db.update(
+        SessionExercisesTable.tableName,
+        {
+          SessionExercisesTable.exerciseStatus: status.name,
+          SessionExercisesTable.performedDuration: performedDuration,
+          SessionExercisesTable.completedAt: DateTime.now().toIso8601String(),
+        },
+        where: '${SessionExercisesTable.id} = ?',
+        whereArgs: [sessionExerciseId],
+      );
+    } catch (e) {
+      debugPrint('Error updating session exercise: $e');
+    }
+  }
+
+  Future<void> completeSession({
+    required int sessionId,
+    required int totalDuration,
+    required double caloriesBurned,
+    String? difficultyFeedback,
+    String? intensityFeedback,
+  }) async {
+    try {
+      final db = await DatabaseService.instance.database;
+      await db.update(
+        SessionScheduleTable.tableName,
+        {
+          SessionScheduleTable.sessionStatus: SessionStatus.completed.name,
+          SessionScheduleTable.sessionDuration: totalDuration,
+          SessionScheduleTable.caloriesBurned: caloriesBurned,
+          if (difficultyFeedback != null)
+            SessionScheduleTable.difficultyFeedback: difficultyFeedback,
+          if (intensityFeedback != null)
+            SessionScheduleTable.intensityFeedback: intensityFeedback,
+        },
+        where: '${SessionScheduleTable.id} = ?',
+        whereArgs: [sessionId],
+      );
+    } catch (e) {
+      debugPrint('Error completing session: $e');
+    }
+  }
 }

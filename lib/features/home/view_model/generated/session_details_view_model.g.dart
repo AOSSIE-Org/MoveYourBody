@@ -108,3 +108,72 @@ abstract class _$SessionDetailsViewModel
     element.handleCreate(ref, () => build(_$args));
   }
 }
+
+@ProviderFor(animationFile)
+final animationFileProvider = AnimationFileFamily._();
+
+final class AnimationFileProvider
+    extends $FunctionalProvider<AsyncValue<File>, File, FutureOr<File>>
+    with $FutureModifier<File>, $FutureProvider<File> {
+  AnimationFileProvider._({
+    required AnimationFileFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'animationFileProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$animationFileHash();
+
+  @override
+  String toString() {
+    return r'animationFileProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<File> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<File> create(Ref ref) {
+    final argument = this.argument as String;
+    return animationFile(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AnimationFileProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$animationFileHash() => r'b49aaa04a807a634bdb85ade7d6ced8af59f96b3';
+
+final class AnimationFileFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<File>, String> {
+  AnimationFileFamily._()
+    : super(
+        retry: null,
+        name: r'animationFileProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  AnimationFileProvider call(String url) =>
+      AnimationFileProvider._(argument: url, from: this);
+
+  @override
+  String toString() => r'animationFileProvider';
+}

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/core/widgets/app_scaffold.dart';
-import 'package:move_your_body/features/home/repositories/exercise_repository.dart';
+import 'package:move_your_body/features/home/view_model/exercise_info_view_model.dart';
 import '../widgets/exercise_info/exercise_info_body.dart';
 
 class ExerciseInfoScreen extends ConsumerWidget {
@@ -12,22 +11,19 @@ class ExerciseInfoScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder<Exercise?>(
-      future: _loadExercise(ref),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const AppScaffold(
-            child: Center(child: CircularProgressIndicator()),
-          );
-        }
+    final asyncExercise = ref.watch(exerciseInfoViewModelProvider(exerciseId));
 
-        final exercise = snapshot.data;
+    return asyncExercise.when(
+      data: (exercise) {
         if (exercise == null) {
           return AppScaffold(
             child: Center(
               child: Text(
                 'Exercise not found',
-                style: TextStyle(color: Colors.red.shade300, fontSize: 16),
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.6),
+                  fontSize: 16,
+                ),
               ),
             ),
           );
@@ -35,13 +31,17 @@ class ExerciseInfoScreen extends ConsumerWidget {
 
         return ExerciseInfoBody(exercise: exercise);
       },
+      loading: () => const AppScaffold(
+        child: Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, stack) => AppScaffold(
+        child: Center(
+          child: Text(
+            'Error loading exercise',
+            style: TextStyle(color: Colors.red.shade300, fontSize: 16),
+          ),
+        ),
+      ),
     );
   }
-
-  Future<Exercise?> _loadExercise(WidgetRef ref) async {
-    final repo = ref.read(exerciseRepositoryProvider);
-    final exercises = await repo.getExercisesByIds([exerciseId]);
-    return exercises.isNotEmpty ? exercises.first : null;
-  }
 }
-

@@ -214,6 +214,8 @@ class Exercise {
       switch (e.trim()) {
         case 'bench':
           return Equipment.bench;
+        case 'pull_up_bar':
+          return Equipment.pullUpBar;
         case 'dumbbells':
           return Equipment.dumbbells;
         case 'yoga_mat':

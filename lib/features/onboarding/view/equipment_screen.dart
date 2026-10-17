@@ -58,7 +58,6 @@ class EquipmentScreen extends ConsumerWidget {
                   onboardingNotifier.toggleEquipment(Equipment.dumbbells.name);
                 },
               ),
-
               const SizedBox(height: 20),
 
               ButtonCard(
@@ -71,7 +70,6 @@ class EquipmentScreen extends ConsumerWidget {
               ),
 
               const SizedBox(height: 20),
-
               ButtonCard(
                 title: 'Stability Ball',
                 selected: selectedEquipments.contains(

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:move_your_body/features/home/repositories/exercise_repository.dart';
 import 'package:move_your_body/features/home/repositories/session_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -67,4 +68,10 @@ class SessionDetailsViewModel extends _$SessionDetailsViewModel {
     if (seconds < 0) return;
     state = state.copyWith(restTime: seconds);
   }
+}
+
+
+@riverpod
+Future<File> animationFile(Ref ref, String url) async {
+  return await ref.read(exerciseRepositoryProvider).getAnimationFile(url);
 }

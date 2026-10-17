@@ -144,7 +144,9 @@ class SessionDetailsScreen extends ConsumerWidget {
             const SizedBox(height: 40),
 
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                context.push(AppRoutes.sessionExecutionPath(sessionId));
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
