@@ -9,18 +9,30 @@ class TokenizerService {
   late WordPieceTokenizer _tokenizer;
   bool _isInitialized = false;
 
+  /// Builds the tokenizer used for all-MiniLM-L6-v2 from `vocab.txt` content.
+  static WordPieceTokenizer buildTokenizer(String vocabContent) {
+    return WordPieceTokenizer(
+      vocab: VocabLoader.fromString(vocabContent),
+      config: TokenizerConfig(maxLength: 128, normalizeText: true),
+    );
+  }
+
+  /// Maps app text to the form the model was trained on.
+  ///
+  /// Tags are stored as snake_case ids (e.g. `knee_pain`). The Dart
+  /// normalizer keeps `_` inside words, which splits every multi-word tag into
+  /// sub-word noise (`##_ ##in ##ju ##ry`). Replacing `_` with a space gives
+  /// the same token ids as the reference BERT tokenizer. See
+  /// `notebooks/onnx_pipeline_validation.ipynb`.
+  static String prepareText(String text) => text.replaceAll('_', ' ');
+
   Future<void> init() async {
     try {
       debugPrint("Tokenizer: Loading vocab...");
       final vocabContent = await rootBundle.loadString(
         'assets/models/vocab.txt',
       );
-      final vocab = VocabLoader.fromString(vocabContent);
-
-      _tokenizer = WordPieceTokenizer(
-        vocab: vocab,
-        config: TokenizerConfig(maxLength: 128, normalizeText: true),
-      );
+      _tokenizer = buildTokenizer(vocabContent);
 
       _isInitialized = true;
       debugPrint(
@@ -34,7 +46,7 @@ class TokenizerService {
   Map<String, Int64List>? encode(String query) {
     try {
       if (!_isInitialized) return null;
-      final output = _tokenizer.encode(query);
+      final output = _tokenizer.encode(prepareText(query));
       return {
         'input_ids': output.inputIdsInt64,
         'attention_mask': output.attentionMaskInt64,

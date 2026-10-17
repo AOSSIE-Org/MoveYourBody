@@ -81,6 +81,7 @@
 - **Inference**: Flutter ONNX Runtime
 - **Tokenization**: Dart WordPiece
 - **Models**: [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) (Quantized ONNX model running directly on-device via `assets/models/model_quantized.onnx`)
+- **Pipeline docs**: [docs/ON_DEVICE_AI.md](docs/ON_DEVICE_AI.md) covers data sources, tokenizer parity, pooling and threshold calibration, reproducible with [notebooks/onnx_pipeline_validation.ipynb](notebooks/onnx_pipeline_validation.ipynb)
 
 ---
 
