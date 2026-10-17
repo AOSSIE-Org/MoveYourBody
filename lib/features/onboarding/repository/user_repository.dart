@@ -10,13 +10,13 @@ final userRepositoryProvider = Provider<UserRepository>((ref) {
 
 class UserRepository {
   Future<void> saveUser(UserData user) async {
-    final db = await DatabaseService.instance.userDatabase;
-    await db.delete('user_data');
-    await db.insert('user_data', user.toMap());
+    final db = await DatabaseService.instance.database;
+    await db.delete(UserTable.tableName);
+    await db.insert(UserTable.tableName, user.toMap());
   }
 
   Future<UserData?> getUserData() async {
-    final db = await DatabaseService.instance.userDatabase;
+    final db = await DatabaseService.instance.database;
     debugPrint("Fetching user data from database...");
     final result = await db.query(UserTable.tableName, limit: 1);
 
@@ -35,7 +35,7 @@ class UserRepository {
       return;
     }
 
-    final db = await DatabaseService.instance.userDatabase;
+    final db = await DatabaseService.instance.database;
 
     await db.delete(UserTable.tableName);
 

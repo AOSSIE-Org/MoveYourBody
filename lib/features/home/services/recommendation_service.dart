@@ -42,6 +42,7 @@ class RecommendationService {
       exercises: exercises,
       user: user,
     );
+
     final scoredExercises = <_ScoredExercise>[];
 
     for (final exercise in exercises) {

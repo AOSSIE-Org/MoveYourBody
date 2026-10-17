@@ -2,10 +2,10 @@ name: move_your_body
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-# The
-## A version number is three numbers separated by dots, like 1.2.43following defines the version and build number for your application.
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
 # followed by an optional build number separated by a +.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
@@ -19,7 +19,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.10.7
+  sdk: ^3.8.0-18.0.dev
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,13 +30,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.8
+  flutter_riverpod: ^3.0.0-dev.0
   flutter_localizations:
     sdk: flutter
-  intl: any
-  cupertino_icons: ^1.0.8
-  google_fonts: ^6.2.1
-  flutter_riverpod: ^3.3.1
-  go_router: ^17.3.0
+  intl: ^0.20.2
+  go_router: ^17.0.1
+  google_fonts: ^6.3.2
   freezed_annotation: ^3.1.0
   riverpod_annotation: ^4.0.2
   flutter_onnxruntime: ^1.8.0
@@ -48,15 +51,18 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   shared_preferences: ^2.5.3
   package_info_plus: ^8.3.0
-  
+  chewie: ^1.10.0
+  flutter_svg: ^2.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.15.0
   freezed: ^3.2.5
   riverpod_generator: ^4.0.3
-  flutter_launcher_icons: "^0.14.4"
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: false
@@ -85,8 +91,10 @@ flutter:
     - assets/images/
     - assets/models/vocab.txt
     - assets/models/model_quantized.onnx
+    - assets/exercises/
     - assets/exercises.db
     - assets/animations/
+    - public/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -108,8 +116,8 @@ flutter:
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  #       - asset: fonts/TrajanPro_bold.ttf
+  #         fontWeight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
