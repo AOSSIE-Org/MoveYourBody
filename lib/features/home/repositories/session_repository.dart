@@ -295,8 +295,10 @@ class SessionRepository {
           SessionScheduleTable.sessionStatus: SessionStatus.completed.name,
           SessionScheduleTable.sessionDuration: totalDuration,
           SessionScheduleTable.caloriesBurned: caloriesBurned,
-          SessionScheduleTable.difficultyFeedback: ?difficultyFeedback,
-          SessionScheduleTable.intensityFeedback: ?intensityFeedback,
+          if (difficultyFeedback != null)
+            SessionScheduleTable.difficultyFeedback: difficultyFeedback,
+          if (intensityFeedback != null)
+            SessionScheduleTable.intensityFeedback: intensityFeedback,
         },
         where: '${SessionScheduleTable.id} = ?',
         whereArgs: [sessionId],

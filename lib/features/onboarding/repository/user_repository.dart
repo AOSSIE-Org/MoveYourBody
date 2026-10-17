@@ -11,8 +11,8 @@ final userRepositoryProvider = Provider<UserRepository>((ref) {
 class UserRepository {
   Future<void> saveUser(UserData user) async {
     final db = await DatabaseService.instance.database;
-    await db.delete('user_data');
-    await db.insert('user_data', user.toMap());
+    await db.delete(UserTable.tableName);
+    await db.insert(UserTable.tableName, user.toMap());
   }
 
   Future<UserData?> getUserData() async {

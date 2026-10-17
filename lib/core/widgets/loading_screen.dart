@@ -71,6 +71,9 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
         limit: 3,
         threshold: 0.60,
       );
+      await ref
+          .read(tagSetupRepositoryProvider)
+          .updateResolvedTags(goals: goalMatches, injuries: healthMatches);
       ref
           .read(onboardingViewModelProvider.notifier)
           .updateResolvedTags(goals: goalMatches, healthIssues: healthMatches);
