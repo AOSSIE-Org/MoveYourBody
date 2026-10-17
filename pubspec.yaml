@@ -27,6 +27,16 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/images/logo.png"
+
+
+
 dependencies:
   flutter:
     sdk: flutter
@@ -43,19 +53,15 @@ dependencies:
   dart_wordpiece: ^1.2.0
   sqflite: ^2.4.3
   path: ^1.9.1
-  
+  flutter_svg: ^2.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.15.0
   freezed: ^3.2.5
   riverpod_generator: ^4.0.3
-  flutter_launcher_icons: "^0.14.4"
   flutter_lints: ^6.0.0
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: false
-  image_path: "assets/images/move_your_body_logo.png"
+  flutter_launcher_icons: ^0.14.4
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -81,6 +87,7 @@ flutter:
     - assets/models/vocab.txt
     - assets/models/model_quantized.onnx
     - assets/exercises/
+    - public/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

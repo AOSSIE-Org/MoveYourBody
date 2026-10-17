@@ -26,7 +26,7 @@ class WeekSelector extends ConsumerWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: days.length,
-        separatorBuilder: (_, __) => SizedBox(width: 12 * scale),
+        separatorBuilder: (_, _) => SizedBox(width: 12 * scale),
         itemBuilder: (_, index) {
           final dayDate = days[index];
           final dayLabel = DateFormat('E').format(dayDate)[0];
