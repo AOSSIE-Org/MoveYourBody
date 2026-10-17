@@ -59,10 +59,13 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const UserdataScreen(),
     ),
     GoRoute(
+      path: AppRoutes.result,
+      builder: (context, state) => const ResultScreen(),
+    ),
+    GoRoute(
       path: AppRoutes.loading,
       builder: (context, state) => const LoadingScreen(),
     ),
-
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return Scaffold(
@@ -88,7 +91,6 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -98,7 +100,6 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -108,7 +109,6 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -118,7 +118,6 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -129,7 +128,6 @@ final GoRouter appRouter = GoRouter(
         ),
       ],
     ),
-    
     GoRoute(
       path: AppRoutes.sessiondetails,
       builder: (context, state) {
@@ -139,7 +137,6 @@ final GoRouter appRouter = GoRouter(
         return SessionDetailsScreen(sessionId: sessionId);
       },
     ),
-
     GoRoute(
       path: AppRoutes.exerciseInfo,
       builder: (context, state) {

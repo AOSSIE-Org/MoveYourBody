@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+﻿import 'dart:typed_data';
 import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../model/onboarding_data.dart';
@@ -74,15 +74,15 @@ class OnboardingViewModel extends _$OnboardingViewModel {
     state = state.copyWith(username: username);
   }
 
-  void setAge(int age) {
+  void setAge(int? age) {
     state = state.copyWith(age: age);
   }
 
-  void setWeight(double weight) {
+  void setWeight(double? weight) {
     state = state.copyWith(weight: weight);
   }
 
-  void setHeight(double height) {
+  void setHeight(double? height) {
     state = state.copyWith(height: height);
   }
 
@@ -120,7 +120,8 @@ class OnboardingViewModel extends _$OnboardingViewModel {
     required List<String> healthIssues,
   }) {
     final updatedGoals = Set<String>.from(state.goalTags)..addAll(goals);
-    final updatedHealthIssues = Set<String>.from(state.healthIssueTags)..addAll(healthIssues);
+    final updatedHealthIssues =
+        Set<String>.from(state.healthIssueTags)..addAll(healthIssues);
 
     state = state.copyWith(
       goalTags: updatedGoals,
@@ -128,3 +129,6 @@ class OnboardingViewModel extends _$OnboardingViewModel {
     );
   }
 }
+
+// Backward-compatible alias for any consumer referencing onboardingProvider
+final onboardingProvider = onboardingViewModelProvider;

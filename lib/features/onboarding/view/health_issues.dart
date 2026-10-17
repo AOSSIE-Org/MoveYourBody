@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
+import 'package:move_your_body/core/widgets/app_toast.dart';
+import 'package:move_your_body/core/widgets/onboarding_progress.dart';
 import 'package:move_your_body/features/onboarding/view_model/onboarding_view_model.dart';
 import '../../../core/widgets/app_scaffold.dart';
 import '../../../core/widgets/feature_chip.dart';
@@ -30,8 +32,10 @@ class HealthIssuesScreen extends ConsumerWidget {
     final selectedHealthIssues = ref.watch(
       onboardingViewModelProvider.select((state) => state.healthIssueTags),
     );
+    final customHealthIssue = ref.watch(
+      onboardingViewModelProvider.select((state) => state.customHealthIssue),
+    );
     final onboardingNotifier = ref.read(onboardingViewModelProvider.notifier);
-    final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     return AppScaffold(
@@ -40,36 +44,7 @@ class HealthIssuesScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () => context.pop(),
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                  tooltip: 'Go back',
-                ),
-
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      6,
-                      (index) => Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: index == 0 ? 8 : 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: index == 0
-                              ? colorScheme.primary
-                              : colorScheme.onSurface.withValues(alpha: 0.25),
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
+            const OnboardingProgress(currentStep: 1),
             const SizedBox(height: 10),
 
             Text(
@@ -122,6 +97,14 @@ class HealthIssuesScreen extends ConsumerWidget {
             SizedBox(
               child: ElevatedButton(
                 onPressed: () {
+                  if (selectedHealthIssues.length < 3 &&
+                      customHealthIssue.trim().isEmpty) {
+                    AppToast.show(
+                      context,
+                      'Select at least 3 health issues or enter yours',
+                    );
+                    return;
+                  }
                   context.push(AppRoutes.difficulty);
                 },
                 child: const Text('Continue'),
