@@ -1,11 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/core/model/user_data.dart';
+import 'package:move_your_body/features/home/services/equipment_filter_service.dart';
+import 'package:move_your_body/features/home/services/safety_filter_service.dart';
 
 import '../repositories/exercise_repository.dart';
 
 final recommendationServiceProvider = Provider<RecommendationService>((ref) {
-  return RecommendationService(ref.read(exerciseRepositoryProvider));
+  return RecommendationService(
+    ref.read(exerciseRepositoryProvider),
+    ref.read(safetyFilterServiceProvider),
+    ref.read(equipmentFilterServiceProvider),
+  );
 });
 
 class RecommendationWeights {
@@ -17,11 +23,25 @@ class RecommendationWeights {
 
 class RecommendationService {
   final ExerciseRepository _exerciseRepository;
+  final SafetyFilterService _safetyFilterService;
+  final EquipmentFilterService _equipmentFilterService;
 
-  RecommendationService(this._exerciseRepository);
+  RecommendationService(
+    this._exerciseRepository,
+    this._safetyFilterService,
+    this._equipmentFilterService,
+  );
 
   Future<List<Exercise>> recommendExercises(UserData user) async {
-    final exercises = await _exerciseRepository.getAllExercises();
+    var exercises = await _exerciseRepository.getAllExercises();
+    exercises = _safetyFilterService.filterExercises(
+      exercises: exercises,
+      user: user,
+    );
+    exercises = _equipmentFilterService.filterExercises(
+      exercises: exercises,
+      user: user,
+    );
 
     final scoredExercises = <_ScoredExercise>[];
 

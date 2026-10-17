@@ -4,15 +4,20 @@ class AppScaffold extends StatelessWidget {
   const AppScaffold({
     super.key,
     required this.child,
+    this.bottomNavigationBar,
   });
 
   final Widget child;
+  final Widget? bottomNavigationBar;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      extendBody: true,
+      backgroundColor: Colors.transparent,
+      bottomNavigationBar: bottomNavigationBar,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

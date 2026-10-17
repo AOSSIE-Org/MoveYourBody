@@ -1,6 +1,3 @@
-// this file to just that what we are collection for onboarding and then we will use this data to show the result in the result screen
-// after mentor review this will be removed
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:move_your_body/features/ai_inference/repositories/tag_setup_repository.dart';
@@ -49,10 +46,16 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     final state = ref.watch(onboardingViewModelProvider);
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final bottomInset = MediaQuery.of(context).padding.bottom;
 
     return AppScaffold(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 16,
+          bottom: 70 + bottomInset,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -336,9 +339,7 @@ class _DataTile extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: 6),
-
             Text(value.isEmpty ? 'Not Provided' : value),
           ],
         ),
