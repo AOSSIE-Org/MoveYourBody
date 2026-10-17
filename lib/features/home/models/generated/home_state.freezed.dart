@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HomeState {
 
- DateTime get selectedDate; List<DateTime> get currentWeekDays; List<Exercise> get recommendedExercises; bool get isLoading; String? get errorMessage;
+ DateTime get selectedDate; List<DateTime> get currentWeekDays; List<Exercise> get recommendedExercises; bool get isLoading; bool get isCreatingSession; Session? get currentSession; bool get hasIncompleteSession; String? get errorMessage;
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $HomeStateCopyWith<HomeState> get copyWith => _$HomeStateCopyWithImpl<HomeState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other.currentWeekDays, currentWeekDays)&&const DeepCollectionEquality().equals(other.recommendedExercises, recommendedExercises)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other.currentWeekDays, currentWeekDays)&&const DeepCollectionEquality().equals(other.recommendedExercises, recommendedExercises)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isCreatingSession, isCreatingSession) || other.isCreatingSession == isCreatingSession)&&(identical(other.currentSession, currentSession) || other.currentSession == currentSession)&&(identical(other.hasIncompleteSession, hasIncompleteSession) || other.hasIncompleteSession == hasIncompleteSession)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,selectedDate,const DeepCollectionEquality().hash(currentWeekDays),const DeepCollectionEquality().hash(recommendedExercises),isLoading,errorMessage);
+int get hashCode => Object.hash(runtimeType,selectedDate,const DeepCollectionEquality().hash(currentWeekDays),const DeepCollectionEquality().hash(recommendedExercises),isLoading,isCreatingSession,currentSession,hasIncompleteSession,errorMessage);
 
 @override
 String toString() {
-  return 'HomeState(selectedDate: $selectedDate, currentWeekDays: $currentWeekDays, recommendedExercises: $recommendedExercises, isLoading: $isLoading, errorMessage: $errorMessage)';
+  return 'HomeState(selectedDate: $selectedDate, currentWeekDays: $currentWeekDays, recommendedExercises: $recommendedExercises, isLoading: $isLoading, isCreatingSession: $isCreatingSession, currentSession: $currentSession, hasIncompleteSession: $hasIncompleteSession, errorMessage: $errorMessage)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $HomeStateCopyWith<$Res>  {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) _then) = _$HomeStateCopyWithImpl;
 @useResult
 $Res call({
- DateTime selectedDate, List<DateTime> currentWeekDays, List<Exercise> recommendedExercises, bool isLoading, String? errorMessage
+ DateTime selectedDate, List<DateTime> currentWeekDays, List<Exercise> recommendedExercises, bool isLoading, bool isCreatingSession, Session? currentSession, bool hasIncompleteSession, String? errorMessage
 });
 
 
@@ -62,12 +62,15 @@ class _$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? selectedDate = null,Object? currentWeekDays = null,Object? recommendedExercises = null,Object? isLoading = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? selectedDate = null,Object? currentWeekDays = null,Object? recommendedExercises = null,Object? isLoading = null,Object? isCreatingSession = null,Object? currentSession = freezed,Object? hasIncompleteSession = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 selectedDate: null == selectedDate ? _self.selectedDate : selectedDate // ignore: cast_nullable_to_non_nullable
 as DateTime,currentWeekDays: null == currentWeekDays ? _self.currentWeekDays : currentWeekDays // ignore: cast_nullable_to_non_nullable
 as List<DateTime>,recommendedExercises: null == recommendedExercises ? _self.recommendedExercises : recommendedExercises // ignore: cast_nullable_to_non_nullable
 as List<Exercise>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isCreatingSession: null == isCreatingSession ? _self.isCreatingSession : isCreatingSession // ignore: cast_nullable_to_non_nullable
+as bool,currentSession: freezed == currentSession ? _self.currentSession : currentSession // ignore: cast_nullable_to_non_nullable
+as Session?,hasIncompleteSession: null == hasIncompleteSession ? _self.hasIncompleteSession : hasIncompleteSession // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -154,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime selectedDate,  List<DateTime> currentWeekDays,  List<Exercise> recommendedExercises,  bool isLoading,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime selectedDate,  List<DateTime> currentWeekDays,  List<Exercise> recommendedExercises,  bool isLoading,  bool isCreatingSession,  Session? currentSession,  bool hasIncompleteSession,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.selectedDate,_that.currentWeekDays,_that.recommendedExercises,_that.isLoading,_that.errorMessage);case _:
+return $default(_that.selectedDate,_that.currentWeekDays,_that.recommendedExercises,_that.isLoading,_that.isCreatingSession,_that.currentSession,_that.hasIncompleteSession,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -175,10 +178,10 @@ return $default(_that.selectedDate,_that.currentWeekDays,_that.recommendedExerci
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime selectedDate,  List<DateTime> currentWeekDays,  List<Exercise> recommendedExercises,  bool isLoading,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime selectedDate,  List<DateTime> currentWeekDays,  List<Exercise> recommendedExercises,  bool isLoading,  bool isCreatingSession,  Session? currentSession,  bool hasIncompleteSession,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _HomeState():
-return $default(_that.selectedDate,_that.currentWeekDays,_that.recommendedExercises,_that.isLoading,_that.errorMessage);case _:
+return $default(_that.selectedDate,_that.currentWeekDays,_that.recommendedExercises,_that.isLoading,_that.isCreatingSession,_that.currentSession,_that.hasIncompleteSession,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +198,10 @@ return $default(_that.selectedDate,_that.currentWeekDays,_that.recommendedExerci
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime selectedDate,  List<DateTime> currentWeekDays,  List<Exercise> recommendedExercises,  bool isLoading,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime selectedDate,  List<DateTime> currentWeekDays,  List<Exercise> recommendedExercises,  bool isLoading,  bool isCreatingSession,  Session? currentSession,  bool hasIncompleteSession,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.selectedDate,_that.currentWeekDays,_that.recommendedExercises,_that.isLoading,_that.errorMessage);case _:
+return $default(_that.selectedDate,_that.currentWeekDays,_that.recommendedExercises,_that.isLoading,_that.isCreatingSession,_that.currentSession,_that.hasIncompleteSession,_that.errorMessage);case _:
   return null;
 
 }
@@ -210,7 +213,7 @@ return $default(_that.selectedDate,_that.currentWeekDays,_that.recommendedExerci
 
 
 class _HomeState implements HomeState {
-  const _HomeState({required this.selectedDate, required final  List<DateTime> currentWeekDays, final  List<Exercise> recommendedExercises = const [], this.isLoading = false, this.errorMessage}): _currentWeekDays = currentWeekDays,_recommendedExercises = recommendedExercises;
+  const _HomeState({required this.selectedDate, required final  List<DateTime> currentWeekDays, final  List<Exercise> recommendedExercises = const [], this.isLoading = false, this.isCreatingSession = false, this.currentSession, this.hasIncompleteSession = false, this.errorMessage}): _currentWeekDays = currentWeekDays,_recommendedExercises = recommendedExercises;
   
 
 @override final  DateTime selectedDate;
@@ -229,6 +232,9 @@ class _HomeState implements HomeState {
 }
 
 @override@JsonKey() final  bool isLoading;
+@override@JsonKey() final  bool isCreatingSession;
+@override final  Session? currentSession;
+@override@JsonKey() final  bool hasIncompleteSession;
 @override final  String? errorMessage;
 
 /// Create a copy of HomeState
@@ -241,16 +247,16 @@ _$HomeStateCopyWith<_HomeState> get copyWith => __$HomeStateCopyWithImpl<_HomeSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other._currentWeekDays, _currentWeekDays)&&const DeepCollectionEquality().equals(other._recommendedExercises, _recommendedExercises)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other._currentWeekDays, _currentWeekDays)&&const DeepCollectionEquality().equals(other._recommendedExercises, _recommendedExercises)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isCreatingSession, isCreatingSession) || other.isCreatingSession == isCreatingSession)&&(identical(other.currentSession, currentSession) || other.currentSession == currentSession)&&(identical(other.hasIncompleteSession, hasIncompleteSession) || other.hasIncompleteSession == hasIncompleteSession)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,selectedDate,const DeepCollectionEquality().hash(_currentWeekDays),const DeepCollectionEquality().hash(_recommendedExercises),isLoading,errorMessage);
+int get hashCode => Object.hash(runtimeType,selectedDate,const DeepCollectionEquality().hash(_currentWeekDays),const DeepCollectionEquality().hash(_recommendedExercises),isLoading,isCreatingSession,currentSession,hasIncompleteSession,errorMessage);
 
 @override
 String toString() {
-  return 'HomeState(selectedDate: $selectedDate, currentWeekDays: $currentWeekDays, recommendedExercises: $recommendedExercises, isLoading: $isLoading, errorMessage: $errorMessage)';
+  return 'HomeState(selectedDate: $selectedDate, currentWeekDays: $currentWeekDays, recommendedExercises: $recommendedExercises, isLoading: $isLoading, isCreatingSession: $isCreatingSession, currentSession: $currentSession, hasIncompleteSession: $hasIncompleteSession, errorMessage: $errorMessage)';
 }
 
 
@@ -261,7 +267,7 @@ abstract mixin class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Re
   factory _$HomeStateCopyWith(_HomeState value, $Res Function(_HomeState) _then) = __$HomeStateCopyWithImpl;
 @override @useResult
 $Res call({
- DateTime selectedDate, List<DateTime> currentWeekDays, List<Exercise> recommendedExercises, bool isLoading, String? errorMessage
+ DateTime selectedDate, List<DateTime> currentWeekDays, List<Exercise> recommendedExercises, bool isLoading, bool isCreatingSession, Session? currentSession, bool hasIncompleteSession, String? errorMessage
 });
 
 
@@ -278,12 +284,15 @@ class __$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? selectedDate = null,Object? currentWeekDays = null,Object? recommendedExercises = null,Object? isLoading = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? selectedDate = null,Object? currentWeekDays = null,Object? recommendedExercises = null,Object? isLoading = null,Object? isCreatingSession = null,Object? currentSession = freezed,Object? hasIncompleteSession = null,Object? errorMessage = freezed,}) {
   return _then(_HomeState(
 selectedDate: null == selectedDate ? _self.selectedDate : selectedDate // ignore: cast_nullable_to_non_nullable
 as DateTime,currentWeekDays: null == currentWeekDays ? _self._currentWeekDays : currentWeekDays // ignore: cast_nullable_to_non_nullable
 as List<DateTime>,recommendedExercises: null == recommendedExercises ? _self._recommendedExercises : recommendedExercises // ignore: cast_nullable_to_non_nullable
 as List<Exercise>,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isCreatingSession: null == isCreatingSession ? _self.isCreatingSession : isCreatingSession // ignore: cast_nullable_to_non_nullable
+as bool,currentSession: freezed == currentSession ? _self.currentSession : currentSession // ignore: cast_nullable_to_non_nullable
+as Session?,hasIncompleteSession: null == hasIncompleteSession ? _self.hasIncompleteSession : hasIncompleteSession // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));

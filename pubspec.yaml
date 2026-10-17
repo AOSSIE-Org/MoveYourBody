@@ -4,8 +4,8 @@ description: "A new Flutter project."
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-# The
-## A version number is three numbers separated by dots, like 1.2.43following defines the version and build number for your application.
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
 # followed by an optional build number separated by a +.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
@@ -19,7 +19,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.10.7
+  sdk: ^3.7.0
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -27,16 +27,6 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
-
-flutter_launcher_icons:
-  android: true
-  ios: true
-  image_path: "assets/images/logo.png"
-  adaptive_icon_background: "#000000"
-  adaptive_icon_foreground: "assets/images/logo.png"
-
-
-
 dependencies:
   flutter:
     sdk: flutter
@@ -53,7 +43,11 @@ dependencies:
   dart_wordpiece: ^1.2.0
   sqflite: ^2.4.3
   path: ^1.9.1
+  lottie: ^3.3.1
+  video_player: ^2.9.6
+  chewie: ^1.10.0
   flutter_svg: ^2.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -62,6 +56,11 @@ dev_dependencies:
   riverpod_generator: ^4.0.3
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: false
+  image_path: "assets/images/move_your_body_logo.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -87,6 +86,7 @@ flutter:
     - assets/models/vocab.txt
     - assets/models/model_quantized.onnx
     - assets/exercises/
+    - assets/animations/
     - public/
 
   # An image asset can refer to one or more resolution-specific "variants", see

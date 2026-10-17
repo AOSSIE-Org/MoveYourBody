@@ -15,4 +15,12 @@ class AppRoutes {
   static const String add = '/add';
   static const String stats = '/stats';
   static const String profile = '/profile';
+  static const String sessiondetails = '/session-details/:sessionId';
+  static const String exerciseInfo = '/exercise-info/:exerciseId';
+
+  static String sessionDetailsPath(int sessionId) =>
+      '/session-details/$sessionId';
+
+  static String exerciseInfoPath(String exerciseId) =>
+      '/exercise-info/$exerciseId';
 }

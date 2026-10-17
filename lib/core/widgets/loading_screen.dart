@@ -109,6 +109,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(
           child: Padding(
