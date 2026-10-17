@@ -74,15 +74,15 @@ class OnboardingViewModel extends _$OnboardingViewModel {
     state = state.copyWith(username: username);
   }
 
-  void setAge(int age) {
+  void setAge(int? age) {
     state = state.copyWith(age: age);
   }
 
-  void setWeight(double weight) {
+  void setWeight(double? weight) {
     state = state.copyWith(weight: weight);
   }
 
-  void setHeight(double height) {
+  void setHeight(double? height) {
     state = state.copyWith(height: height);
   }
 
@@ -119,12 +119,14 @@ class OnboardingViewModel extends _$OnboardingViewModel {
     required List<String> goals,
     required List<String> healthIssues,
   }) {
-    final updatedGoals = Set<String>.from(state.goalTags)..addAll(goals);
-    final updatedHealthIssues = Set<String>.from(state.healthIssueTags)..addAll(healthIssues);
-
     state = state.copyWith(
-      goalTags: updatedGoals,
-      healthIssueTags: updatedHealthIssues,
+      goalTags: goals.isNotEmpty ? goals.toSet() : state.goalTags,
+      healthIssueTags: healthIssues.isNotEmpty
+          ? healthIssues.toSet()
+          : state.healthIssueTags,
     );
   }
 }
+
+// Backward-compatible alias for any consumer referencing onboardingProvider
+final onboardingProvider = onboardingViewModelProvider;

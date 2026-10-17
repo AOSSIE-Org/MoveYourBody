@@ -42,7 +42,7 @@ final class OnboardingViewModelProvider
 }
 
 String _$onboardingViewModelHash() =>
-    r'bf90c57779b64d955e6d3ee6a172b9793917a220';
+    r'ce2dec159aed6afc4d4c205162823a03e8995381';
 
 abstract class _$OnboardingViewModel extends $Notifier<OnboardingData> {
   OnboardingData build();
