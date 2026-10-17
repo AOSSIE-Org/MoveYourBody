@@ -23,7 +23,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   Future<void> _checkUser() async {
     final user = await ref.read(userRepositoryProvider).getUserData();
     await SeedService().seedExercises();
-    // await SeedService().debugPrintExercises();
     if (user != null) {
       print("-------------------");
       ref.read(onboardingViewModelProvider.notifier).loadFromUserData(user);

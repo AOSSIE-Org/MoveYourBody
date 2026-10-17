@@ -347,3 +347,4 @@ build/
 .flutter-plugins
 .flutter-plugins-dependencies
 lib/generated/
+assets/exercises.db
