@@ -72,18 +72,18 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
         threshold: 0.60,
       );
       await ref
-          .read(onboardingViewModelProvider.notifier)
-          .saveAndCompleteOnboarding(
-            goalEmbed: customGoalBytes,
-            healthEmbed: customHealthBytes,
-          );
-
-      await ref
           .read(tagSetupRepositoryProvider)
           .updateResolvedTags(goals: goalMatches, injuries: healthMatches);
       ref
           .read(onboardingViewModelProvider.notifier)
           .updateResolvedTags(goals: goalMatches, healthIssues: healthMatches);
+
+      await ref
+          .read(onboardingViewModelProvider.notifier)
+          .saveAndCompleteOnboarding(
+            goalEmbed: customGoalBytes,
+            healthEmbed: customHealthBytes,
+          );
       await ref.read(userRepositoryProvider).debugPrintUserData();
       print(
         "💾 Pipeline Phase 5: Saving complete profile to UserTable and extracting top tags.",

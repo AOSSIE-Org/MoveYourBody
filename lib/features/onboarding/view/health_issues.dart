@@ -10,19 +10,22 @@ import '../../../core/widgets/feature_chip.dart';
 
 class HealthIssuesScreen extends ConsumerWidget {
   const HealthIssuesScreen({super.key});
-  static const List<String> healthIssues = [
-    'Lower Back Pain',
-    'Ankle Pain',
-    'Poor Cardiovascular Endurance',
-    'Neck Stiffness',
-    'Hip Joint',
-    'Hamstring Tightness',
-    'Knee Pain',
-    'Low Flexibility',
-    'Tight Muscles',
-    'Shortness of Breath During Light Activity',
-    'Stress-Related Body Tension',
-  ];
+  static const Map<String, String> healthIssuesMap = {
+    'Lower Back Pain': 'lower_back_pain',
+    'Knee Pain': 'knee_pain',
+    'Hip Pain': 'hip_pain',
+    'Shoulder Injury': 'shoulder_injury',
+    'Wrist Injury': 'wrist_injury',
+    'Neck Injury': 'neck_injury',
+    'Ankle Injury': 'ankle_injury',
+    'Pregnancy': 'pregnancy',
+    'Elbow Injury': 'elbow_injury',
+    'Rotator Cuff Injury': 'rotator_cuff_injury',
+    'Herniated Disc': 'herniated_disc',
+    'High Blood Pressure': 'high_blood_pressure',
+    'Osteoporosis': 'osteoporosis',
+    'Post-Abdominal Surgery': 'post_abdominal_surgery',
+  };
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -59,13 +62,15 @@ class HealthIssuesScreen extends ConsumerWidget {
               alignment: WrapAlignment.center,
               spacing: 10,
               runSpacing: 12,
-              children: healthIssues.map((issues) {
-                final isSelected = selectedHealthIssues.contains(issues);
+              children: healthIssuesMap.entries.map((entry) {
+                final uiText = entry.key;
+                final dbTag = entry.value;
+                final isSelected = selectedHealthIssues.contains(dbTag);
                 return FeatureChip(
-                  text: issues,
+                  text: uiText,
                   selected: isSelected,
                   onTap: () {
-                    onboardingNotifier.toggleHealthIssue(issues);
+                    onboardingNotifier.toggleHealthIssue(dbTag);
                   },
                 );
               }).toList(),

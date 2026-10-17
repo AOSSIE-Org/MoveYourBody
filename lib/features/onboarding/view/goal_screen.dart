@@ -10,21 +10,22 @@ import '../../../core/widgets/feature_chip.dart';
 
 class GoalScreen extends ConsumerWidget {
   const GoalScreen({super.key});
-  static const List<String> goals = [
-    'Burn Fat',
-    'Increase Mobility',
-    'Tone Body',
-    'Build Muscle',
-    'Lose Weight',
-    'Daily Movement',
-    'Sleep Better',
-    'Cardio Fitness',
-    'Better Posture',
-    'Reduce Stress',
-    'Core Strength',
-    'Bodyweight Only',
-    'Improve Stamina and Strength',
-  ];
+  static const Map<String, String> goalsMap = {
+    'Burn Fat': 'fat_burn',
+    'Increase Mobility': 'mobility',
+    'Tone Body': 'toning',
+    'Build Muscle': 'muscle_building',
+    'Improve Endurance': 'endurance',
+    'Cardio Fitness': 'cardio',
+    'Better Posture': 'posture',
+    'Reduce Stress': 'stress_relief',
+    'Core Strength': 'core_strength',
+    'Bodyweight Only': 'bodyweight',
+    'Improve Balance': 'balance',
+    'Warm Up': 'warmup',
+    'Improve Strength': 'strength',
+    'Rehabilitation': 'rehabilitation',
+  };
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -61,13 +62,15 @@ class GoalScreen extends ConsumerWidget {
               alignment: WrapAlignment.center,
               spacing: 12,
               runSpacing: 12,
-              children: goals.map((goal) {
-                final isSelected = selectedGoals.contains(goal);
+              children: goalsMap.entries.map((entry) {
+                final uiText = entry.key;
+                final dbTag = entry.value;
+                final isSelected = selectedGoals.contains(dbTag);
                 return FeatureChip(
-                  text: goal,
+                  text: uiText,
                   selected: isSelected,
                   onTap: () {
-                    onboardingNotifier.toggleGoal(goal);
+                    onboardingNotifier.toggleGoal(dbTag);
                   },
                 );
               }).toList(),
