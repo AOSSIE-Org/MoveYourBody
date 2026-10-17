@@ -43,10 +43,16 @@ class AiInferenceViewModel extends _$AiInferenceViewModel {
       final aiModelRepo = ref.read(aiModelRepositoryProvider);
       final tagSetupRepo = ref.read(tagSetupRepositoryProvider);
       await aiModelRepo.initModel();
-      await tagSetupRepo.processAndSeedTags();
+      final tagsSeeded = await tagSetupRepo.ensureTagsSeeded();
 
       if (!ref.mounted) return;
 
+      if (!tagsSeeded) {
+        debugPrint(
+          "AI Lifecycle: Some tags have no embedding; engine not marked ready.",
+        );
+        return;
+      }
       state = state.copyWith(isReady: true);
       debugPrint("AI Lifecycle: Pipeline is READY and Cached");
     } catch (e) {
@@ -74,7 +80,10 @@ class AiInferenceViewModel extends _$AiInferenceViewModel {
       final embeddingBytes = await aiModelRepo.generateEmbedding(query);
 
       if (embeddingBytes != null) {
-        final float32Buffer = embeddingBytes.buffer.asFloat32List();
+        final float32Buffer = embeddingBytes.buffer.asFloat32List(
+          embeddingBytes.offsetInBytes,
+          embeddingBytes.lengthInBytes ~/ Float32List.bytesPerElement,
+        );
         final List<double> userEmbedding = float32Buffer.toList();
 
         if (!ref.mounted) return;

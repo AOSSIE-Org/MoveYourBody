@@ -37,7 +37,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       await aiModelRepo.initModel();
 
       print("🚀 Pipeline Phase 2: Syncing Static JSON Tags to DB...");
-      await tagSetupRepo.processAndSeedTags();
+      final tagsSeeded = await tagSetupRepo.ensureTagsSeeded();
 
       Uint8List? customGoalBytes;
       Uint8List? customHealthBytes;
@@ -63,13 +63,13 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
         type: TagType.goal,
         userEmbedding: customGoalBytes,
         limit: 3,
-        threshold: 0.60,
+        threshold: TagSetupRepository.defaultSimilarityThreshold,
       );
       final healthMatches = await tagSetupRepo.findTopMatches(
         type: TagType.injury,
         userEmbedding: customHealthBytes,
         limit: 3,
-        threshold: 0.60,
+        threshold: TagSetupRepository.defaultSimilarityThreshold,
       );
       await ref
           .read(onboardingViewModelProvider.notifier)
@@ -89,7 +89,11 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
         "💾 Pipeline Phase 5: Saving complete profile to UserTable and extracting top tags.",
       );
 
-      ref.read(aiInferenceViewModelProvider.notifier).setEngineReady();
+      if (tagsSeeded) {
+        ref.read(aiInferenceViewModelProvider.notifier).setEngineReady();
+      } else {
+        debugPrint("⚠️ Tag seeding incomplete: AI engine not marked ready.");
+      }
 
       if (!mounted) return;
 

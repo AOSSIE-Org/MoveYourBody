@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:move_your_body/core/database/tables/user_table.dart';
@@ -23,10 +23,26 @@ class TagSetupRepository {
   final Ref _ref;
   TagSetupRepository(this._ref);
 
-  static const double defaultSimilarityThreshold = 0.60;
+  /// Calibrated for mean-pooled, L2-normalized MiniLM embeddings: exact
+  /// matches score ~1.0, close paraphrases ~0.5-0.8, unrelated tags < 0.4.
+  static const double defaultSimilarityThreshold = 0.45;
   static const int defaultTopMatchLimit = 5;
 
-  Future<void> processAndSeedTags() async {
+  /// Runs [processAndSeedTags], retrying tags that failed to embed, and
+  /// returns whether every tag ended up with a cached embedding.
+  Future<bool> ensureTagsSeeded({int maxAttempts = 2}) async {
+    for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+      if (await processAndSeedTags()) return true;
+      debugPrint("Tag seeding incomplete (attempt $attempt/$maxAttempts)");
+    }
+    return false;
+  }
+
+  /// Embeds and caches every goal/injury tag from the exercise data.
+  ///
+  /// Returns `true` only when every tag has a cached embedding. Tags that
+  /// fail are left without one, so they are retried on the next call.
+  Future<bool> processAndSeedTags() async {
     final db = await DatabaseService.instance.database;
 
     final String jsonString = await rootBundle.loadString(
@@ -49,43 +65,104 @@ class TagSetupRepository {
         uniqueInjuries.addAll(contraStr.split(';').map((e) => e.trim()));
       }
     }
-    print(uniqueGoals.length);
-    print(uniqueInjuries.length);
-    await _processSet(db, uniqueGoals, TagType.goal);
-    await _processSet(db, uniqueInjuries, TagType.injury);
+    debugPrint(
+      "Tag seeding: ${uniqueGoals.length} goals, "
+      "${uniqueInjuries.length} injuries found",
+    );
+    // Load every existing tag in one query instead of one query per tag.
+    // `tag_name` is unique across types, so rows are keyed by name only.
+    final List<Map<String, dynamic>> existingRows = await db.query(
+      TagsTable.tableName,
+      columns: [TagsTable.tagName, TagsTable.embedding],
+    );
+    final Map<String, bool> existing = {
+      for (final row in existingRows)
+        row[TagsTable.tagName] as String: row[TagsTable.embedding] != null,
+    };
+
+    final goalFailures = await _processSet(
+      db,
+      uniqueGoals,
+      TagType.goal,
+      existing,
+    );
+    final injuryFailures = await _processSet(
+      db,
+      uniqueInjuries,
+      TagType.injury,
+      existing,
+    );
+    return goalFailures + injuryFailures == 0;
   }
 
-  Future<void> _processSet(Database db, Set<String> tags, TagType type) async {
+  /// Embeds tags that are missing or have a null embedding, and returns the
+  /// number of tags that could not be embedded.
+  Future<int> _processSet(
+    Database db,
+    Set<String> tags,
+    TagType type,
+    Map<String, bool> existing,
+  ) async {
     final aiRepo = _ref.read(aiModelRepositoryProvider);
+
+    final batch = db.batch();
+    int cached = 0;
+    int inserted = 0;
+    int updated = 0;
+    int failed = 0;
 
     for (String tagName in tags) {
       if (tagName.isEmpty) continue;
-      final List<Map<String, dynamic>> existing = await db.query(
-        TagsTable.tableName,
-        where: '${TagsTable.tagName} = ? AND ${TagsTable.tagType} = ?',
-        whereArgs: [tagName, type.name],
-      );
-      if (existing.isEmpty) {
-        final Uint8List? embeddingBytes = await aiRepo.generateEmbedding(
-          tagName,
-        );
+      final hasEmbedding = existing[tagName];
+      if (hasEmbedding == true) {
+        cached++;
+        continue;
+      }
 
-        if (embeddingBytes != null) {
-          final newTag = Tag(
+      // Tags are stored as snake_case ids; embed them as natural text so they
+      // line up with free-form user input.
+      final Uint8List? embeddingBytes = await aiRepo.generateEmbedding(
+        tagName.replaceAll('_', ' '),
+      );
+      if (embeddingBytes == null) {
+        failed++;
+        continue;
+      }
+
+      if (hasEmbedding == false) {
+        // Row exists without an embedding: fill it in rather than inserting
+        // a duplicate name.
+        batch.update(
+          TagsTable.tableName,
+          {TagsTable.embedding: embeddingBytes},
+          where: '${TagsTable.tagName} = ?',
+          whereArgs: [tagName],
+        );
+        updated++;
+      } else {
+        batch.insert(
+          TagsTable.tableName,
+          Tag(
             tagName: tagName,
             tagType: type,
             embedding: embeddingBytes,
-          );
-
-          await db.insert(TagsTable.tableName, newTag.toMap());
-          print("Local Inference Complete & Cached: [$type] $tagName");
-        }
-      } else {
-        print(
-          "Entry found in Cache, skipping model inference: [$type] $tagName",
+          ).toMap(),
+          conflictAlgorithm: ConflictAlgorithm.ignore,
         );
+        inserted++;
       }
+      existing[tagName] = true;
     }
+
+    if (inserted + updated > 0) {
+      await batch.commit(noResult: true);
+    }
+
+    debugPrint(
+      "Tag seeding [${type.name}]: $cached cached, $inserted inserted, "
+      "$updated updated, $failed failed",
+    );
+    return failed;
   }
 
   Future<void> debugPrintAllCachedTags() async {
@@ -96,12 +173,12 @@ class TagSetupRepository {
         TagsTable.tableName,
       );
 
-      print("================ DB VERIFICATION START ================");
-      print("Total Tags Found in Database: ${maps.length}");
+      debugPrint("================ DB VERIFICATION START ================");
+      debugPrint("Total Tags Found in Database: ${maps.length}");
 
       if (maps.isEmpty) {
-        print("❌ No tags found in the database.");
-        print("=====================================================");
+        debugPrint("❌ No tags found in the database.");
+        debugPrint("=====================================================");
         return;
       }
 
@@ -110,13 +187,13 @@ class TagSetupRepository {
 
         final int embeddingLength = tag.embedding?.length ?? 0;
 
-        print(
+        debugPrint(
           "📌 ID: ${tag.id} | Name: ${tag.tagName} | Type: ${tag.tagType.name} | Embedding Size: $embeddingLength bytes",
         );
       }
-      print("================= DB VERIFICATION END =================");
+      debugPrint("================= DB VERIFICATION END =================");
     } catch (e) {
-      print("❌ Error reading tags from database: $e");
+      debugPrint("❌ Error reading tags from database: $e");
     }
   }
 
