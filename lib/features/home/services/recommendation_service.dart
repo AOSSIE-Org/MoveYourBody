@@ -32,17 +32,20 @@ class RecommendationService {
     this._equipmentFilterService,
   );
 
-  Future<List<Exercise>> recommendExercises(UserData user) async {
+  Future<List<Exercise>> recommendExercises(
+    UserData user, [
+    List<String> recentExerciseIds = const [],
+  ]) async {
     var exercises = await _exerciseRepository.getAllExercises();
     exercises = _safetyFilterService.filterExercises(
       exercises: exercises,
       user: user,
+      recentExerciseIds: recentExerciseIds,
     );
     exercises = _equipmentFilterService.filterExercises(
       exercises: exercises,
       user: user,
     );
-
     final scoredExercises = <_ScoredExercise>[];
 
     for (final exercise in exercises) {

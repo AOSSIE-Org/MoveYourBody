@@ -6,6 +6,7 @@ import 'package:move_your_body/core/database/tables/session_schedule_table.dart'
 import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/core/model/session_data.dart';
 import 'package:move_your_body/features/home/services/recommendation_service.dart';
+import 'package:move_your_body/features/home/services/safety_filter_service.dart';
 import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
 
 final sessionRepositoryProvider = Provider<SessionRepository>((ref) {
@@ -32,8 +33,10 @@ class SessionRepository {
         return null;
       }
 
+      final recentExerciseIds =
+          await getRecentExerciseIds(SafetyFilterService.sessionsToSkip);
       final recommendedExercises = await _recommendationService
-          .recommendExercises(userData);
+          .recommendExercises(userData, recentExerciseIds);
 
       final db = await DatabaseService.instance.database;
 
@@ -108,8 +111,7 @@ class SessionRepository {
 
       final sessionMaps = await db.query(
         SessionScheduleTable.tableName,
-        where:
-            '${SessionScheduleTable.sessionStatus} IN (?, ?)',
+        where: '${SessionScheduleTable.sessionStatus} IN (?, ?)',
         whereArgs: [
           SessionStatus.created.name,
           SessionStatus.inProgress.name,
@@ -310,6 +312,98 @@ class SessionRepository {
       );
     } catch (e) {
       debugPrint('Error completing session: $e');
+    }
+  }
+
+  Future<List<String>> getRecentExerciseIds(int sessionCount) async {
+    try {
+      final db = await DatabaseService.instance.database;
+
+      final sessionResult = await db.query(
+        SessionScheduleTable.tableName,
+        columns: [SessionScheduleTable.id],
+        where: '${SessionScheduleTable.sessionStatus} = ?',
+        whereArgs: [SessionStatus.completed.name],
+        orderBy: '${SessionScheduleTable.createdAt} DESC',
+        limit: sessionCount,
+      );
+
+      if (sessionResult.isEmpty) return [];
+
+      final sessionIds =
+          sessionResult.map((e) => e[SessionScheduleTable.id] as int).toList();
+
+      final exerciseResult = await db.query(
+        SessionExercisesTable.tableName,
+        columns: [SessionExercisesTable.exerciseId],
+        where:
+            '${SessionExercisesTable.sessionId} IN (${List.filled(sessionIds.length, '?').join(', ')})',
+        whereArgs: sessionIds,
+      );
+
+      return exerciseResult
+          .map((e) => e[SessionExercisesTable.exerciseId] as String)
+          .toSet()
+          .toList();
+    } catch (e, stackTrace) {
+      debugPrint('Error getting recent exercise IDs: $e');
+      debugPrint('$stackTrace');
+      return [];
+    }
+  }
+
+  Future<List<Session>> getLastThreeCompletedSessions() async {
+    try {
+      final db = await DatabaseService.instance.database;
+
+      final sessionResult = await db.query(
+        SessionScheduleTable.tableName,
+        where: '${SessionScheduleTable.sessionStatus} = ?',
+        whereArgs: [SessionStatus.completed.name],
+        orderBy: '${SessionScheduleTable.createdAt} DESC',
+        limit: 3,
+      );
+
+      return sessionResult.map((e) => Session.fromMap(e)).toList();
+    } catch (e, stackTrace) {
+      debugPrint('Error fetching last 3 completed sessions: $e');
+      debugPrint('$stackTrace');
+      return [];
+    }
+  }
+
+  Future<List<Session>> getAllSessions() async {
+    try {
+      final db = await DatabaseService.instance.database;
+      final sessionResult = await db.query(SessionScheduleTable.tableName);
+      return sessionResult.map((e) => Session.fromMap(e)).toList();
+    } catch (e) {
+      debugPrint('Error getting all sessions: $e');
+      return [];
+    }
+  }
+
+  Future<void> debugPrintAllSessions() async {
+    try {
+      final db = await DatabaseService.instance.database;
+
+      final sessionResult = await db.query(SessionScheduleTable.tableName);
+
+      debugPrint('=== ALL SESSIONS IN DATABASE ===');
+      for (var sessionMap in sessionResult) {
+        final session = Session.fromMap(sessionMap);
+        debugPrint(
+            'Session ID: ${session.id} | Status: ${session.sessionStatus.name}');
+        debugPrint(
+            'Duration: ${session.sessionDuration}s | Calories: ${session.caloriesBurned}');
+        debugPrint('Difficulty Feedback: ${session.difficultyFeedback}');
+        debugPrint('Intensity Feedback: ${session.intensityFeedback}');
+        debugPrint('----------------------------------');
+      }
+      debugPrint('================================');
+    } catch (e, stackTrace) {
+      debugPrint('Error printing sessions: $e');
+      debugPrint('$stackTrace');
     }
   }
 }

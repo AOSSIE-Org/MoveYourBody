@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:move_your_body/features/ai_inference/repositories/tag_setup_repository.dart';
 import 'package:move_your_body/features/home/services/recommendation_service.dart';

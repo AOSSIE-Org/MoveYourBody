@@ -61,7 +61,7 @@ final class SessionExecutionViewModelProvider
 }
 
 String _$sessionExecutionViewModelHash() =>
-    r'5a78524df774c87f4afe5a44b526101b82fdbbfc';
+    r'9651a6602e27345804da725ff27770d5e8128cec';
 
 final class SessionExecutionViewModelFamily extends $Family
     with

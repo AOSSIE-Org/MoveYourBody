@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:move_your_body/core/model/session_data.dart';
+import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/features/home/repositories/session_repository.dart';
 import 'package:move_your_body/features/home/view_model/session_details_view_model.dart';
+import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/session_execution_state.dart';
 
@@ -17,9 +19,9 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
     ref.onDispose(() {
       _timer?.cancel();
     });
-    
+
     Future.microtask(() => _init());
-    
+
     final now = DateTime.now();
     return SessionExecutionState(
       session: Session(createdAt: now, sessionStatus: SessionStatus.created),
@@ -32,7 +34,7 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
 
   Future<void> _init() async {
     final detailsState = ref.read(sessionDetailsViewModelProvider(sessionId));
-    
+
     if (detailsState.session == null) {
       debugPrint("Cannot start execution: Session details not found");
       return;
@@ -106,23 +108,26 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
       case ExecutionPhase.preparation:
         _startPhase(ExecutionPhase.workout);
         break;
-        
+
       case ExecutionPhase.workout:
         await _markCurrentExerciseCompleted();
-        
-        final isLastExercise = state.currentExerciseIndex >= state.exercises.length - 1;
+
+        final isLastExercise =
+            state.currentExerciseIndex >= state.exercises.length - 1;
         if (isLastExercise) {
           _startPhase(ExecutionPhase.finished);
         } else {
           _startPhase(ExecutionPhase.rest);
         }
         break;
-        
+
       case ExecutionPhase.rest:
-        state = state.copyWith(currentExerciseIndex: state.currentExerciseIndex + 1);
+        state = state.copyWith(
+          currentExerciseIndex: state.currentExerciseIndex + 1,
+        );
         _startPhase(ExecutionPhase.workout);
         break;
-        
+
       case ExecutionPhase.finished:
         break;
     }
@@ -134,14 +139,17 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
       (se) => se.exerciseId == currentExercise.exerciseId,
     );
 
-    final expectedDuration = state.exerciseDurations[currentExercise.exerciseId] ?? 30;
+    final expectedDuration =
+        state.exerciseDurations[currentExercise.exerciseId] ?? 30;
     final performedDuration = expectedDuration - state.remainingSeconds;
 
     final repo = ref.read(sessionRepositoryProvider);
     await repo.updateSessionExerciseStatus(
       sessionExerciseId: sessionExercise.id!,
       status: ExerciseStatus.completed,
-      performedDuration: performedDuration > 0 ? performedDuration : expectedDuration,
+      performedDuration: performedDuration > 0
+          ? performedDuration
+          : expectedDuration,
     );
   }
 
@@ -177,7 +185,92 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
       caloriesBurned: 0.0,
     );
   }
-  
+
+  void setDifficultyFeedback(DifficultyFeedback difficulty) {
+    state = state.copyWith(difficultyFeedback: difficulty);
+  }
+
+  void setIntensityFeedback(IntensityFeedback intensity) {
+    state = state.copyWith(intensityFeedback: intensity);
+  }
+
+  Future<void> submitFeedback() async {
+    final difficulty = state.difficultyFeedback;
+    final intensity = state.intensityFeedback;
+
+    if (difficulty == null || intensity == null) {
+      debugPrint("Feedback not fully selected");
+      return;
+    }
+
+    final sessionRepo = ref.read(sessionRepositoryProvider);
+    final userRepo = ref.read(userRepositoryProvider);
+
+    await sessionRepo.completeSession(
+      sessionId: sessionId,
+      totalDuration: state.totalElapsedSeconds,
+      caloriesBurned: 0.0,
+      difficultyFeedback: difficulty.name,
+      intensityFeedback: intensity.name,
+    );
+
+    final last3Sessions = await sessionRepo.getLastThreeCompletedSessions();
+    final currentUserData = await userRepo.getUserData();
+
+    if (last3Sessions.length == 3 && currentUserData != null) {
+      final allEasy = last3Sessions.every(
+        (s) => s.difficultyFeedback == DifficultyFeedback.easy.name,
+      );
+      final allHard = last3Sessions.every(
+        (s) => s.difficultyFeedback == DifficultyFeedback.hard.name,
+      );
+
+      final allLight = last3Sessions.every(
+        (s) => s.intensityFeedback == IntensityFeedback.light.name,
+      );
+      final allHigh = last3Sessions.every(
+        (s) => s.intensityFeedback == IntensityFeedback.high.name,
+      );
+
+      String newDifficulty = currentUserData.difficulty;
+      String newIntensity = currentUserData.intensity;
+
+      if (allEasy) {
+        if (newDifficulty == Difficulty.beginner.name) {
+          newDifficulty = Difficulty.intermediate.name;
+        } else if (newDifficulty == Difficulty.intermediate.name) {
+          newDifficulty = Difficulty.advanced.name;
+        }
+      } else if (allHard) {
+        if (newDifficulty == Difficulty.advanced.name) {
+          newDifficulty = Difficulty.intermediate.name;
+        } else if (newDifficulty == Difficulty.intermediate.name) {
+          newDifficulty = Difficulty.beginner.name;
+        }
+      }
+      if (allLight) {
+        if (newIntensity == Intensity.low.name) {
+          newIntensity = Intensity.moderate.name;
+        } else if (newIntensity == Intensity.moderate.name) {
+          newIntensity = Intensity.high.name;
+        }
+      } else if (allHigh) {
+        if (newIntensity == Intensity.high.name) {
+          newIntensity = Intensity.moderate.name;
+        } else if (newIntensity == Intensity.moderate.name) {
+          newIntensity = Intensity.low.name;
+        }
+      }
+      if (newDifficulty != currentUserData.difficulty ||
+          newIntensity != currentUserData.intensity) {
+        await userRepo.updateDifficultyAndIntensity(
+          newDifficulty,
+          newIntensity,
+        );
+      }
+    }
+  }
+
   // double _calculateEstimatedCalories() {
   //    we will work in later pr
   // }

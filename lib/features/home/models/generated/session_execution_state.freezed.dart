@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SessionExecutionState {
 
- Session get session; List<Exercise> get exercises; Map<String, int> get exerciseDurations; int get preparationTime; int get restTime; ExecutionPhase get currentPhase; int get currentExerciseIndex; int get remainingSeconds; bool get isPaused; int get totalElapsedSeconds; bool get isInitializing;
+ Session get session; List<Exercise> get exercises; Map<String, int> get exerciseDurations; int get preparationTime; int get restTime; ExecutionPhase get currentPhase; int get currentExerciseIndex; int get remainingSeconds; bool get isPaused; int get totalElapsedSeconds; bool get isInitializing; DifficultyFeedback? get difficultyFeedback; IntensityFeedback? get intensityFeedback;
 /// Create a copy of SessionExecutionState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SessionExecutionStateCopyWith<SessionExecutionState> get copyWith => _$SessionE
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SessionExecutionState&&(identical(other.session, session) || other.session == session)&&const DeepCollectionEquality().equals(other.exercises, exercises)&&const DeepCollectionEquality().equals(other.exerciseDurations, exerciseDurations)&&(identical(other.preparationTime, preparationTime) || other.preparationTime == preparationTime)&&(identical(other.restTime, restTime) || other.restTime == restTime)&&(identical(other.currentPhase, currentPhase) || other.currentPhase == currentPhase)&&(identical(other.currentExerciseIndex, currentExerciseIndex) || other.currentExerciseIndex == currentExerciseIndex)&&(identical(other.remainingSeconds, remainingSeconds) || other.remainingSeconds == remainingSeconds)&&(identical(other.isPaused, isPaused) || other.isPaused == isPaused)&&(identical(other.totalElapsedSeconds, totalElapsedSeconds) || other.totalElapsedSeconds == totalElapsedSeconds)&&(identical(other.isInitializing, isInitializing) || other.isInitializing == isInitializing));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SessionExecutionState&&(identical(other.session, session) || other.session == session)&&const DeepCollectionEquality().equals(other.exercises, exercises)&&const DeepCollectionEquality().equals(other.exerciseDurations, exerciseDurations)&&(identical(other.preparationTime, preparationTime) || other.preparationTime == preparationTime)&&(identical(other.restTime, restTime) || other.restTime == restTime)&&(identical(other.currentPhase, currentPhase) || other.currentPhase == currentPhase)&&(identical(other.currentExerciseIndex, currentExerciseIndex) || other.currentExerciseIndex == currentExerciseIndex)&&(identical(other.remainingSeconds, remainingSeconds) || other.remainingSeconds == remainingSeconds)&&(identical(other.isPaused, isPaused) || other.isPaused == isPaused)&&(identical(other.totalElapsedSeconds, totalElapsedSeconds) || other.totalElapsedSeconds == totalElapsedSeconds)&&(identical(other.isInitializing, isInitializing) || other.isInitializing == isInitializing)&&(identical(other.difficultyFeedback, difficultyFeedback) || other.difficultyFeedback == difficultyFeedback)&&(identical(other.intensityFeedback, intensityFeedback) || other.intensityFeedback == intensityFeedback));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,session,const DeepCollectionEquality().hash(exercises),const DeepCollectionEquality().hash(exerciseDurations),preparationTime,restTime,currentPhase,currentExerciseIndex,remainingSeconds,isPaused,totalElapsedSeconds,isInitializing);
+int get hashCode => Object.hash(runtimeType,session,const DeepCollectionEquality().hash(exercises),const DeepCollectionEquality().hash(exerciseDurations),preparationTime,restTime,currentPhase,currentExerciseIndex,remainingSeconds,isPaused,totalElapsedSeconds,isInitializing,difficultyFeedback,intensityFeedback);
 
 @override
 String toString() {
-  return 'SessionExecutionState(session: $session, exercises: $exercises, exerciseDurations: $exerciseDurations, preparationTime: $preparationTime, restTime: $restTime, currentPhase: $currentPhase, currentExerciseIndex: $currentExerciseIndex, remainingSeconds: $remainingSeconds, isPaused: $isPaused, totalElapsedSeconds: $totalElapsedSeconds, isInitializing: $isInitializing)';
+  return 'SessionExecutionState(session: $session, exercises: $exercises, exerciseDurations: $exerciseDurations, preparationTime: $preparationTime, restTime: $restTime, currentPhase: $currentPhase, currentExerciseIndex: $currentExerciseIndex, remainingSeconds: $remainingSeconds, isPaused: $isPaused, totalElapsedSeconds: $totalElapsedSeconds, isInitializing: $isInitializing, difficultyFeedback: $difficultyFeedback, intensityFeedback: $intensityFeedback)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SessionExecutionStateCopyWith<$Res>  {
   factory $SessionExecutionStateCopyWith(SessionExecutionState value, $Res Function(SessionExecutionState) _then) = _$SessionExecutionStateCopyWithImpl;
 @useResult
 $Res call({
- Session session, List<Exercise> exercises, Map<String, int> exerciseDurations, int preparationTime, int restTime, ExecutionPhase currentPhase, int currentExerciseIndex, int remainingSeconds, bool isPaused, int totalElapsedSeconds, bool isInitializing
+ Session session, List<Exercise> exercises, Map<String, int> exerciseDurations, int preparationTime, int restTime, ExecutionPhase currentPhase, int currentExerciseIndex, int remainingSeconds, bool isPaused, int totalElapsedSeconds, bool isInitializing, DifficultyFeedback? difficultyFeedback, IntensityFeedback? intensityFeedback
 });
 
 
@@ -62,7 +62,7 @@ class _$SessionExecutionStateCopyWithImpl<$Res>
 
 /// Create a copy of SessionExecutionState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? session = null,Object? exercises = null,Object? exerciseDurations = null,Object? preparationTime = null,Object? restTime = null,Object? currentPhase = null,Object? currentExerciseIndex = null,Object? remainingSeconds = null,Object? isPaused = null,Object? totalElapsedSeconds = null,Object? isInitializing = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? session = null,Object? exercises = null,Object? exerciseDurations = null,Object? preparationTime = null,Object? restTime = null,Object? currentPhase = null,Object? currentExerciseIndex = null,Object? remainingSeconds = null,Object? isPaused = null,Object? totalElapsedSeconds = null,Object? isInitializing = null,Object? difficultyFeedback = freezed,Object? intensityFeedback = freezed,}) {
   return _then(_self.copyWith(
 session: null == session ? _self.session : session // ignore: cast_nullable_to_non_nullable
 as Session,exercises: null == exercises ? _self.exercises : exercises // ignore: cast_nullable_to_non_nullable
@@ -75,7 +75,9 @@ as int,remainingSeconds: null == remainingSeconds ? _self.remainingSeconds : rem
 as int,isPaused: null == isPaused ? _self.isPaused : isPaused // ignore: cast_nullable_to_non_nullable
 as bool,totalElapsedSeconds: null == totalElapsedSeconds ? _self.totalElapsedSeconds : totalElapsedSeconds // ignore: cast_nullable_to_non_nullable
 as int,isInitializing: null == isInitializing ? _self.isInitializing : isInitializing // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,difficultyFeedback: freezed == difficultyFeedback ? _self.difficultyFeedback : difficultyFeedback // ignore: cast_nullable_to_non_nullable
+as DifficultyFeedback?,intensityFeedback: freezed == intensityFeedback ? _self.intensityFeedback : intensityFeedback // ignore: cast_nullable_to_non_nullable
+as IntensityFeedback?,
   ));
 }
 
@@ -160,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Session session,  List<Exercise> exercises,  Map<String, int> exerciseDurations,  int preparationTime,  int restTime,  ExecutionPhase currentPhase,  int currentExerciseIndex,  int remainingSeconds,  bool isPaused,  int totalElapsedSeconds,  bool isInitializing)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Session session,  List<Exercise> exercises,  Map<String, int> exerciseDurations,  int preparationTime,  int restTime,  ExecutionPhase currentPhase,  int currentExerciseIndex,  int remainingSeconds,  bool isPaused,  int totalElapsedSeconds,  bool isInitializing,  DifficultyFeedback? difficultyFeedback,  IntensityFeedback? intensityFeedback)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SessionExecutionState() when $default != null:
-return $default(_that.session,_that.exercises,_that.exerciseDurations,_that.preparationTime,_that.restTime,_that.currentPhase,_that.currentExerciseIndex,_that.remainingSeconds,_that.isPaused,_that.totalElapsedSeconds,_that.isInitializing);case _:
+return $default(_that.session,_that.exercises,_that.exerciseDurations,_that.preparationTime,_that.restTime,_that.currentPhase,_that.currentExerciseIndex,_that.remainingSeconds,_that.isPaused,_that.totalElapsedSeconds,_that.isInitializing,_that.difficultyFeedback,_that.intensityFeedback);case _:
   return orElse();
 
 }
@@ -181,10 +183,10 @@ return $default(_that.session,_that.exercises,_that.exerciseDurations,_that.prep
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Session session,  List<Exercise> exercises,  Map<String, int> exerciseDurations,  int preparationTime,  int restTime,  ExecutionPhase currentPhase,  int currentExerciseIndex,  int remainingSeconds,  bool isPaused,  int totalElapsedSeconds,  bool isInitializing)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Session session,  List<Exercise> exercises,  Map<String, int> exerciseDurations,  int preparationTime,  int restTime,  ExecutionPhase currentPhase,  int currentExerciseIndex,  int remainingSeconds,  bool isPaused,  int totalElapsedSeconds,  bool isInitializing,  DifficultyFeedback? difficultyFeedback,  IntensityFeedback? intensityFeedback)  $default,) {final _that = this;
 switch (_that) {
 case _SessionExecutionState():
-return $default(_that.session,_that.exercises,_that.exerciseDurations,_that.preparationTime,_that.restTime,_that.currentPhase,_that.currentExerciseIndex,_that.remainingSeconds,_that.isPaused,_that.totalElapsedSeconds,_that.isInitializing);case _:
+return $default(_that.session,_that.exercises,_that.exerciseDurations,_that.preparationTime,_that.restTime,_that.currentPhase,_that.currentExerciseIndex,_that.remainingSeconds,_that.isPaused,_that.totalElapsedSeconds,_that.isInitializing,_that.difficultyFeedback,_that.intensityFeedback);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +203,10 @@ return $default(_that.session,_that.exercises,_that.exerciseDurations,_that.prep
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Session session,  List<Exercise> exercises,  Map<String, int> exerciseDurations,  int preparationTime,  int restTime,  ExecutionPhase currentPhase,  int currentExerciseIndex,  int remainingSeconds,  bool isPaused,  int totalElapsedSeconds,  bool isInitializing)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Session session,  List<Exercise> exercises,  Map<String, int> exerciseDurations,  int preparationTime,  int restTime,  ExecutionPhase currentPhase,  int currentExerciseIndex,  int remainingSeconds,  bool isPaused,  int totalElapsedSeconds,  bool isInitializing,  DifficultyFeedback? difficultyFeedback,  IntensityFeedback? intensityFeedback)?  $default,) {final _that = this;
 switch (_that) {
 case _SessionExecutionState() when $default != null:
-return $default(_that.session,_that.exercises,_that.exerciseDurations,_that.preparationTime,_that.restTime,_that.currentPhase,_that.currentExerciseIndex,_that.remainingSeconds,_that.isPaused,_that.totalElapsedSeconds,_that.isInitializing);case _:
+return $default(_that.session,_that.exercises,_that.exerciseDurations,_that.preparationTime,_that.restTime,_that.currentPhase,_that.currentExerciseIndex,_that.remainingSeconds,_that.isPaused,_that.totalElapsedSeconds,_that.isInitializing,_that.difficultyFeedback,_that.intensityFeedback);case _:
   return null;
 
 }
@@ -216,7 +218,7 @@ return $default(_that.session,_that.exercises,_that.exerciseDurations,_that.prep
 
 
 class _SessionExecutionState implements SessionExecutionState {
-  const _SessionExecutionState({required this.session, required final  List<Exercise> exercises, required final  Map<String, int> exerciseDurations, required this.preparationTime, required this.restTime, this.currentPhase = ExecutionPhase.preparation, this.currentExerciseIndex = 0, this.remainingSeconds = 0, this.isPaused = false, this.totalElapsedSeconds = 0, this.isInitializing = true}): _exercises = exercises,_exerciseDurations = exerciseDurations;
+  const _SessionExecutionState({required this.session, required final  List<Exercise> exercises, required final  Map<String, int> exerciseDurations, required this.preparationTime, required this.restTime, this.currentPhase = ExecutionPhase.preparation, this.currentExerciseIndex = 0, this.remainingSeconds = 0, this.isPaused = false, this.totalElapsedSeconds = 0, this.isInitializing = true, this.difficultyFeedback, this.intensityFeedback}): _exercises = exercises,_exerciseDurations = exerciseDurations;
   
 
 @override final  Session session;
@@ -242,6 +244,8 @@ class _SessionExecutionState implements SessionExecutionState {
 @override@JsonKey() final  bool isPaused;
 @override@JsonKey() final  int totalElapsedSeconds;
 @override@JsonKey() final  bool isInitializing;
+@override final  DifficultyFeedback? difficultyFeedback;
+@override final  IntensityFeedback? intensityFeedback;
 
 /// Create a copy of SessionExecutionState
 /// with the given fields replaced by the non-null parameter values.
@@ -253,16 +257,16 @@ _$SessionExecutionStateCopyWith<_SessionExecutionState> get copyWith => __$Sessi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SessionExecutionState&&(identical(other.session, session) || other.session == session)&&const DeepCollectionEquality().equals(other._exercises, _exercises)&&const DeepCollectionEquality().equals(other._exerciseDurations, _exerciseDurations)&&(identical(other.preparationTime, preparationTime) || other.preparationTime == preparationTime)&&(identical(other.restTime, restTime) || other.restTime == restTime)&&(identical(other.currentPhase, currentPhase) || other.currentPhase == currentPhase)&&(identical(other.currentExerciseIndex, currentExerciseIndex) || other.currentExerciseIndex == currentExerciseIndex)&&(identical(other.remainingSeconds, remainingSeconds) || other.remainingSeconds == remainingSeconds)&&(identical(other.isPaused, isPaused) || other.isPaused == isPaused)&&(identical(other.totalElapsedSeconds, totalElapsedSeconds) || other.totalElapsedSeconds == totalElapsedSeconds)&&(identical(other.isInitializing, isInitializing) || other.isInitializing == isInitializing));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SessionExecutionState&&(identical(other.session, session) || other.session == session)&&const DeepCollectionEquality().equals(other._exercises, _exercises)&&const DeepCollectionEquality().equals(other._exerciseDurations, _exerciseDurations)&&(identical(other.preparationTime, preparationTime) || other.preparationTime == preparationTime)&&(identical(other.restTime, restTime) || other.restTime == restTime)&&(identical(other.currentPhase, currentPhase) || other.currentPhase == currentPhase)&&(identical(other.currentExerciseIndex, currentExerciseIndex) || other.currentExerciseIndex == currentExerciseIndex)&&(identical(other.remainingSeconds, remainingSeconds) || other.remainingSeconds == remainingSeconds)&&(identical(other.isPaused, isPaused) || other.isPaused == isPaused)&&(identical(other.totalElapsedSeconds, totalElapsedSeconds) || other.totalElapsedSeconds == totalElapsedSeconds)&&(identical(other.isInitializing, isInitializing) || other.isInitializing == isInitializing)&&(identical(other.difficultyFeedback, difficultyFeedback) || other.difficultyFeedback == difficultyFeedback)&&(identical(other.intensityFeedback, intensityFeedback) || other.intensityFeedback == intensityFeedback));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,session,const DeepCollectionEquality().hash(_exercises),const DeepCollectionEquality().hash(_exerciseDurations),preparationTime,restTime,currentPhase,currentExerciseIndex,remainingSeconds,isPaused,totalElapsedSeconds,isInitializing);
+int get hashCode => Object.hash(runtimeType,session,const DeepCollectionEquality().hash(_exercises),const DeepCollectionEquality().hash(_exerciseDurations),preparationTime,restTime,currentPhase,currentExerciseIndex,remainingSeconds,isPaused,totalElapsedSeconds,isInitializing,difficultyFeedback,intensityFeedback);
 
 @override
 String toString() {
-  return 'SessionExecutionState(session: $session, exercises: $exercises, exerciseDurations: $exerciseDurations, preparationTime: $preparationTime, restTime: $restTime, currentPhase: $currentPhase, currentExerciseIndex: $currentExerciseIndex, remainingSeconds: $remainingSeconds, isPaused: $isPaused, totalElapsedSeconds: $totalElapsedSeconds, isInitializing: $isInitializing)';
+  return 'SessionExecutionState(session: $session, exercises: $exercises, exerciseDurations: $exerciseDurations, preparationTime: $preparationTime, restTime: $restTime, currentPhase: $currentPhase, currentExerciseIndex: $currentExerciseIndex, remainingSeconds: $remainingSeconds, isPaused: $isPaused, totalElapsedSeconds: $totalElapsedSeconds, isInitializing: $isInitializing, difficultyFeedback: $difficultyFeedback, intensityFeedback: $intensityFeedback)';
 }
 
 
@@ -273,7 +277,7 @@ abstract mixin class _$SessionExecutionStateCopyWith<$Res> implements $SessionEx
   factory _$SessionExecutionStateCopyWith(_SessionExecutionState value, $Res Function(_SessionExecutionState) _then) = __$SessionExecutionStateCopyWithImpl;
 @override @useResult
 $Res call({
- Session session, List<Exercise> exercises, Map<String, int> exerciseDurations, int preparationTime, int restTime, ExecutionPhase currentPhase, int currentExerciseIndex, int remainingSeconds, bool isPaused, int totalElapsedSeconds, bool isInitializing
+ Session session, List<Exercise> exercises, Map<String, int> exerciseDurations, int preparationTime, int restTime, ExecutionPhase currentPhase, int currentExerciseIndex, int remainingSeconds, bool isPaused, int totalElapsedSeconds, bool isInitializing, DifficultyFeedback? difficultyFeedback, IntensityFeedback? intensityFeedback
 });
 
 
@@ -290,7 +294,7 @@ class __$SessionExecutionStateCopyWithImpl<$Res>
 
 /// Create a copy of SessionExecutionState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? session = null,Object? exercises = null,Object? exerciseDurations = null,Object? preparationTime = null,Object? restTime = null,Object? currentPhase = null,Object? currentExerciseIndex = null,Object? remainingSeconds = null,Object? isPaused = null,Object? totalElapsedSeconds = null,Object? isInitializing = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? session = null,Object? exercises = null,Object? exerciseDurations = null,Object? preparationTime = null,Object? restTime = null,Object? currentPhase = null,Object? currentExerciseIndex = null,Object? remainingSeconds = null,Object? isPaused = null,Object? totalElapsedSeconds = null,Object? isInitializing = null,Object? difficultyFeedback = freezed,Object? intensityFeedback = freezed,}) {
   return _then(_SessionExecutionState(
 session: null == session ? _self.session : session // ignore: cast_nullable_to_non_nullable
 as Session,exercises: null == exercises ? _self._exercises : exercises // ignore: cast_nullable_to_non_nullable
@@ -303,7 +307,9 @@ as int,remainingSeconds: null == remainingSeconds ? _self.remainingSeconds : rem
 as int,isPaused: null == isPaused ? _self.isPaused : isPaused // ignore: cast_nullable_to_non_nullable
 as bool,totalElapsedSeconds: null == totalElapsedSeconds ? _self.totalElapsedSeconds : totalElapsedSeconds // ignore: cast_nullable_to_non_nullable
 as int,isInitializing: null == isInitializing ? _self.isInitializing : isInitializing // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,difficultyFeedback: freezed == difficultyFeedback ? _self.difficultyFeedback : difficultyFeedback // ignore: cast_nullable_to_non_nullable
+as DifficultyFeedback?,intensityFeedback: freezed == intensityFeedback ? _self.intensityFeedback : intensityFeedback // ignore: cast_nullable_to_non_nullable
+as IntensityFeedback?,
   ));
 }
 

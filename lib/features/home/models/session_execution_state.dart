@@ -11,6 +11,18 @@ enum ExecutionPhase {
   finished
 }
 
+enum DifficultyFeedback {
+  easy,
+  medium,
+  hard
+}
+
+enum IntensityFeedback {
+  light,
+  medium,
+  high
+}
+
 @freezed
 abstract class SessionExecutionState with _$SessionExecutionState {
   const factory SessionExecutionState({
@@ -26,5 +38,8 @@ abstract class SessionExecutionState with _$SessionExecutionState {
     @Default(false) bool isPaused,
     @Default(0) int totalElapsedSeconds,
     @Default(true) bool isInitializing,
+    
+    DifficultyFeedback? difficultyFeedback,
+    IntensityFeedback? intensityFeedback,
   }) = _SessionExecutionState;
 }

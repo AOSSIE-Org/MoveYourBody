@@ -23,7 +23,7 @@ class SessionExecutionScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(sessionExecutionViewModelProvider(sessionId), (previous, next) {
       if (next.currentPhase == ExecutionPhase.finished) {
-        context.go(AppRoutes.home);
+        context.go(AppRoutes.postSessionFeedbackPath(sessionId));
       }
     });
 
@@ -39,48 +39,9 @@ class SessionExecutionScreen extends ConsumerWidget {
     }
 
     if (state.currentPhase == ExecutionPhase.finished) {
-      return AppScaffold(
+      return const AppScaffold(
         child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.check_circle,
-                color: AppColors.primary,
-                size: 80,
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                "Workout Complete! 🎉",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 40),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 16,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-                child: const Text(
-                  "Finish",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-          ),
+          child: CircularProgressIndicator(color: AppColors.primary),
         ),
       );
     }
@@ -126,7 +87,8 @@ class SessionExecutionScreen extends ConsumerWidget {
                 flex: 4,
                 child: ExecutionAnimationBox(
                   exercise: currentExercise,
-                  isResting: isResting || state.currentPhase == ExecutionPhase.preparation,
+                  isResting: isResting ||
+                      state.currentPhase == ExecutionPhase.preparation,
                   nextExercise: nextAnimExercise,
                 ),
               ),

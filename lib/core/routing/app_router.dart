@@ -6,6 +6,7 @@ import 'package:move_your_body/features/home/screens/home_screen.dart';
 import 'package:move_your_body/features/home/screens/session_details_screen.dart';
 import 'package:move_your_body/features/home/screens/exercise_info_screen.dart';
 import 'package:move_your_body/features/home/screens/session_execution_screen.dart';
+import 'package:move_your_body/features/home/screens/session_feedback_screen.dart';
 import 'package:move_your_body/features/onboarding/view/splash_screen.dart';
 import './app_routes.dart';
 import '../../features/onboarding/view/body_region_screen.dart';
@@ -148,6 +149,13 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) {
         final sessionId = int.parse(state.pathParameters['sessionId']!);
         return SessionExecutionScreen(sessionId: sessionId);
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.postsessionfeedback,
+      builder: (context, state) {
+        final sessionId = int.parse(state.pathParameters['sessionId']!);
+        return SessionFeedbackScreen(sessionId: sessionId);
       },
     ),
   ],

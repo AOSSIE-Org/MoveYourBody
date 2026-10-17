@@ -1,5 +1,6 @@
 import 'package:move_your_body/features/home/repositories/exercise_repository.dart';
 import 'package:move_your_body/features/home/repositories/session_repository.dart';
+import 'package:move_your_body/features/home/services/safety_filter_service.dart';
 import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:move_your_body/features/home/services/recommendation_service.dart';
@@ -69,7 +70,12 @@ class HomeViewModel extends _$HomeViewModel {
       }
 
       final service = ref.read(recommendationServiceProvider);
-      final exercises = await service.recommendExercises(userData);
+      final localSessionRepo = ref.read(sessionRepositoryProvider);
+
+      final recentExerciseIds = await localSessionRepo
+          .getRecentExerciseIds(SafetyFilterService.sessionsToSkip);
+      final exercises =
+          await service.recommendExercises(userData, recentExerciseIds);
 
       state = state.copyWith(
         recommendedExercises: exercises,
