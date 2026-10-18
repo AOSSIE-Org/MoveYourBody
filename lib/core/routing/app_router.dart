@@ -20,6 +20,7 @@ import '../../features/onboarding/view/user_details.dart';
 import '../../features/onboarding/view/welcome_screen.dart';
 import '../../features/home/screens/search_screen.dart';
 
+
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
   routes: [
@@ -60,6 +61,10 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const UserdataScreen(),
     ),
     GoRoute(
+      path: AppRoutes.result,
+      builder: (context, state) => const ResultScreen(),
+    ),
+    GoRoute(
       path: AppRoutes.loading,
       builder: (context, state) => const LoadingScreen(),
     ),
@@ -67,7 +72,6 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.search,
       builder: (context, state) => const SearchScreen(),
     ),
-
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return Scaffold(
@@ -93,7 +97,6 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -103,7 +106,6 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -113,7 +115,6 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -123,7 +124,6 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-
         StatefulShellBranch(
           routes: [
             GoRoute(
@@ -134,15 +134,15 @@ final GoRouter appRouter = GoRouter(
         ),
       ],
     ),
-
     GoRoute(
       path: AppRoutes.sessiondetails,
       builder: (context, state) {
-        final sessionId = int.parse(state.pathParameters['sessionId']!);
+        final sessionId = int.parse(
+          state.pathParameters['sessionId']!,
+        );
         return SessionDetailsScreen(sessionId: sessionId);
       },
     ),
-
     GoRoute(
       path: AppRoutes.exerciseInfo,
       builder: (context, state) {

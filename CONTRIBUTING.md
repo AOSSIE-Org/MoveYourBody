@@ -1,4 +1,4 @@
-# Contributing to TODO: Project Name
+# Contributing to MoveYourBody
 
 ⭐ First off, thank you for considering contributing to this project! ⭐
 
@@ -23,14 +23,13 @@ We welcome contributions from everyone. By participating in this project, you ag
 - [Development Workflow](#development-workflow)
 - [Pull Request Guidelines](#pull-request-guidelines)
 - [Code Style Guidelines](#code-style-guidelines)
-- [Debugging Pre-commit Hooks](#debugging-pre-commit-hooks)
 - [Community Guidelines](#community-guidelines)
 
 ## 🤝 How Can I Contribute?
 
 ### Reporting Bugs
 
-Before creating bug reports, please check existing issues to avoid duplicates. When creating a bug report, include:
+Before creating bug reports, please check [existing issues](https://github.com/AOSSIE-Org/MoveYourBody/issues) to avoid duplicates. If you need help, feel free to ask in our [project discord channel](https://discord.com/channels/1022871757289422898/1500966300782956634). When creating a bug report, include:
 
 - Clear and descriptive title
 - Steps to reproduce the issue
@@ -66,9 +65,20 @@ What we expect:
 
 ## 🚀 Getting Started
 
-### Prerequisites
+### Codebase Architecture
 
-TODO: List prerequisites specific to your project
+```text
+MoveYourBody/
+├── assets/             # Local assets (fonts, models, JSON DB)
+├── public/             # Static assets for README (logos, diagrams)
+├── scripts/            # Python utility scripts (e.g., DB generation)
+├── lib/
+│   ├── features/       # Feature-driven modules (UI, State, Repositories)
+│   ├── l10n/           # Localization files
+│   └── main.dart       # Flutter entry point
+├── pubspec.yaml        # Flutter dependencies
+└── README.md           # Project documentation
+```
 
 ### Setup
 
@@ -79,25 +89,34 @@ TODO: List prerequisites specific to your project
 
 2. **Clone Your Fork**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/TODO.git
-   cd TODO
+   git clone https://github.com/YOUR_USERNAME/MoveYourBody.git
+   cd MoveYourBody
    ```
 
 3. **Add Upstream Remote**
    ```bash
-   git remote add upstream https://github.com/AOSSIE-Org/TODO.git
+   git remote add upstream https://github.com/AOSSIE-Org/MoveYourBody.git
    ```
 
 4. **Install Dependencies**
    ```bash
-   npm install
-   # or yarn install
-   # or pnpm install
+   flutter pub get
    ```
 
-5. **Run the Project**
+5. **Generate Riverpod Code**
    ```bash
-   npm run dev
+   dart run build_runner build --delete-conflicting-outputs
+   ```
+
+6. **Generate Exercise Database (Crucial Step)**
+   Before running the app, you must generate the local exercise DB:
+   ```bash
+   python scripts/generate_exercise_db.py
+   ```
+
+7. **Run the Project**
+   ```bash
+   flutter run
    ```
 
 ## 🔄 Development Workflow
@@ -121,12 +140,11 @@ git checkout -b fix/your-bug-fix
 
 ### 3. Test Your Changes
 
-TODO: Add project-specific testing instructions
+Ensure all tests pass and there are no analyzer issues:
 
 ```bash
-npm test
-# or
-npm run lint
+flutter test
+flutter analyze
 ```
 
 ### 4. Commit Your Changes
@@ -223,286 +241,16 @@ Steps to test the changes
 
 ## 📝 Code Style Guidelines
 
-TODO: Add project-specific code style guidelines
-
-### General Guidelines
-
-- Use meaningful variable and function names
-- Keep functions small and focused
-- Add comments for complex logic
-- Remove console.logs before committing
-- Avoid code duplication
-- Avoid unnecessary complexity and minor over-optimization
-
-### JavaScript/TypeScript
-- Use ES6+ syntax
-- Prefer `const` over `let`, avoid `var`
-- Use arrow functions where appropriate
-- Follow ESLint rules
-
-### Python
-- Follow PEP 8 style guide
-- Use type hints where applicable
-- Write docstrings for functions/classes
-
-## 🔧 Debugging Pre-commit Hooks
-
-Pre-commit hooks help maintain code quality by running automated checks before each commit. This section helps you troubleshoot common issues.
-
-### Initial Setup
-
-If pre-commit is configured in this project, install it first:
-
-```bash
-pip install pre-commit
-pre-commit install
-```
-
-### Common Errors and Solutions
-
-#### 1. **Pre-commit Hook Failed: Trailing Whitespace**
-
-**Error:**
-```text
-Trim Trailing Whitespace.................................................Failed
-- hook id: trailing-whitespace
-- exit code: 1
-- files were modified by this hook
-```
-
-**Solution:**
-```bash
-# Pre-commit automatically fixes this. Just re-stage and commit:
-git add .
-git commit -m "your message"
-```
-
-#### 2. **Pre-commit Hook Failed: End of File Fixer**
-
-**Error:**
-```text
-Fix End of Files.........................................................Failed
-- hook id: end-of-file-fixer
-- exit code: 1
-- files were modified by this hook
-```
-
-**Solution:**
-```bash
-# Files are automatically fixed. Re-add and commit:
-git add .
-git commit -m "your message"
-```
-
-#### 3. **Pre-commit Hook Failed: Check YAML/JSON/TOML**
-
-**Error:**
-```text
-Check Yaml..........................................Failed
-- hook id: check-yaml
-- exit code: 1
-
-File .github/workflows/test.yml: mapping values are not allowed here
-```
-
-**Solution:**
-```bash
-# Fix the syntax error in the file (check line number in error)
-# Common issues:
-# - Incorrect indentation
-# - Missing colons
-# - Invalid characters
-# Then commit again
-```
-
-#### 4. **Pre-commit Hook Failed: Detect Secrets**
-
-**Error:**
-```text
-detect-secrets...........................................................Failed
-- hook id: detect-secrets
-- exit code: 1
-
-Potential secrets about to be added to git repo:
-
-  Secret Type: AWS Access Key
-  Location:    config/settings.py:42
-```
-
-**Solution:**
-```bash
-# Option 1: Remove the secret and use environment variables
-# Replace hardcoded secrets with:
-# API_KEY = os.getenv('API_KEY')
-
-# Option 2: If it's a false positive, update baseline:
-# detect-secrets scan > .secrets.baseline
-# git add .secrets.baseline
-```
-
-#### 5. **Pre-commit Hook Failed: Mixed Line Endings**
-
-**Error:**
-```text
-Mixed line ending........................................................Failed
-- hook id: mixed-line-ending
-- exit code: 1
-- files were modified by this hook
-```
-
-**Solution:**
-```bash
-# Automatically fixed to LF. Re-add and commit:
-git add .
-git commit -m "your message"
-```
-
-#### 6. **Pre-commit Hook Failed: Large Files**
-
-**Error:**
-```text
-Check for added large files..............................................Failed
-- hook id: check-added-large-files
-- exit code: 1
-
-large.zip (5.2 MB) exceeds 500 KB
-```
-
-**Solution:**
-```bash
-# Option 1: Remove large files
-git rm --cached large.zip
-
-# Option 2: Use Git LFS for large files
-git lfs install
-git lfs track "*.zip"
-git add .gitattributes
-
-# Option 3: Increase limit (not recommended)
-# Edit .pre-commit-config.yaml:
-# args: ['--maxkb=10000']  # 10MB
-```
-
-#### 7. **Pre-commit Hook Failed: Merge Conflict Markers**
-
-**Error:**
-```text
-Check for merge conflicts................................................Failed
-- hook id: check-merge-conflict
-- exit code: 1
-
-Merge conflict markers found in:
-  src/main.js:45
-```
-
-**Solution:**
-```bash
-# Open the file and remove conflict markers:
-# <<<<<<< HEAD
-# =======
-# >>>>>>> branch-name
-
-# Then commit again
-```
-
-#### 8. **Pre-commit Not Running**
-
-**Problem:** Commits go through without pre-commit checks
-
-**Solution:**
-```bash
-# Reinstall pre-commit hooks
-pre-commit uninstall
-pre-commit install
-
-# Verify installation
-pre-commit run --all-files
-```
-
-#### 9. **Pre-commit Takes Too Long**
-
-**Problem:** Pre-commit is slow on every commit
-
-**Solution:**
-```bash
-# Run only on changed files (default behavior)
-git commit -m "message"
-
-# Skip pre-commit for quick commits (use sparingly!)
-git commit --no-verify -m "message"
-
-# Update pre-commit hooks
-pre-commit autoupdate
-```
-
-#### 10. **Hook Installation Failed**
-
-**Error:**
-```text
-An error has occurred: InvalidManifestError:
-=====> /path/to/.pre-commit-config.yaml does not exist
-```
-
-**Solution:**
-```bash
-# Ensure you're in the project root directory
-cd /path/to/project/root
-
-# Verify config file exists
-ls -la .pre-commit-config.yaml
-
-# Reinstall
-pre-commit install
-```
-
-### Bypassing Pre-commit (Emergency Only)
-
-**⚠️ Use only when absolutely necessary:**
-
-```bash
-# Skip pre-commit hooks for a single commit
-git commit --no-verify -m "emergency fix"
-
-# Or use the short flag
-git commit -n -m "emergency fix"
-```
-
-**Note:** This should be rare. If you need to bypass frequently, discuss with maintainers.
-
-### Running Pre-commit Manually
-
-```bash
-# Run all hooks on all files
-pre-commit run --all-files
-
-# Run a specific hook
-pre-commit run trailing-whitespace --all-files
-
-# Run on specific files
-pre-commit run --files src/main.js src/utils.js
-```
-
-### Updating Pre-commit Hooks
-
-```bash
-# Update to latest versions
-pre-commit autoupdate
-
-# Clean and reinstall
-pre-commit clean
-pre-commit install
-```
-
-### Getting Help
-
-If you encounter issues not covered here:
-
-1. Check [pre-commit documentation](https://pre-commit.com/)
-2. Review the error message carefully (it usually tells you what's wrong)
-3. Ask in the project's Discord channel
-4. Search for similar issues in the repository
-
-**Remember:** Pre-commit hooks are there to help you maintain code quality. Don't fight them - fix the issues they find!
+### Flutter & Dart
+
+- Follow standard [Dart style guidelines](https://dart.dev/guides/language/effective-dart/style)
+- Use `camelCase` for variables and `PascalCase` for classes
+- Keep Riverpod providers organized inside your feature's `providers` or `viewmodels` folder
+- Run `dart format .` before committing
+- Avoid highly nested widget trees by breaking them down into smaller stateless widgets
+- Write clear comments for complex logic in models and repositories
+- Remove print statements before committing (use a logger if necessary)
+- Avoid code duplication and unnecessary complexity
 
 ## 🌟 Community Guidelines
 
@@ -538,4 +286,4 @@ If you encounter issues not covered here:
 - Check for existing PRs before starting to avoid duplication, as there might PRs that didn't mention the related issue
 
 
-Thank you for contributing to TODO! Your efforts help make this project better for everyone. 🚀
+Thank you for contributing to MoveYourBody! Your efforts help make this project better for everyone. 🚀

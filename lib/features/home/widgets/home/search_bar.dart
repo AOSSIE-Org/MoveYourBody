@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:go_router/go_router.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
 import 'package:move_your_body/core/theme/app_colors.dart';

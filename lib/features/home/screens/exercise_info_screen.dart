@@ -20,7 +20,10 @@ class ExerciseInfoScreen extends ConsumerWidget {
             child: Center(
               child: Text(
                 'Exercise not found',
-                style: TextStyle(color: Colors.red.shade300, fontSize: 16),
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.6),
+                  fontSize: 16,
+                ),
               ),
             ),
           );
@@ -42,4 +45,3 @@ class ExerciseInfoScreen extends ConsumerWidget {
     );
   }
 }
-

@@ -16,16 +16,17 @@ class DatabaseService {
 
   DatabaseService._internal();
 
-  Database? _userdatabase;
+  Database? _database;
   Database? _exercisesDatabase;
 
-  Future<Database> get userDatabase async {
-    if (_userdatabase != null) return _userdatabase!;
+  Future<Database> get database async {
+    if (_database != null) return _database!;
 
-    _userdatabase = await _initDatabase();
-    return _userdatabase!;
+    _database = await _initDatabase();
+    return _database!;
   }
 
+  Future<Database> get userDatabase => database;
   Future<Database> get exercisesDatabase async {
     if (_exercisesDatabase != null) return _exercisesDatabase!;
 

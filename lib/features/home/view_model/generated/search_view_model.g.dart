@@ -41,7 +41,7 @@ final class SearchViewModelProvider
   }
 }
 
-String _$searchViewModelHash() => r'eae27004ba1dd15ff75ec5c9bff946b0697284cf';
+String _$searchViewModelHash() => r'23b3a547876d2e9eb6d835ca2e9e06035d9697b1';
 
 abstract class _$SearchViewModel extends $Notifier<SearchState> {
   SearchState build();
