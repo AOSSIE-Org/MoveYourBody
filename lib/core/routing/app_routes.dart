@@ -19,6 +19,7 @@ class AppRoutes {
   static const String exerciseInfo = '/exercise-info/:exerciseId';
   static const String sessionExecution = '/session-execution/:sessionId';
   static const String postsessionfeedback = '/post-session-feedback/:sessionId';
+  static const String search = '/search';
 
   static String sessionDetailsPath(int sessionId) =>
       '/session-details/$sessionId';

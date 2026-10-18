@@ -365,6 +365,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
+  fuzzy:
+    dependency: "direct main"
+    description:
+      name: fuzzy
+      sha256: "5ab35514199b09662dd73fdec5f3f446dcae88c51fdab1aa24bb29adc30f0847"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.2"
   glob:
     dependency: transitive
     description:
@@ -1010,6 +1018,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  stringr:
+    dependency: transitive
+    description:
+      name: stringr
+      sha256: "31bc22634dc3a1399e66c668787939726965ecbc9c390ee876b99e2e11a9c4d3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.2"
   synchronized:
     dependency: transitive
     description:

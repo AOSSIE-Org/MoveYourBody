@@ -18,6 +18,8 @@ import '../../features/onboarding/view/intensity_level.dart';
 import '../../features/onboarding/view/resultscreen.dart';
 import '../../features/onboarding/view/user_details.dart';
 import '../../features/onboarding/view/welcome_screen.dart';
+import '../../features/home/screens/search_screen.dart';
+
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
@@ -65,6 +67,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.loading,
       builder: (context, state) => const LoadingScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.search,
+      builder: (context, state) => const SearchScreen(),
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {

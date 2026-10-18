@@ -28,6 +28,7 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   shared_preferences: ^2.5.3
   package_info_plus: ^8.3.0
+  fuzzy: ^0.5.1
   chewie: ^1.10.0
   flutter_svg: ^2.3.0
 
