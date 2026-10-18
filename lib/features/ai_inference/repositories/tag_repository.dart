@@ -29,12 +29,12 @@ class TagRepository {
         TagsTable.tableName,
       );
 
-      print("================ DB VERIFICATION START ================");
-      print("Total Tags Found in Database: ${maps.length}");
+      debugPrint("================ DB VERIFICATION START ================");
+      debugPrint("Total Tags Found in Database: ${maps.length}");
 
       if (maps.isEmpty) {
-        print("❌ No tags found in the database.");
-        print("=====================================================");
+        debugPrint("❌ No tags found in the database.");
+        debugPrint("=====================================================");
         return;
       }
 
@@ -43,13 +43,13 @@ class TagRepository {
 
         final int embeddingLength = tag.embedding?.length ?? 0;
 
-        print(
+        debugPrint(
           "📌 ID: ${tag.id} | Name: ${tag.tagName} | Type: ${tag.tagType.name} | Embedding Size: $embeddingLength bytes",
         );
       }
-      print("================= DB VERIFICATION END =================");
+      debugPrint("================= DB VERIFICATION END =================");
     } catch (e) {
-      print("❌ Error reading tags from database: $e");
+      debugPrint("❌ Error reading tags from database: $e");
     }
   }
 
@@ -104,13 +104,13 @@ class TagRepository {
       }
 
       matches.sort((a, b) => b.score.compareTo(a.score));
-      print("Found ${matches.length} matches:");
+      debugPrint("Found ${matches.length} matches:");
       for (final match in matches) {
-        print("${match.tag.tagName} -> ${match.score.toStringAsFixed(4)}");
+        debugPrint("${match.tag.tagName} -> ${match.score.toStringAsFixed(4)}");
       }
       return matches.take(limit).map((m) => m.tag.tagName).toList();
     } catch (e) {
-      print("❌ Error finding top matches: $e");
+      debugPrint("❌ Error finding top matches: $e");
       return [];
     }
   }
