@@ -20,6 +20,8 @@ class AppRoutes {
   static const String sessionExecution = '/session-execution/:sessionId';
   static const String postsessionfeedback = '/post-session-feedback/:sessionId';
   static const String search = '/search';
+  static const String pastSessionDetails = '/past-session-details/:sessionId';
+  static const String allSessions = '/all-sessions';
 
   static String sessionDetailsPath(int sessionId) =>
       '/session-details/$sessionId';
@@ -32,4 +34,7 @@ class AppRoutes {
 
   static String postSessionFeedbackPath(int sessionId) =>
       '/post-session-feedback/$sessionId';
+
+  static String pastSessionDetailsPath(int sessionId) =>
+      '/past-session-details/$sessionId';
 }

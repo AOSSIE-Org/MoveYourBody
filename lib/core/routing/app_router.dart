@@ -19,7 +19,9 @@ import '../../features/onboarding/view/resultscreen.dart';
 import '../../features/onboarding/view/user_details.dart';
 import '../../features/onboarding/view/welcome_screen.dart';
 import '../../features/home/screens/search_screen.dart';
-
+import 'package:move_your_body/features/stats/screens/stats_screen.dart';
+import 'package:move_your_body/features/stats/screens/past_session_details_screen.dart';
+import 'package:move_your_body/features/stats/screens/all_sessions_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
@@ -119,8 +121,7 @@ final GoRouter appRouter = GoRouter(
           routes: [
             GoRoute(
               path: AppRoutes.stats,
-              builder: (context, state) =>
-                  const Scaffold(body: Center(child: Text('Stats'))),
+              builder: (context, state) => const StatsScreen(),
             ),
           ],
         ),
@@ -163,6 +164,17 @@ final GoRouter appRouter = GoRouter(
         final sessionId = int.parse(state.pathParameters['sessionId']!);
         return SessionFeedbackScreen(sessionId: sessionId);
       },
+    ),
+    GoRoute(
+      path: AppRoutes.pastSessionDetails,
+      builder: (context, state) {
+        final sessionId = int.parse(state.pathParameters['sessionId']!);
+        return PastSessionDetailsScreen(sessionId: sessionId);
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.allSessions,
+      builder: (context, state) => const AllSessionsScreen(),
     ),
   ],
 );
