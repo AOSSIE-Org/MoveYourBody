@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../repositories/ai_repository.dart';
+import '../repositories/tag_setup_repository.dart';
 import '../services/cosine_similairty.dart';
 
 part 'generated/ai_inference_view_model.g.dart';
@@ -40,8 +41,9 @@ class AiInferenceViewModel extends _$AiInferenceViewModel {
     try {
       debugPrint("AI Lifecycle: Starting initialization pipeline...");
       final aiModelRepo = ref.read(aiModelRepositoryProvider);
+      final tagSetupRepo = ref.read(tagSetupRepositoryProvider);
       await aiModelRepo.initModel();
-      // now Tags are pre-seeded in the read-only exercisesDatabase
+      await tagSetupRepo.processAndSeedTags();
 
       if (!ref.mounted) return;
 

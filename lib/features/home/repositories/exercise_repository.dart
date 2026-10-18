@@ -11,7 +11,7 @@ final exerciseRepositoryProvider = Provider<ExerciseRepository>((ref) {
 
 class ExerciseRepository {
   Future<List<Exercise>> getAllExercises() async {
-    final db = await DatabaseService.instance.exercisesDatabase;
+    final db = await DatabaseService.instance.database;
 
     final maps = await db.query(ExerciseTable.tableName);
 
@@ -20,21 +20,21 @@ class ExerciseRepository {
 
   Future<List<Exercise>> getExercisesByIds(List<String> exerciseIds) async {
     if (exerciseIds.isEmpty) return [];
-    
-    final db = await DatabaseService.instance.exercisesDatabase;
+
+    final db = await DatabaseService.instance.database;
     final placeholders = List.filled(exerciseIds.length, '?').join(', ');
-    
+
     final maps = await db.query(
       ExerciseTable.tableName,
       where: '${ExerciseTable.exerciseId} IN ($placeholders)',
       whereArgs: exerciseIds,
     );
-    
+
     final exerciseMap = {
-      for (final map in maps) 
-        map[ExerciseTable.exerciseId] as String: Exercise.fromMap(map)
+      for (final map in maps)
+        map[ExerciseTable.exerciseId] as String: Exercise.fromMap(map),
     };
-    
+
     return exerciseIds
         .where((id) => exerciseMap.containsKey(id))
         .map((id) => exerciseMap[id]!)
