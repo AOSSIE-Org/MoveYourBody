@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/database/db_config.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
-import 'package:move_your_body/core/service/seed_service.dart';
 import '../repository/user_repository.dart';
 import '../view_model/onboarding_view_model.dart';
 
@@ -22,7 +22,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
   Future<void> _checkUser() async {
     final user = await ref.read(userRepositoryProvider).getUserData();
-    await SeedService().seedExercises();
+    await DatabaseService.instance.exercisesDatabase;
     if (user != null) {
       debugPrint("-------------------");
       ref.read(onboardingViewModelProvider.notifier).loadFromUserData(user);

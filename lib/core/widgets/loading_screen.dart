@@ -5,10 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:move_your_body/core/model/tag_data.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
 import 'package:move_your_body/features/ai_inference/repositories/ai_repository.dart';
-import 'package:move_your_body/features/ai_inference/repositories/tag_setup_repository.dart';
+import 'package:move_your_body/features/ai_inference/repositories/tag_repository.dart';
 import 'package:move_your_body/features/ai_inference/view_model/ai_inference_view_model.dart';
 import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
 import 'package:move_your_body/features/onboarding/view_model/onboarding_view_model.dart';
+import '../../core/database/db_config.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class LoadingScreen extends ConsumerStatefulWidget {
@@ -30,14 +31,14 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       await Future.delayed(const Duration(milliseconds: 300));
 
       final aiModelRepo = ref.read(aiModelRepositoryProvider);
-      final tagSetupRepo = ref.read(tagSetupRepositoryProvider);
+      final tagSetupRepo = ref.read(tagRepositoryProvider);
       final onboardingData = ref.read(onboardingViewModelProvider);
 
       debugPrint("🚀 Pipeline Phase 1: Initializing ONNX Engine...");
       await aiModelRepo.initModel();
 
-      debugPrint("🚀 Pipeline Phase 2: Syncing Static JSON Tags to DB...");
-      await tagSetupRepo.processAndSeedTags();
+      debugPrint("🚀 Pipeline Phase 2: Initializing static exercises DB...");
+      await DatabaseService.instance.exercisesDatabase;
 
       Uint8List? customGoalBytes;
       Uint8List? customHealthBytes;
@@ -71,9 +72,6 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
         limit: 3,
         threshold: 0.60,
       );
-      await ref
-          .read(tagSetupRepositoryProvider)
-          .updateResolvedTags(goals: goalMatches, injuries: healthMatches);
       ref
           .read(onboardingViewModelProvider.notifier)
           .updateResolvedTags(goals: goalMatches, healthIssues: healthMatches);
@@ -94,12 +92,12 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       if (!mounted) return;
 
       debugPrint(
-        "🎯 Pipeline Perfect: All operations complete. Redirecting to Results.",
+        "🎯 Pipeline Perfect: All operations complete. Redirecting to Home.",
       );
-      context.go(AppRoutes.profile);
+      context.go(AppRoutes.home);
     } catch (e) {
       debugPrint("❌ Critical Pipeline Crash: $e");
-      if (mounted) context.go(AppRoutes.profile);
+      if (mounted) context.go(AppRoutes.home);
     }
   }
 

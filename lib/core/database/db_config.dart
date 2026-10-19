@@ -27,6 +27,7 @@ class DatabaseService {
   }
 
   Future<Database> get userDatabase => database;
+
   Future<Database> get exercisesDatabase async {
     if (_exercisesDatabase != null) return _exercisesDatabase!;
 

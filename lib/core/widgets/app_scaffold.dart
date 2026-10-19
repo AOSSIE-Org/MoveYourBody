@@ -16,6 +16,7 @@ class AppScaffold extends StatelessWidget {
 
     return Scaffold(
       extendBody: true,
+      backgroundColor: Colors.transparent,
       bottomNavigationBar: bottomNavigationBar,
       body: Container(
         decoration: BoxDecoration(
