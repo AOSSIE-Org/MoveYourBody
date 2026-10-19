@@ -4,18 +4,14 @@
 <!-- Organization Logo -->
 <div align="center" style="display: flex; align-items: center; justify-content: center; gap: 16px;">
   <img alt="AOSSIE" src="public/aossie-logo.svg" width="175">
-  <img alt="Move Your Body Logo" src="public/move-your-body-logo.svg" width="175" />
+  <img alt="Move Your Body Logo" src="public/MoveYourBodyLogo.svg" width="175" />
 </div>
 
 &nbsp;
 
 <!-- Organization Name -->
 <div align="center">
-
-[![Static Badge](https://img.shields.io/badge/aossie.org/TODO-228B22?style=for-the-badge&labelColor=FFC517)](https://TODO.aossie.org/)
-
-<!-- Correct deployed url to be added -->
-
+  <a href="https://aossie.org/"><img src="https://img.shields.io/badge/aossie.org/MoveYourBody-228B22?style=for-the-badge&labelColor=FFC517" alt="Static Badge"></a>
 </div>
 
 <!-- Organization/Project Social Handles -->
@@ -29,7 +25,7 @@
 <img src="https://img.shields.io/twitter/follow/aossie_org" alt="X (formerly Twitter) Badge"/></a>
 &nbsp;&nbsp;
 <!-- Discord -->
-<a href="https://discord.gg/hjUhu33uAn">
+<a href="https://discord.com/channels/1022871757289422898/1500966300782956634">
 <img src="https://img.shields.io/discord/1022871757289422898?style=flat&logo=discord&logoColor=white&logoSize=auto&label=Discord&labelColor=5865F2&color=57F287" alt="Discord Badge"/></a>
 &nbsp;&nbsp;
 <!-- Medium -->
@@ -48,68 +44,57 @@
 ---
 
 <div align="center">
-<h1>TODO: Project Name</h1>
+<h1>MoveYourBody</h1>
 </div>
 
-[TODO](https://TODO.stability.nexus/) is a ... TODO: Project Description.
+**MoveYourBody** is a privacy-first, on-device fitness application designed to help you stay consistent with your goals. It provides personalized, short micro-workout sessions (5–7 minutes) that adapt based on your feedback and health conditions. By running completely offline, MoveYourBody combines rule-based filtering and lightweight semantic matching to ensure your workout data stays entirely private while delivering safe, relevant, and engaging exercises.
 
 ---
 
 ## 🚀 Features
 
-TODO: List your main features here:
-
-- **Feature 1**: Description
-- **Feature 2**: Description
-- **Feature 3**: Description
-- **Feature 4**: Description
+- **Micro-Workout Sessions**: Stay consistent with short, 5-7 minute micro-sessions. You'll receive 2-3 sessions per day, with each session consisting of 3 exercises, complete with built-in notifications.
+- **Personalized Exercise Selection**: Uses an on-device embedding pipeline to match exercises to your goals. It avoids recently performed exercises to prevent boredom, filters out unsafe movements based on your injuries, and adapts difficulty through post-workout feedback.
+- **High-Quality Animations & Guidance**: Understand every movement with crystal-clear animations and instructions that teach you the correct posture.
+- **Voice-Controlled Interface**: Enjoy a hands-free workout experience with voice commands to start, pause, skip, or repeat instructions during a session.
+- **Body Focus Workouts**: Want to target a specific muscle group? Choose from pre-defined sessions tailored for quick, muscle-specific training.
+- **Custom Workout Creation**: Take full control. Explore a database of over 100+ exercises to learn, mix, and build your own custom, flexible workout routines.
+- **Progress & Motivation**: Visualize your consistency and fitness journey with an interactive stats screen, calendar views, and performance charts.
+- **Privacy-First & 100% Offline**: Everything runs on-device. Your health data, feedback, and embedded semantic searches never leave your phone.
 
 ---
 
 ## 💻 Tech Stack
 
-TODO: Update based on your project
+### Mobile Frontend
+- **Framework**: Flutter
+- **State Management**: Riverpod
+- **Routing**: GoRouter
+- **UI/Animations**: Lottie, Video Player, Google Fonts, FL Chart
 
-### Frontend
-- React / Next.js / Flutter / React Native
-- TypeScript
-- TailwindCSS
+### Local Backend & Data
+- **Database**: SQLite (`sqflite`)
+- **Caching**: Shared Preferences, Flutter Cache Manager
+- **Search Utilities**: Fuzzy string matching
 
-### Backend
-- Flask / FastAPI / Node.js / Supabase
-- Database: PostgreSQL / SQLite / MongoDB
-
-### AI/ML (if applicable)
-- LangChain / LangGraph / LlamaIndex
-- Google Gemini / OpenAI / Anthropic Claude
-- Vector Database: Weaviate / Pinecone / Chroma
-- RAG / Prompt Engineering / Agent Frameworks
-
-### Blockchain (if applicable)
-- Solidity / solana / cardano / ergo Smart Contracts
-- Hardhat / Truffle / foundry
-- Web3.js / Ethers.js / Wagmi
-- OpenZeppelin / alchemy / Infura
+### On-Device AI
+- **Inference**: Flutter ONNX Runtime
+- **Tokenization**: Dart WordPiece
+- **Models**: [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) (Quantized ONNX model running directly on-device via `assets/models/model_quantized.onnx`)
 
 ---
 
 ## ✅ Project Checklist
 
-TODO: Complete applicable items based on your project type
-
-- [ ] **The protocol** (if applicable):
-   - [ ] has been described and formally specified in a paper.
-   - [ ] has had its main properties mathematically proven.
-   - [ ] has been formally verified.
-- [ ] **The smart contracts** (if applicable):
-   - [ ] were thoroughly reviewed by at least two knights of The Stable Order.
-   - [ ] were deployed to: [Add deployment details]
-- [ ] **The mobile app** (if applicable):
+- [x] **The mobile app**:
    - [ ] has an _About_ page containing the Stability Nexus's logo and pointing to the social media accounts of the Stability Nexus.
    - [ ] is available for download as a release in this repo.
    - [ ] is available in the relevant app stores.
-- [ ] **The AI/ML components** (if applicable):
-   - [ ] LLM/model selection and configuration are documented.
+- [x] **The AI/ML components**:
+   - [x] LLM/model selection and configuration are documented.
+      - **Model Selection**: [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) was chosen because it is designed specifically for sentence similarity tasks. It provides low latency and fast inference which is highly suitable for on-device cases (see [Research Paper](https://www.researchgate.net/publication/377627749_Performance_of_4_Pre-Trained_Sentence_Transformer_Models_in_the_Semantic_Query_of_a_Systematic_Review_Dataset_on_Peri-Implantitis)).
+      - **Configuration**: ONNX models are quantized and bundled locally in assets, with tokenization logic strictly handled on-device.
+      - ![Model Selection](public/model_selection.png)
    - [ ] Prompts and system instructions are version-controlled.
    - [ ] Content safety and moderation mechanisms are implemented.
    - [ ] API keys and rate limits are properly managed.
@@ -118,132 +103,153 @@ TODO: Complete applicable items based on your project type
 
 ## 🔗 Repository Links
 
-TODO: Update with your repository structure
-
-1. [Main Repository](https://github.com/AOSSIE-Org/TODO)
-2. [Frontend](https://github.com/AOSSIE-Org/TODO/tree/main/frontend) (if separate)
-3. [Backend](https://github.com/AOSSIE-Org/TODO/tree/main/backend) (if separate)
+1. [Main Repository](https://github.com/AOSSIE-Org/MoveYourBody)
 
 ---
 
-## 🏗️ Architecture Diagram
+## 🏗️ Architecture
 
-TODO: Add your system architecture diagram here
+### 1. High-Level MVVM Architecture
 
+The application follows a robust **Model-View-ViewModel (MVVM) with Repository Pattern** architecture, utilizing Riverpod as the reactive state-management (ViewModel) layer to keep the UI strictly separated from the business and data logic.
+
+```mermaid
+graph TD
+    %% Define Styles
+    classDef ui fill:#1A2E1A,stroke:#4CAF50,stroke-width:2px,color:#fff;
+    classDef vm fill:#254025,stroke:#81C784,stroke-width:2px,color:#fff;
+    classDef model fill:#122412,stroke:#2E7D32,stroke-width:2px,color:#fff;
+    classDef data fill:#0A1A0A,stroke:#66BB6A,stroke-width:2px,color:#fff;
+
+    subgraph View Layer [View Layer]
+        UI[Flutter UI / Screens]:::ui
+        Widgets[Custom Widgets]:::ui
+    end
+
+    subgraph ViewModel Layer [ViewModel Layer]
+        Riverpod[Riverpod Notifiers & Providers]:::vm
+        Router[GoRouter State]:::vm
+    end
+
+    subgraph Model Layer [Model Layer]
+        DataModels[Domain Data Models]:::model
+        Repository[Repositories / Data Handlers]:::model
+        AI[ONNX Runtime / WordPiece Tokenizer]:::model
+    end
+
+    subgraph Data Layer [Data & Local Storage]
+        DB[(SQLite / sqflite)]:::data
+        Cache[(Shared Preferences)]:::data
+    end
+
+    %% Flow of MVVM
+    UI -->|User Intent / Actions| Riverpod
+    Riverpod -->|Reactive State Updates| UI
+    
+    Riverpod -->|Fetch / Process Request| Repository
+    Repository -->|Parsed Domain Data| Riverpod
+    
+    Repository -->|Query| DB
+    Repository -->|Cache| Cache
+    
+    Riverpod -->|Search Query / Embeddings| AI
+    AI -->|Semantic Match Results| DataModels
 ```
-[Architecture Diagram Placeholder]
-```
 
-You can create architecture diagrams using:
-- [Draw.io](https://draw.io)
-- [Excalidraw](https://excalidraw.com)
-- [Lucidchart](https://lucidchart.com)
-- [Mermaid](https://mermaid.js.org) (for code-based diagrams)
+- **View Layer**: Contains the modular Flutter screens and reusable UI components. Responsible only for rendering state and capturing user input.
+- **ViewModel Layer (Riverpod)**: Acts as the bridge between the View and Model. It holds the business logic, manages the state of the UI, and interacts with repositories.
+- **Model Layer**: Contains the core domain structures (Data Models) and the **Repositories**, which abstract the logic required to access data sources. Includes ONNX inference logic.
+- **Data Layer**: Manages local persistence using SQLite for offline-first capabilities and Shared Preferences for caching.
 
-Example structure to include:
-- Frontend components
-- Backend services
-- Database architecture
-- External APIs/services
-- Data flow between components
+### 2. Custom Input to Tags Pipeline
+
+![Custom Input to Tags Pipeline](public/custom_input_to_tags_pipeline.png)
+*(Illustrates how user input is processed and mapped to semantic tags)*
+
+### 3. Recommendation Algorithm Overview
+
+![Recommendation Algorithm Overview](public/recommendation_algorithm_overview.png)
+*(Overview of rule-based filtering, injury exclusion, and semantic matching)*
+
+### 4. Voice Control Pipeline
+
+![Voice Control Pipeline](public/Voice_Control_Pipeline.png)
+*(Flowchart detailing how voice commands are captured, processed, and executed)*
 
 ---
 
 ## 🔄 User Flow
 
-TODO: Add user flow diagrams showing how users interact with your application
-
+```text
+User opens the app
+        ↓
+User completes onboarding (details, goals, injuries)
+        ↓
+Algorithm & AI create a personalized micro-session
+        ↓
+User executes and completes the workout session
+        ↓
+User submits post-workout ratings and feedback
+        ↓
+System adapts and tailors the next session based on feedback
+        ↓
+User receives notification when the next customized session is ready
 ```
-[User Flow Diagram Placeholder]
-```
-
-### Key User Journeys
-
-TODO: Document main user flows:
-
-1. **User Journey 1**: Description
-   - Step 1
-   - Step 2
-   - Step 3
-
-2. **User Journey 2**: Description
-   - Step 1
-   - Step 2
-   - Step 3
-
-3. **User Journey 3**: Description
-   - Step 1
-   - Step 2
-   - Step 3
 
 ---
 
-## �🍀 Getting Started
+## 🍀 Getting Started
 
 ### Prerequisites
 
-TODO: List what developers need installed
-
-- Node.js 18+ / Python 3.9+ / Flutter SDK
-- npm / yarn / pnpm
-- [Any specific tools or accounts needed]
+- Flutter SDK
+- Dart SDK
+- Android Studio / Xcode (for emulation and building)
 
 ### Installation
-
-TODO: Provide detailed setup instructions
 
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/AOSSIE-Org/TODO.git
-cd TODO
+git clone https://github.com/AOSSIE-Org/MoveYourBody.git
+cd MoveYourBody
 ```
 
 #### 2. Install Dependencies
 
 ```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
+flutter pub get
 ```
 
-#### 3. Configure Environment Variables(.env.example)
-
-Create a `.env` file in the root directory:
-
-```env
-# Add your environment variables here
-API_KEY=your_api_key
-DATABASE_URL=your_database_url
-```
-
-#### 4. Run the Development Server
+#### 3. Generate Riverpod Code
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+dart run build_runner build --delete-conflicting-outputs
 ```
 
-#### 5. Open your Browser
+#### 4. Generate Exercise Database
 
-Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
+Run the provided Python script to set up the local exercise database.
 
-For detailed setup instructions, please refer to our [Installation Guide](./docs/INSTALL_GUIDE.md) (if you have one).
+```bash
+python scripts/generate_exercise_db.py
+```
+
+#### 5. Run the Application
+
+Ensure you have a simulator running or a device connected.
+
+```bash
+flutter run
+```
 
 ---
 
 ## 📱 App Screenshots
 
-TODO: Add screenshots showcasing your application
-
-|  |  |  |
-|---|---|---|
-| Screenshot 1 | Screenshot 2 | Screenshot 3 |
+| | | |
+|:---:|:---:|:---:|
+| ![Screenshot 1](public/app_ss_1.png) | ![Screenshot 2](public/app_ss_2.png) | ![Screenshot 3](public/app_ss_3.png) |
 
 ---
 
@@ -251,16 +257,9 @@ TODO: Add screenshots showcasing your application
 
 ⭐ Don't forget to star this repository if you find it useful! ⭐
 
-Thank you for considering contributing to this project! Contributions are highly appreciated and welcomed. To ensure smooth collaboration, please refer to our [Contribution Guidelines](./CONTRIBUTING.md).
+Thank you for considering contributing to this project! Contributions are highly appreciated and welcomed, read the [CONTRIBUTING.md](./CONTRIBUTING.md) for setting the project.
 
----
-
-## ✨ Maintainers
-
-TODO: Add maintainer information
-
-- [Maintainer Name](https://github.com/username)
-- [Maintainer Name](https://github.com/username)
+*Note: Before opening a UI Pull Request, please ensure you read our [brand.md](./brand/brand.md) file for styling guidelines.*
 
 ---
 
@@ -273,8 +272,8 @@ See the [LICENSE](LICENSE) file for details.
 
 ## 💪 Thanks To All Contributors
 
-Thanks a lot for spending your time helping TODO grow. Keep rocking 🥂
+Thanks a lot for spending your time helping MoveYourBody grow. Keep rocking 🥂
 
-[![Contributors](https://contrib.rocks/image?repo=AOSSIE-Org/TODO)](https://github.com/AOSSIE-Org/TODO/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=AOSSIE-Org/MoveYourBody)](https://github.com/AOSSIE-Org/MoveYourBody/graphs/contributors)
 
-© 2025 AOSSIE 
+© 2026 AOSSIE

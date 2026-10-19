@@ -1,8 +1,7 @@
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/onnx_service.dart';
 import '../services/tokenizer_service.dart';
-import 'package:flutter/material.dart';
 
 final aiModelRepositoryProvider = Provider((ref) => AiModelRepository(ref));
 
