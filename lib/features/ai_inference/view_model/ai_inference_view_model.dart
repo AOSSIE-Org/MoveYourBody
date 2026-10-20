@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../repositories/ai_repository.dart';
+
 import '../services/cosine_similairty.dart';
 
 part 'generated/ai_inference_view_model.g.dart';

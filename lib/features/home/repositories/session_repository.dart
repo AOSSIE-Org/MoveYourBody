@@ -33,11 +33,12 @@ class SessionRepository {
         return null;
       }
 
-      final recentExerciseIds = await getRecentExerciseIds(SafetyFilterService.sessionsToSkip);
+      final recentExerciseIds =
+          await getRecentExerciseIds(SafetyFilterService.sessionsToSkip);
       final recommendedExercises = await _recommendationService
           .recommendExercises(userData, recentExerciseIds);
 
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await DatabaseService.instance.database;
 
       return await db.transaction<Session?>((txn) async {
         final now = DateTime.now();
@@ -69,14 +70,14 @@ class SessionRepository {
             SessionExercisesTable.completedAt: null,
           };
 
-          final exerciseSessionId = await txn.insert(
+          final sessionExerciseId = await txn.insert(
             SessionExercisesTable.tableName,
             sessionExerciseMap,
           );
 
           sessionExercises.add(
             SessionExercise(
-              id: exerciseSessionId,
+              id: sessionExerciseId,
               sessionId: sessionId,
               exerciseId: exercise.exerciseId,
               orderIndex: i,
@@ -106,46 +107,50 @@ class SessionRepository {
 
   Future<Session?> getLatestIncompleteSession() async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await DatabaseService.instance.database;
 
-      final sessionResult = await db.query(
+      final sessionMaps = await db.query(
         SessionScheduleTable.tableName,
-        where: '${SessionScheduleTable.sessionStatus} IN (?, ?) AND ${SessionScheduleTable.isQuickPlan} = 0',
-        whereArgs: [SessionStatus.created.name, SessionStatus.inProgress.name],
+        where:
+            '${SessionScheduleTable.sessionStatus} IN (?, ?) AND ${SessionScheduleTable.isQuickPlan} = 0',
+        whereArgs: [
+          SessionStatus.created.name,
+          SessionStatus.inProgress.name,
+        ],
         orderBy: '${SessionScheduleTable.createdAt} DESC',
         limit: 1,
       );
 
-      if (sessionResult.isEmpty) {
+      if (sessionMaps.isEmpty) {
         return null;
       }
 
-      final session = Session.fromMap(sessionResult.first);
+      final sessionMap = sessionMaps.first;
+      final sessionId = sessionMap[SessionScheduleTable.id] as int;
 
-      final exercisesResult = await db.query(
+      final exerciseMaps = await db.query(
         SessionExercisesTable.tableName,
         where: '${SessionExercisesTable.sessionId} = ?',
-        whereArgs: [session.id],
+        whereArgs: [sessionId],
         orderBy: '${SessionExercisesTable.orderIndex} ASC',
       );
 
-      final exercises = exercisesResult
-          .map((e) => SessionExercise.fromMap(e))
-          .toList();
+      final exercises =
+          exerciseMaps.map(SessionExercise.fromMap).toList();
 
-      return session.copyWith(exercises: exercises);
+      return Session.fromMap(sessionMap, exercises: exercises);
     } catch (e, stackTrace) {
       debugPrint('Error fetching latest incomplete session: $e');
-      debugPrint('$stackTrace');
+      debugPrint('Stacktrace: $stackTrace');
       return null;
     }
   }
 
   Future<Session?> getSessionById(int sessionId) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await DatabaseService.instance.database;
 
-      final List<Map<String, dynamic>> sessionResult = await db.rawQuery('''
+      final List<Map<String, dynamic>> sessionMaps = await db.rawQuery('''
         SELECT s.*, q.name AS ${SessionScheduleTable.quickPlanName}
         FROM ${SessionScheduleTable.tableName} s
         LEFT JOIN quick_plans q ON s.${SessionScheduleTable.quickPlanId} = q.id
@@ -153,34 +158,35 @@ class SessionRepository {
         LIMIT 1
       ''', [sessionId]);
 
-      if (sessionResult.isEmpty) {
+      if (sessionMaps.isEmpty) {
         return null;
       }
 
-      final session = Session.fromMap(sessionResult.first);
+      final sessionMap = sessionMaps.first;
 
-      final exercisesResult = await db.query(
+      final exerciseMaps = await db.query(
         SessionExercisesTable.tableName,
         where: '${SessionExercisesTable.sessionId} = ?',
-        whereArgs: [session.id],
+        whereArgs: [sessionId],
         orderBy: '${SessionExercisesTable.orderIndex} ASC',
       );
 
-      final exercises = exercisesResult
-          .map((e) => SessionExercise.fromMap(e))
-          .toList();
+      final exercises =
+          exerciseMaps.map(SessionExercise.fromMap).toList();
 
-      return session.copyWith(exercises: exercises);
+      return Session.fromMap(sessionMap, exercises: exercises);
     } catch (e, stackTrace) {
       debugPrint('Error fetching session by id: $e');
-      debugPrint('$stackTrace');
+      debugPrint('Stacktrace: $stackTrace');
       return null;
     }
   }
 
   Future<Session?> createSessionFromExercises(List<Exercise> exercises) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      if (exercises.isEmpty) return null;
+
+      final db = await DatabaseService.instance.database;
 
       return await db.transaction<Session?>((txn) async {
         final now = DateTime.now();
@@ -212,14 +218,14 @@ class SessionRepository {
             SessionExercisesTable.completedAt: null,
           };
 
-          final exerciseSessionId = await txn.insert(
+          final sessionExerciseId = await txn.insert(
             SessionExercisesTable.tableName,
             sessionExerciseMap,
           );
 
           sessionExercises.add(
             SessionExercise(
-              id: exerciseSessionId,
+              id: sessionExerciseId,
               sessionId: sessionId,
               exerciseId: exercise.exerciseId,
               orderIndex: i,
@@ -249,7 +255,7 @@ class SessionRepository {
 
   Future<void> updateSessionStatus(int sessionId, SessionStatus status) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await DatabaseService.instance.database;
       await db.update(
         SessionScheduleTable.tableName,
         {SessionScheduleTable.sessionStatus: status.name},
@@ -267,7 +273,7 @@ class SessionRepository {
     required int performedDuration,
   }) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await DatabaseService.instance.database;
       await db.update(
         SessionExercisesTable.tableName,
         {
@@ -291,15 +297,17 @@ class SessionRepository {
     String? intensityFeedback,
   }) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await DatabaseService.instance.database;
       await db.update(
         SessionScheduleTable.tableName,
         {
           SessionScheduleTable.sessionStatus: SessionStatus.completed.name,
           SessionScheduleTable.sessionDuration: totalDuration,
           SessionScheduleTable.caloriesBurned: caloriesBurned,
-          SessionScheduleTable.difficultyFeedback: ?difficultyFeedback,
-          SessionScheduleTable.intensityFeedback: ?intensityFeedback,
+          if (difficultyFeedback != null)
+            SessionScheduleTable.difficultyFeedback: difficultyFeedback,
+          if (intensityFeedback != null)
+            SessionScheduleTable.intensityFeedback: intensityFeedback,
         },
         where: '${SessionScheduleTable.id} = ?',
         whereArgs: [sessionId],
@@ -311,8 +319,8 @@ class SessionRepository {
 
   Future<List<String>> getRecentExerciseIds(int sessionCount) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
-      
+      final db = await DatabaseService.instance.database;
+
       final sessionResult = await db.query(
         SessionScheduleTable.tableName,
         columns: [SessionScheduleTable.id],
@@ -321,19 +329,24 @@ class SessionRepository {
         orderBy: '${SessionScheduleTable.createdAt} DESC',
         limit: sessionCount,
       );
-      
+
       if (sessionResult.isEmpty) return [];
-      
-      final sessionIds = sessionResult.map((e) => e[SessionScheduleTable.id] as int).toList();
-      
+
+      final sessionIds =
+          sessionResult.map((e) => e[SessionScheduleTable.id] as int).toList();
+
       final exerciseResult = await db.query(
         SessionExercisesTable.tableName,
         columns: [SessionExercisesTable.exerciseId],
-        where: '${SessionExercisesTable.sessionId} IN (${List.filled(sessionIds.length, '?').join(', ')})',
+        where:
+            '${SessionExercisesTable.sessionId} IN (${List.filled(sessionIds.length, '?').join(', ')})',
         whereArgs: sessionIds,
       );
-      
-      return exerciseResult.map((e) => e[SessionExercisesTable.exerciseId] as String).toSet().toList();
+
+      return exerciseResult
+          .map((e) => e[SessionExercisesTable.exerciseId] as String)
+          .toSet()
+          .toList();
     } catch (e, stackTrace) {
       debugPrint('Error getting recent exercise IDs: $e');
       debugPrint('$stackTrace');
@@ -343,8 +356,8 @@ class SessionRepository {
 
   Future<List<Session>> getLastThreeCompletedSessions() async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
-      
+      final db = await DatabaseService.instance.database;
+
       final List<Map<String, dynamic>> sessionResult = await db.rawQuery('''
         SELECT s.*, q.name AS ${SessionScheduleTable.quickPlanName}
         FROM ${SessionScheduleTable.tableName} s
@@ -364,7 +377,7 @@ class SessionRepository {
 
   Future<List<Session>> getAllSessions() async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await DatabaseService.instance.database;
       final List<Map<String, dynamic>> sessionResult = await db.rawQuery('''
         SELECT s.*, q.name AS ${SessionScheduleTable.quickPlanName}
         FROM ${SessionScheduleTable.tableName} s
@@ -379,15 +392,17 @@ class SessionRepository {
 
   Future<void> debugPrintAllSessions() async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
-      
+      final db = await DatabaseService.instance.database;
+
       final sessionResult = await db.query(SessionScheduleTable.tableName);
 
       debugPrint('=== ALL SESSIONS IN DATABASE ===');
       for (var sessionMap in sessionResult) {
         final session = Session.fromMap(sessionMap);
-        debugPrint('Session ID: ${session.id} | Status: ${session.sessionStatus.name}');
-        debugPrint('Duration: ${session.sessionDuration}s | Calories: ${session.caloriesBurned}');
+        debugPrint(
+            'Session ID: ${session.id} | Status: ${session.sessionStatus.name}');
+        debugPrint(
+            'Duration: ${session.sessionDuration}s | Calories: ${session.caloriesBurned}');
         debugPrint('Difficulty Feedback: ${session.difficultyFeedback}');
         debugPrint('Intensity Feedback: ${session.intensityFeedback}');
         debugPrint('----------------------------------');
