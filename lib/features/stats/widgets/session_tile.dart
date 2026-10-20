@@ -73,9 +73,11 @@ class SessionTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Workout Session',
-                    style: TextStyle(
+                  Text(
+                    session.isQuickPlan && session.quickPlanName != null
+                        ? session.quickPlanName!
+                        : 'Workout Session',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -107,7 +109,7 @@ class SessionTile extends StatelessWidget {
                 if (session.caloriesBurned != null &&
                     session.caloriesBurned! > 0)
                   Text(
-                    '${session.caloriesBurned!.toInt()} kcal',
+                    '${session.caloriesBurned!.toStringAsFixed(1)} kcal',
                     style: const TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.bold,

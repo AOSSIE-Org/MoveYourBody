@@ -11,7 +11,9 @@ class SessionScheduleDatabaseService {
         ${SessionScheduleTable.sessionStatus} TEXT,
         ${SessionScheduleTable.difficultyFeedback} TEXT,
         ${SessionScheduleTable.intensityFeedback} TEXT,
-        ${SessionScheduleTable.caloriesBurned} REAL
+        ${SessionScheduleTable.caloriesBurned} REAL,
+        ${SessionScheduleTable.isQuickPlan} INTEGER DEFAULT 0,
+        ${SessionScheduleTable.quickPlanId} INTEGER
       )
     ''');
   }

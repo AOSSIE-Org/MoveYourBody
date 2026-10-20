@@ -111,7 +111,8 @@ class SessionRepository {
 
       final sessionMaps = await db.query(
         SessionScheduleTable.tableName,
-        where: '${SessionScheduleTable.sessionStatus} IN (?, ?)',
+        where:
+            '${SessionScheduleTable.sessionStatus} IN (?, ?) AND ${SessionScheduleTable.isQuickPlan} = 0',
         whereArgs: [
           SessionStatus.created.name,
           SessionStatus.inProgress.name,
@@ -149,12 +150,13 @@ class SessionRepository {
     try {
       final db = await DatabaseService.instance.database;
 
-      final sessionMaps = await db.query(
-        SessionScheduleTable.tableName,
-        where: '${SessionScheduleTable.id} = ?',
-        whereArgs: [sessionId],
-        limit: 1,
-      );
+      final List<Map<String, dynamic>> sessionMaps = await db.rawQuery('''
+        SELECT s.*, q.name AS ${SessionScheduleTable.quickPlanName}
+        FROM ${SessionScheduleTable.tableName} s
+        LEFT JOIN quick_plans q ON s.${SessionScheduleTable.quickPlanId} = q.id
+        WHERE s.${SessionScheduleTable.id} = ?
+        LIMIT 1
+      ''', [sessionId]);
 
       if (sessionMaps.isEmpty) {
         return null;
@@ -356,13 +358,14 @@ class SessionRepository {
     try {
       final db = await DatabaseService.instance.database;
 
-      final sessionResult = await db.query(
-        SessionScheduleTable.tableName,
-        where: '${SessionScheduleTable.sessionStatus} = ?',
-        whereArgs: [SessionStatus.completed.name],
-        orderBy: '${SessionScheduleTable.createdAt} DESC',
-        limit: 3,
-      );
+      final List<Map<String, dynamic>> sessionResult = await db.rawQuery('''
+        SELECT s.*, q.name AS ${SessionScheduleTable.quickPlanName}
+        FROM ${SessionScheduleTable.tableName} s
+        LEFT JOIN quick_plans q ON s.${SessionScheduleTable.quickPlanId} = q.id
+        WHERE s.${SessionScheduleTable.sessionStatus} = ?
+        ORDER BY s.${SessionScheduleTable.createdAt} DESC
+        LIMIT 3
+      ''', [SessionStatus.completed.name]);
 
       return sessionResult.map((e) => Session.fromMap(e)).toList();
     } catch (e, stackTrace) {
@@ -375,7 +378,11 @@ class SessionRepository {
   Future<List<Session>> getAllSessions() async {
     try {
       final db = await DatabaseService.instance.database;
-      final sessionResult = await db.query(SessionScheduleTable.tableName);
+      final List<Map<String, dynamic>> sessionResult = await db.rawQuery('''
+        SELECT s.*, q.name AS ${SessionScheduleTable.quickPlanName}
+        FROM ${SessionScheduleTable.tableName} s
+        LEFT JOIN quick_plans q ON s.${SessionScheduleTable.quickPlanId} = q.id
+      ''');
       return sessionResult.map((e) => Session.fromMap(e)).toList();
     } catch (e) {
       debugPrint('Error getting all sessions: $e');

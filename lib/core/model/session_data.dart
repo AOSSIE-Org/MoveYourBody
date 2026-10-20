@@ -1,7 +1,7 @@
 import 'package:move_your_body/core/database/tables/session_exercises_table.dart';
 import 'package:move_your_body/core/database/tables/session_schedule_table.dart';
 
-enum SessionStatus { created, inProgress, completed}
+enum SessionStatus { created, inProgress, completed }
 
 enum ExerciseStatus { notStarted, completed, skipped }
 
@@ -66,6 +66,9 @@ class Session {
   final String? difficultyFeedback;
   final String? intensityFeedback;
   final double? caloriesBurned;
+  final bool isQuickPlan;
+  final int? quickPlanId;
+  final String? quickPlanName;
   final List<SessionExercise> exercises;
 
   const Session({
@@ -76,6 +79,9 @@ class Session {
     this.difficultyFeedback,
     this.intensityFeedback,
     this.caloriesBurned,
+    this.isQuickPlan = false,
+    this.quickPlanId,
+    this.quickPlanName,
     this.exercises = const [],
   });
 
@@ -95,6 +101,9 @@ class Session {
       intensityFeedback: map[SessionScheduleTable.intensityFeedback] as String?,
       caloriesBurned: (map[SessionScheduleTable.caloriesBurned] as num?)
           ?.toDouble(),
+      isQuickPlan: (map[SessionScheduleTable.isQuickPlan] as int? ?? 0) == 1,
+      quickPlanId: map[SessionScheduleTable.quickPlanId] as int?,
+      quickPlanName: map[SessionScheduleTable.quickPlanName] as String?,
       exercises: exercises,
     );
   }
@@ -108,6 +117,8 @@ class Session {
       SessionScheduleTable.difficultyFeedback: difficultyFeedback,
       SessionScheduleTable.intensityFeedback: intensityFeedback,
       SessionScheduleTable.caloriesBurned: caloriesBurned,
+      SessionScheduleTable.isQuickPlan: isQuickPlan ? 1 : 0,
+      SessionScheduleTable.quickPlanId: quickPlanId,
     };
   }
 
@@ -119,6 +130,9 @@ class Session {
     String? difficultyFeedback,
     String? intensityFeedback,
     double? caloriesBurned,
+    bool? isQuickPlan,
+    int? quickPlanId,
+    String? quickPlanName,
     List<SessionExercise>? exercises,
   }) {
     return Session(
@@ -129,6 +143,9 @@ class Session {
       difficultyFeedback: difficultyFeedback ?? this.difficultyFeedback,
       intensityFeedback: intensityFeedback ?? this.intensityFeedback,
       caloriesBurned: caloriesBurned ?? this.caloriesBurned,
+      isQuickPlan: isQuickPlan ?? this.isQuickPlan,
+      quickPlanId: quickPlanId ?? this.quickPlanId,
+      quickPlanName: quickPlanName ?? this.quickPlanName,
       exercises: exercises ?? this.exercises,
     );
   }

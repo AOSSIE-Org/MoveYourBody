@@ -126,12 +126,16 @@ class PastSessionDetailsScreen extends ConsumerWidget {
                               ),
                             ),
                           ),
-                          Text(
-                            dateStr,
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.7),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: Text(
+                              dateStr,
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.7),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ],
@@ -157,7 +161,7 @@ class PastSessionDetailsScreen extends ConsumerWidget {
                           _StatItem(
                             icon: Icons.local_fire_department,
                             title: 'CALORIES',
-                            value: '${session.caloriesBurned?.toInt() ?? 0}',
+                            value: session.caloriesBurned?.toStringAsFixed(1) ?? '0',
                             unit: 'kcal',
                             color: Colors.orangeAccent,
                           ),

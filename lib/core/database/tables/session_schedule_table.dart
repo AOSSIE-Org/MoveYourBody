@@ -7,4 +7,7 @@ class SessionScheduleTable {
   static const difficultyFeedback = 'difficulty_feedback';
   static const intensityFeedback = 'intensity_feedback';
   static const caloriesBurned = 'calories_burned';
+  static const isQuickPlan = 'is_quick_plan';
+  static const quickPlanId = 'quick_plan_id';
+  static const quickPlanName = 'quick_plan_name';
 }

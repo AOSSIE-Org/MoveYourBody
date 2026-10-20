@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:move_your_body/core/model/session_data.dart';
 import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/features/home/repositories/session_repository.dart';
+import 'package:move_your_body/features/home/services/calorie_calculator_service.dart';
 import 'package:move_your_body/features/home/view_model/session_details_view_model.dart';
 import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -178,11 +179,13 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
       isPaused: true,
     );
 
+    final caloriesBurned = await _calculateEstimatedCalories();
+
     final repo = ref.read(sessionRepositoryProvider);
     await repo.completeSession(
       sessionId: sessionId,
       totalDuration: state.totalElapsedSeconds,
-      caloriesBurned: 0.0,
+      caloriesBurned: caloriesBurned,
     );
   }
 
@@ -206,10 +209,12 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
     final sessionRepo = ref.read(sessionRepositoryProvider);
     final userRepo = ref.read(userRepositoryProvider);
 
+    final caloriesBurned = await _calculateEstimatedCalories();
+
     await sessionRepo.completeSession(
       sessionId: sessionId,
       totalDuration: state.totalElapsedSeconds,
-      caloriesBurned: 0.0,
+      caloriesBurned: caloriesBurned,
       difficultyFeedback: difficulty.name,
       intensityFeedback: intensity.name,
     );
@@ -271,7 +276,22 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
     }
   }
 
-  // double _calculateEstimatedCalories() {
-  //    we will work in later pr
-  // }
+  Future<double> _calculateEstimatedCalories() async {
+    final userRepo = ref.read(userRepositoryProvider);
+    final userData = await userRepo.getUserData();
+    if (userData == null) return 0.0;
+
+    double totalCalories = 0.0;
+
+    for (var exercise in state.exercises) {
+      final duration = state.exerciseDurations[exercise.exerciseId] ?? 30;
+      totalCalories += CalorieCalculatorService.calculateCaloriesBurned(
+        exercise: exercise,
+        userWeightKg: userData.weight,
+        durationInSeconds: duration,
+      );
+    }
+
+    return totalCalories;
+  }
 }

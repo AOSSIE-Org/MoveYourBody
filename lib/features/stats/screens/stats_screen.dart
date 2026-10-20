@@ -5,6 +5,7 @@ import 'package:move_your_body/core/widgets/app_scaffold.dart';
 import 'package:move_your_body/core/theme/app_colors.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
 import 'package:move_your_body/features/stats/widgets/activity_calendar.dart';
+import 'package:move_your_body/features/stats/widgets/weekly_calorie_chart.dart';
 import 'package:move_your_body/features/stats/widgets/weekly_time_chart.dart';
 import 'package:move_your_body/features/stats/widgets/session_tile.dart';
 import 'package:move_your_body/features/stats/view_model/stats_view_model.dart';
@@ -38,8 +39,11 @@ class StatsScreen extends ConsumerWidget {
                 ? const _SkeletonCalendar()
                 : ActivityCalendar(activeDates: statsState.activeDates),
 
-            if (!statsState.isLoading)
+            if (!statsState.isLoading) ...[
+              WeeklyCalorieChart(allSessions: statsState.allSessions),
+              const SizedBox(height: 16),
               WeeklyTimeChart(allSessions: statsState.allSessions),
+            ],
 
             const SizedBox(height: 32),
 
