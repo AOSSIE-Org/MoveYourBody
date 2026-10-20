@@ -11,7 +11,6 @@ class AppScaffold extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      extendBody: true,
       backgroundColor: Colors.transparent,
       bottomNavigationBar: bottomNavigationBar,
       body: Container(
