@@ -20,7 +20,7 @@ final class SessionDetailsViewModelProvider
   }) : super(
          retry: null,
          name: r'sessionDetailsViewModelProvider',
-         isAutoDispose: false,
+         isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
@@ -60,7 +60,7 @@ final class SessionDetailsViewModelProvider
 }
 
 String _$sessionDetailsViewModelHash() =>
-    r'd91f7de25acae5b6f8ee682199be92c5477f7473';
+    r'2e92604d1f01987dc7283babca5cf65cd3e25bbe';
 
 final class SessionDetailsViewModelFamily extends $Family
     with
@@ -77,7 +77,7 @@ final class SessionDetailsViewModelFamily extends $Family
         name: r'sessionDetailsViewModelProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
-        isAutoDispose: false,
+        isAutoDispose: true,
       );
 
   SessionDetailsViewModelProvider call(int sessionId) =>
