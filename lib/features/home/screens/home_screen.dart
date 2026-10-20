@@ -8,6 +8,7 @@ import 'package:move_your_body/features/home/widgets/home/quick_plan_card.dart';
 import 'package:move_your_body/features/home/widgets/home/search_bar.dart';
 import 'package:move_your_body/features/home/widgets/home/today_session_card.dart';
 import 'package:move_your_body/features/home/widgets/home/week_selector.dart';
+// import 'package:move_your_body/features/home/widgets/home/weekly_stats_card.dart';
 import '../../../core/widgets/app_scaffold.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -35,28 +36,27 @@ class HomeScreen extends ConsumerWidget {
     return AppScaffold(
       child: SingleChildScrollView(
         padding: EdgeInsets.only(
-          left: 16.0,
-          right: 16.0,
-          top: 16.0,
-          bottom: bottomInset + 80.0,
+          left: 20,
+          right: 20,
+          top: 16,
+          bottom: 70 + bottomInset,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const HomeAppBar(),
-            const SizedBox(height: 20),
+            const HomeAppBar(username: "Vaibhav"),
+            const SizedBox(height: 24),
+            const HomeSearchBar(),
+            const SizedBox(height: 22),
             const WeekSelector(),
-            const SizedBox(height: 20),
-            const SearchBarWidget(),
             const SizedBox(height: 24),
             const TodaySessionCard(),
             const SizedBox(height: 24),
-            const Text(
-              "Quick Plans",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            Text(
+              "Quick plans",
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 16),
             SizedBox(
@@ -66,18 +66,15 @@ class HomeScreen extends ConsumerWidget {
                   : ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: quickPlanState.plans.length,
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(width: 16),
+                      separatorBuilder: (context, index) => const SizedBox(width: 16),
                       itemBuilder: (context, index) {
                         final plan = quickPlanState.plans[index];
                         final isThisPlanLoading =
-                            quickPlanState.tapStatus == QuickPlanStatus.loading &&
-                                quickPlanState.tappedPlanId == plan.id;
+                            quickPlanState.tapStatus == QuickPlanStatus.loading && quickPlanState.tappedPlanId == plan.id;
 
                         return QuickPlanCard(
                           title: plan.name,
-                          imagePath: plan.imagePath ??
-                              'assets/images/fat_burn_blast.png',
+                          imagePath: plan.imagePath ?? 'assets/images/fat_burn_blast.png',
                           isLoading: isThisPlanLoading,
                           onTap: () async {
                             final session = await quickPlanViewModel
@@ -93,6 +90,7 @@ class HomeScreen extends ConsumerWidget {
                     ),
             ),
             const SizedBox(height: 24),
+            // const WeeklyStatsCard(),
             const SizedBox(height: 20),
           ],
         ),
