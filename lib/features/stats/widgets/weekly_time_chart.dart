@@ -164,8 +164,9 @@ class WeeklyTimeChart extends StatelessWidget {
                         showTitles: true,
                         reservedSize: 40,
                         getTitlesWidget: (double value, TitleMeta meta) {
-                          if (value == 0 || value % yInterval != 0)
+                          if (value == 0 || value % yInterval != 0) {
                             return const SizedBox.shrink();
+                          }
 
                           String text = '';
                           if (maxY <= 3600) {
