@@ -9,7 +9,7 @@ final statsRepositoryProvider = Provider((ref) {
 
 class StatsRepository {
   Future<List<Session>> getCompletedSessions() async {
-    final db = await DatabaseService.instance.userDatabase;
+    final db = await DatabaseService.instance.database;
 
     final List<Map<String, dynamic>> maps = await db.rawQuery('''
       SELECT s.*, q.name AS ${SessionScheduleTable.quickPlanName}
