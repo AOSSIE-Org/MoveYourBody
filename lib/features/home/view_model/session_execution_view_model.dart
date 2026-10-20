@@ -4,6 +4,8 @@ import 'package:move_your_body/core/model/session_data.dart';
 import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/features/home/repositories/session_repository.dart';
 import 'package:move_your_body/features/home/services/calorie_calculator_service.dart';
+import 'package:move_your_body/features/home/services/tts_service.dart';
+import 'package:move_your_body/features/home/services/voice_command_service.dart';
 import 'package:move_your_body/features/home/view_model/session_details_view_model.dart';
 import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,11 +16,17 @@ part 'generated/session_execution_view_model.g.dart';
 @riverpod
 class SessionExecutionViewModel extends _$SessionExecutionViewModel {
   Timer? _timer;
+  final TtsService _ttsService = TtsService();
+  late final VoiceCommandService _voiceService;
 
   @override
   SessionExecutionState build(int sessionId) {
+    _voiceService = VoiceCommandService(ttsService: _ttsService);
+
     ref.onDispose(() {
       _timer?.cancel();
+      _voiceService.dispose();
+      _ttsService.dispose();
     });
 
     Future.microtask(() => _init());
@@ -52,12 +60,33 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
 
     final sessionRepo = ref.read(sessionRepositoryProvider);
     await sessionRepo.updateSessionStatus(sessionId, SessionStatus.inProgress);
+    await _ttsService.init();
+    await _voiceService.init();
+    _voiceService.onCommandDetected = _handleVoiceCommand;
+    _voiceService.startListening();
 
     _startPhase(ExecutionPhase.preparation);
   }
 
+  void _handleVoiceCommand(VoiceCommand command) {
+    debugPrint('Executing voice command: ${command.name}');
+
+    switch (command) {
+      case VoiceCommand.resume:
+        resumeTimer();
+        break;
+      case VoiceCommand.pause:
+        pauseTimer();
+        break;
+      case VoiceCommand.skip:
+        skipToNext();
+        break;
+    }
+  }
+
   void _startPhase(ExecutionPhase phase) {
     _timer?.cancel();
+    _ttsService.stop();
 
     int duration = 0;
     switch (phase) {
@@ -83,6 +112,22 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
     );
 
     _timer = Timer.periodic(const Duration(seconds: 1), _tick);
+
+    if (phase == ExecutionPhase.workout) {
+      _speakCurrentExerciseInstructions();
+    }
+  }
+
+  void _speakCurrentExerciseInstructions() {
+    final exercise = state.exercises[state.currentExerciseIndex];
+    final segments = exercise.instructions
+        .split('\n')
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+
+    if (segments.isEmpty) return;
+    _ttsService.speakInstructions(segments);
   }
 
   void _tick(Timer timer) {
@@ -155,14 +200,21 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
   }
 
   void pauseTimer() {
+    _ttsService.stop();
     state = state.copyWith(isPaused: true);
   }
 
   void resumeTimer() {
+    if (!state.isPaused) return;
+
     state = state.copyWith(isPaused: false);
+    if (state.currentPhase == ExecutionPhase.workout) {
+      _speakCurrentExerciseInstructions();
+    }
   }
 
   void skipToNext() {
+    _ttsService.stop();
     _advancePhase();
   }
 
@@ -173,6 +225,9 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
 
   Future<void> _finishSession() async {
     _timer?.cancel();
+    _ttsService.stop();
+    _voiceService.stopListening();
+
     state = state.copyWith(
       currentPhase: ExecutionPhase.finished,
       remainingSeconds: 0,
@@ -220,6 +275,7 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
     );
 
     final last3Sessions = await sessionRepo.getLastThreeCompletedSessions();
+
     final currentUserData = await userRepo.getUserData();
 
     if (last3Sessions.length == 3 && currentUserData != null) {

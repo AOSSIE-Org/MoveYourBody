@@ -43,7 +43,7 @@ void main() {
 
     expect(find.text('Workout Session'), findsOneWidget);
     expect(find.text('02:10'), findsOneWidget);
-    expect(find.text('150 kcal'), findsOneWidget);
+    expect(find.text('150.0 kcal'), findsOneWidget);
     expect(find.byIcon(Icons.check_circle_rounded), findsOneWidget);
 
     await tester.tap(find.byType(SessionTile));

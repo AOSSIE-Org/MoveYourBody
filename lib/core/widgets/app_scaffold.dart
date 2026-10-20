@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppScaffold extends StatelessWidget {
-  const AppScaffold({
-    super.key,
-    required this.child,
-    this.bottomNavigationBar,
-  });
+  const AppScaffold({super.key, required this.child, this.bottomNavigationBar});
 
   final Widget child;
   final Widget? bottomNavigationBar;
@@ -26,13 +22,11 @@ class AppScaffold extends StatelessWidget {
             end: Alignment.bottomCenter,
             colors: [
               Theme.of(context).scaffoldBackgroundColor,
-              colorScheme.surface.withValues(alpha: 0.95),
+              colorScheme.surface.withValues(alpha: .95),
             ],
           ),
         ),
-        child: SafeArea(
-          child: child,
-        ),
+        child: SafeArea(child: child),
       ),
     );
   }

@@ -29,6 +29,8 @@ dependencies:
   shared_preferences: ^2.5.3
   package_info_plus: ^8.3.0
   fuzzy: ^0.5.1
+  flutter_tts: ^4.2.0
+  speech_to_text: ^7.0.0
   table_calendar: ^3.2.0
   fl_chart: ^1.2.0
   chewie: ^1.10.0

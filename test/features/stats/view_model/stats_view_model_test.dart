@@ -26,7 +26,7 @@ void main() {
     test('initial build returns loading state with empty lists', () async {
       when(() => mockSessionRepo.getAllSessions()).thenAnswer((_) async => []);
 
-      final sub = container.listen(statsViewModelProvider, (_, _) {});
+      final sub = container.listen(statsViewModelProvider, (_, __) {});
 
       final initialState = sub.read();
       expect(initialState.isLoading, true);
@@ -65,7 +65,7 @@ void main() {
           () => mockSessionRepo.getAllSessions(),
         ).thenAnswer((_) async => dummySessions);
 
-        final sub = container.listen(statsViewModelProvider, (_, _) {});
+        final sub = container.listen(statsViewModelProvider, (_, __) {});
         await Future.delayed(const Duration(milliseconds: 200));
 
         final state = sub.read();
@@ -87,7 +87,7 @@ void main() {
         () => mockSessionRepo.getAllSessions(),
       ).thenThrow(Exception('DB crashed'));
 
-      final sub = container.listen(statsViewModelProvider, (_, _) {});
+      final sub = container.listen(statsViewModelProvider, (_, __) {});
       await Future.delayed(const Duration(milliseconds: 200));
 
       final state = sub.read();

@@ -1,6 +1,9 @@
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 import 'package:move_your_body/core/model/user_data.dart';
 import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
 import 'package:move_your_body/features/onboarding/view_model/onboarding_view_model.dart';
@@ -15,10 +18,25 @@ class FakeUserRepository extends UserRepository {
 }
 
 void main() {
+  setUpAll(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+    SharedPreferences.setMockInitialValues({});
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+      const MethodChannel('dev.fluttercommunity.plus/package_info'),
+      (MethodCall methodCall) async => {
+        'appName': 'Test',
+        'packageName': 'test',
+        'version': '1.0',
+        'buildNumber': '1',
+      },
+    );
+  });
+
   group('OnboardingViewModel Tests', () {
     late ProviderContainer container;
     late FakeUserRepository fakeRepository;
-
     setUp(() {
       fakeRepository = FakeUserRepository();
       container = ProviderContainer(
