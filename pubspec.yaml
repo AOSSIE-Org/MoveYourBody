@@ -49,6 +49,8 @@ flutter_launcher_icons:
   android: "launcher_icon"
   ios: false
   image_path: "assets/images/move_your_body_logo.png"
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/images/move_your_body_logo.png"
 
 flutter:
   generate: true
