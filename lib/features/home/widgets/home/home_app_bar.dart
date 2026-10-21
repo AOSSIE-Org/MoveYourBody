@@ -18,7 +18,7 @@ class HomeAppBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Hi Champ 👋",
+                "Hi Champ ≡ƒæï",
                 style: textTheme.bodyMedium?.copyWith(
                   color: AppColors.textSecondary,
                 ),
@@ -42,7 +42,7 @@ class HomeAppBar extends StatelessWidget {
               onPressed: () {
                 NotificationSettingsDialog.show(context);
               },
-            )
+            ),
           ],
         ),
       ],
