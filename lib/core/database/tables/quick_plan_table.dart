@@ -4,6 +4,7 @@ class QuickPlanTable {
   static const name = 'name';
   static const description = 'description';
   static const imagePath = 'image_path';
+  static const isCustom = 'is_custom';
 }
 
 class QuickPlanExercisesTable {

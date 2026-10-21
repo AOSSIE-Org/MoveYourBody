@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:move_your_body/core/database/schema/exercise_schema.dart';
 import 'package:move_your_body/core/database/schema/quick_plan_schema.dart';
@@ -6,7 +7,6 @@ import 'package:move_your_body/core/database/schema/session_exercises_schema.dar
 import 'package:move_your_body/core/database/schema/session_schedule_schema.dart';
 import 'package:move_your_body/core/database/schema/tags_schema.dart';
 import 'package:move_your_body/core/database/schema/user_schema.dart';
-import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,7 +42,7 @@ class DatabaseService {
     debugPrint('DB PATH: $path');
     return openDatabase(
       path,
-      version: 7,
+      version: 8,
       onCreate: (db, version) async {
         await UserDatabaseService.createTable(db);
         await ExerciseDatabaseService.createTable(db);
@@ -75,6 +75,11 @@ class DatabaseService {
         if (oldVersion < 7) {
           await db.execute(
             'ALTER TABLE quick_plans ADD COLUMN image_path TEXT',
+          );
+        }
+        if (oldVersion < 8) {
+          await db.execute(
+            'ALTER TABLE quick_plans ADD COLUMN is_custom INTEGER NOT NULL DEFAULT 0',
           );
         }
       },

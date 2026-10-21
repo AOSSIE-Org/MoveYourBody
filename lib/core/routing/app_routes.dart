@@ -11,8 +11,8 @@ class AppRoutes {
   static const String result = '/onboarding/result';
   static const String loading = '/loading';
   static const String home = '/home';
-  static const String explore = '/explore';
   static const String add = '/add';
+  static const String createCustomPlan = '/add/create-custom-plan';
   static const String stats = '/stats';
   static const String profile = '/profile';
   static const String sessiondetails = '/session-details/:sessionId';

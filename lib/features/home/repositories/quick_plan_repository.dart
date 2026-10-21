@@ -87,10 +87,21 @@ class QuickPlanRepository {
   Future<List<QuickPlan>> fetchAllPlans() async {
     try {
       final db = await DatabaseService.instance.userDatabase;
-      final maps = await db.query(QuickPlanTable.tableName);
+      final maps = await db.query(QuickPlanTable.tableName, where: '${QuickPlanTable.isCustom} = 0');
       return maps.map((m) => QuickPlan.fromMap(m)).toList();
     } catch (e, st) {
       debugPrint('Error fetching quick plans: $e\n$st');
+      return [];
+    }
+  }
+
+  Future<List<QuickPlan>> fetchCustomPlans() async {
+    try {
+      final db = await DatabaseService.instance.userDatabase;
+      final maps = await db.query(QuickPlanTable.tableName, where: '${QuickPlanTable.isCustom} = 1');
+      return maps.map((m) => QuickPlan.fromMap(m)).toList();
+    } catch (e, st) {
+      debugPrint('Error fetching custom plans: $e\n$st');
       return [];
     }
   }
@@ -250,6 +261,33 @@ class QuickPlanRepository {
       });
     } catch (e, st) {
       debugPrint('Error creating session from plan: $e\n$st');
+      return null;
+    }
+  }
+
+  Future<int?> createCustomPlan(String name, List<String> exerciseIds) async {
+    try {
+      final db = await DatabaseService.instance.userDatabase;
+      
+      return await db.transaction<int?>((txn) async {
+        final planId = await txn.insert(QuickPlanTable.tableName, {
+          QuickPlanTable.name: name,
+          QuickPlanTable.description: 'Custom Workout',
+          QuickPlanTable.isCustom: 1,
+        });
+
+        for (int i = 0; i < exerciseIds.length; i++) {
+          await txn.insert(QuickPlanExercisesTable.tableName, {
+            QuickPlanExercisesTable.planId: planId,
+            QuickPlanExercisesTable.exerciseId: exerciseIds[i],
+            QuickPlanExercisesTable.orderIndex: i,
+          });
+        }
+        
+        return planId;
+      });
+    } catch (e, st) {
+      debugPrint('Error creating custom plan: $e\n$st');
       return null;
     }
   }

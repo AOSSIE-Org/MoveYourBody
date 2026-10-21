@@ -5,12 +5,14 @@ class QuickPlan {
   final String name;
   final String description;
   final String? imagePath;
+  final bool isCustom;
 
   const QuickPlan({
     required this.id,
     required this.name,
     required this.description,
     this.imagePath,
+    this.isCustom = false,
   });
 
   factory QuickPlan.fromMap(Map<String, dynamic> map) {
@@ -19,6 +21,7 @@ class QuickPlan {
       name: map[QuickPlanTable.name] as String,
       description: map[QuickPlanTable.description] as String,
       imagePath: map[QuickPlanTable.imagePath] as String?,
+      isCustom: (map[QuickPlanTable.isCustom] as int? ?? 0) == 1,
     );
   }
 
@@ -28,6 +31,7 @@ class QuickPlan {
       QuickPlanTable.name: name,
       QuickPlanTable.description: description,
       QuickPlanTable.imagePath: imagePath,
+      QuickPlanTable.isCustom: isCustom ? 1 : 0,
     };
   }
 
@@ -36,12 +40,14 @@ class QuickPlan {
     String? name,
     String? description,
     String? imagePath,
+    bool? isCustom,
   }) {
     return QuickPlan(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
       imagePath: imagePath ?? this.imagePath,
+      isCustom: isCustom ?? this.isCustom,
     );
   }
 }

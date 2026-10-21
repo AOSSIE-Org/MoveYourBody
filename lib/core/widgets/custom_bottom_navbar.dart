@@ -43,10 +43,9 @@ class CustomBottomNavBar extends StatelessWidget {
           child: Row(
             children: [
               _buildNavItem(0, Icons.home_rounded, "Home"),
-              _buildNavItem(1, Icons.rocket_launch_outlined, "Explore"),
-              _buildNavItem(2, Icons.add_circle_outline_rounded, "Add"),
-              _buildNavItem(3, Icons.bar_chart_rounded, "Stats"),
-              _buildNavItem(4, Icons.person_outline_rounded, "Profile"),
+              _buildNavItem(1, Icons.add_circle_outline_rounded, "Add"),
+              _buildNavItem(2, Icons.bar_chart_rounded, "Stats"),
+              _buildNavItem(3, Icons.person_outline_rounded, "Profile"),
             ],
           ),
         ),

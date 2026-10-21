@@ -281,7 +281,7 @@ class ExerciseInfoBody extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "• ",
+                        "ΓÇó ",
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 14,
