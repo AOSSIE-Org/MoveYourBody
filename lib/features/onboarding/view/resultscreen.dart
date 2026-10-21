@@ -57,7 +57,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                 ],
               ),
               const SizedBox(height: 32),
-              _SectionTitle(title: 'Fitness Goals'),
+              const _SectionTitle(title: 'Fitness Goals'),
               _ChipsWrap(items: state.goalTags.toList()),
               if (state.customGoal.isNotEmpty)
                 _InfoTile(
@@ -66,7 +66,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                   text: state.customGoal,
                 ),
               const SizedBox(height: 24),
-              _SectionTitle(title: 'Health Profile'),
+              const _SectionTitle(title: 'Health Profile'),
               if (state.healthIssueTags.isEmpty && state.customHealthIssue.isEmpty)
                 const _InfoTile(
                   icon: Icons.health_and_safety, 
@@ -84,7 +84,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                   ),
               ],
               const SizedBox(height: 24),
-              _SectionTitle(title: 'Workout Preferences'),
+              const _SectionTitle(title: 'Workout Preferences'),
               Row(
                 children: [
                   Expanded(
@@ -105,10 +105,10 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                 ],
               ),
               const SizedBox(height: 24),
-              _SectionTitle(title: 'Target Body Regions'),
+              const _SectionTitle(title: 'Target Body Regions'),
               _ChipsWrap(items: state.targetBodyRegion.toList()),
               const SizedBox(height: 24),
-              _SectionTitle(title: 'Available Equipment'),
+              const _SectionTitle(title: 'Available Equipment'),
               _ChipsWrap(items: state.equipments.toList()),
             ],
           ),
@@ -192,7 +192,7 @@ class _ChipsWrap extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.card,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.border.withOpacity(0.3)),
+            border: Border.all(color: AppColors.border.withValues(alpha: 0.3)),
           ),
           child: Text(
             item,
@@ -221,7 +221,7 @@ class _InfoTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border.withOpacity(0.1)),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.1)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -273,7 +273,7 @@ class _InfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border.withOpacity(0.2)),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

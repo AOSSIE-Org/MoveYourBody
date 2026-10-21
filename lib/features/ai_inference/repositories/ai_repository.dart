@@ -1,8 +1,7 @@
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/onnx_service.dart';
 import '../services/tokenizer_service.dart';
-import 'package:flutter/material.dart';
 
 final aiModelRepositoryProvider = Provider((ref) => AiModelRepository(ref));
 
@@ -19,7 +18,7 @@ class AiModelRepository {
 
   Future<Uint8List?> generateEmbedding(String text) async {
     if (text.trim().isEmpty) {
-      debugPrint("🧠 AI Repo: Input text is empty. Skipping embedding generation.");
+      debugPrint("╬ô├½├¡Γò₧├åΓö¼ΓòæΓö£├¡ AI Repo: Input text is empty. Skipping embedding generation.");
       return null;
     }
     final onnxService = _ref.read(onnxServiceProvider);

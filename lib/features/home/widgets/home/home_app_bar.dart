@@ -42,7 +42,7 @@ class HomeAppBar extends StatelessWidget {
               onPressed: () {
                 NotificationSettingsDialog.show(context);
               },
-            )
+            ),
           ],
         ),
       ],
