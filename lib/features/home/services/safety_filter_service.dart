@@ -8,14 +8,15 @@ final safetyFilterServiceProvider = Provider<SafetyFilterService>((ref) {
 
 class SafetyFilterService {
   static const int sessionsToSkip = 6;
+
   List<Exercise> filterExercises({
     required List<Exercise> exercises,
     required UserData user,
-    required List<String> recentExerciseIds,
+    List<String> recentExerciseIds = const [],
   }) {
     // 1. Health & Safety Filter
     List<Exercise> safeExercises = exercises;
-    
+
     if (user.healthIssueTags.isNotEmpty) {
       safeExercises = exercises.where((exercise) {
         return !_hasContraindications(
@@ -30,7 +31,10 @@ class SafetyFilterService {
       return safeExercises;
     }
 
-    final freshExercises = safeExercises.where((ex) => !recentExerciseIds.contains(ex.exerciseId)).toList();
+    final freshExercises = safeExercises
+        .where((ex) => !recentExerciseIds.contains(ex.exerciseId))
+        .toList();
+
     if (freshExercises.length < 3) {
       return safeExercises;
     }
