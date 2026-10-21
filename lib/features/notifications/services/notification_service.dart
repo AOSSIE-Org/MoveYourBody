@@ -11,10 +11,14 @@ final notificationServiceProvider = Provider<NotificationService>((ref) {
 });
 
 class NotificationService {
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
+
+  NotificationService({FlutterLocalNotificationsPlugin? plugin})
+      : _flutterLocalNotificationsPlugin =
+            plugin ?? FlutterLocalNotificationsPlugin();
+
   bool _isInitialized = false;
+  bool get isInitialized => _isInitialized;
 
   Future<void> init() async {
     if (_isInitialized) return;
@@ -47,7 +51,7 @@ class NotificationService {
   }
 
   void _onDidReceiveNotificationResponse(NotificationResponse response) {
-    debugPrint('Notification clicked: \${response.payload}');
+    debugPrint('Notification clicked: ${response.payload}');
   }
 
   Future<void> requestPermissions() async {
@@ -99,7 +103,7 @@ class NotificationService {
         matchDateTimeComponents: DateTimeComponents.time,
       );
     }
-    debugPrint('Scheduled \${times.length} notifications');
+    debugPrint('Scheduled ${times.length} notifications');
   }
 
   tz.TZDateTime _nextInstanceOfTime(TimeOfDay time) {

@@ -13,6 +13,10 @@ void main() {
       const MethodChannel('flutter_tts'),
       (MethodCall methodCall) async => 1,
     );
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+      const MethodChannel('com.llfbandit.record/messages'),
+      (MethodCall methodCall) async => null,
+    );
   });
 
   group('SessionExecutionViewModel', () {

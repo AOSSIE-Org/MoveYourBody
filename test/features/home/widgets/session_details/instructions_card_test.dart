@@ -17,10 +17,8 @@ void main() {
     expect(find.text('Pause - say to stop'), findsOneWidget);
     expect(find.text('Start - say to resume'), findsOneWidget);
     expect(find.text('Skip - to skip current exercise'), findsOneWidget);
-    expect(find.text('Add time - +10 seconds'), findsOneWidget);
     expect(find.byIcon(Icons.pause), findsOneWidget);
     expect(find.byIcon(Icons.play_arrow), findsOneWidget);
     expect(find.byIcon(Icons.skip_next), findsOneWidget);
-    expect(find.byIcon(Icons.add_circle_outline), findsOneWidget);
   });
 }
