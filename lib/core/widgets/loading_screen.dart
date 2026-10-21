@@ -34,10 +34,10 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       final tagSetupRepo = ref.read(tagRepositoryProvider);
       final onboardingData = ref.read(onboardingViewModelProvider);
 
-      debugPrint("🚀 Pipeline Phase 1: Initializing ONNX Engine...");
+      debugPrint("≡ƒÜÇ Pipeline Phase 1: Initializing ONNX Engine...");
       await aiModelRepo.initModel();
 
-      debugPrint("🚀 Pipeline Phase 2: Initializing static exercises DB...");
+      debugPrint("≡ƒÜÇ Pipeline Phase 2: Initializing static exercises DB...");
       await DatabaseService.instance.exercisesDatabase;
 
       Uint8List? customGoalBytes;
@@ -45,7 +45,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
 
       if (onboardingData.customGoal.trim().isNotEmpty) {
         debugPrint(
-          "🧠 Pipeline Phase 3: Generating embedding for Custom Goal: '${onboardingData.customGoal}'",
+          "≡ƒºá Pipeline Phase 3: Generating embedding for Custom Goal: '${onboardingData.customGoal}'",
         );
         customGoalBytes = await aiModelRepo.generateEmbedding(
           onboardingData.customGoal.trim(),
@@ -54,7 +54,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
 
       if (onboardingData.customHealthIssue.trim().isNotEmpty) {
         debugPrint(
-          "🧠 Pipeline Phase 4: Generating embedding for Custom Injury: '${onboardingData.customHealthIssue}'",
+          "≡ƒºá Pipeline Phase 4: Generating embedding for Custom Injury: '${onboardingData.customHealthIssue}'",
         );
         customHealthBytes = await aiModelRepo.generateEmbedding(
           onboardingData.customHealthIssue.trim(),
@@ -84,7 +84,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
           );
       await ref.read(userRepositoryProvider).debugPrintUserData();
       debugPrint(
-        "💾 Pipeline Phase 5: Saving complete profile to UserTable and extracting top tags.",
+        "≡ƒÆ╛ Pipeline Phase 5: Saving complete profile to UserTable and extracting top tags.",
       );
 
       ref.read(aiInferenceViewModelProvider.notifier).setEngineReady();
@@ -92,12 +92,12 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       if (!mounted) return;
 
       debugPrint(
-        "🎯 Pipeline Perfect: All operations complete. Redirecting to Results.",
+        "≡ƒÄ» Pipeline Perfect: All operations complete. Redirecting to Home.",
       );
-      context.go(AppRoutes.profile);
+      context.go(AppRoutes.home);
     } catch (e) {
-      debugPrint("❌ Critical Pipeline Crash: $e");
-      if (mounted) context.go(AppRoutes.profile);
+      debugPrint("Γ¥î Critical Pipeline Crash: $e");
+      if (mounted) context.go(AppRoutes.home);
     }
   }
 

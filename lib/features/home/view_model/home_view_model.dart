@@ -49,6 +49,15 @@ class HomeViewModel extends _$HomeViewModel {
         return;
       }
 
+      await fetchRecommendations();
+    } catch (e) {
+      state = state.copyWith(isLoading: false, errorMessage: e.toString());
+    }
+  }
+
+  Future<void> fetchRecommendations() async {
+    state = state.copyWith(isLoading: true, errorMessage: null);
+    try {
       final userRepo = ref.read(userRepositoryProvider);
       final userData = await userRepo.getUserData();
 
@@ -62,9 +71,11 @@ class HomeViewModel extends _$HomeViewModel {
 
       final service = ref.read(recommendationServiceProvider);
       final localSessionRepo = ref.read(sessionRepositoryProvider);
-    
-      final recentExerciseIds = await localSessionRepo.getRecentExerciseIds(SafetyFilterService.sessionsToSkip);
-      final exercises = await service.recommendExercises(userData, recentExerciseIds);
+
+      final recentExerciseIds = await localSessionRepo
+          .getRecentExerciseIds(SafetyFilterService.sessionsToSkip);
+      final exercises =
+          await service.recommendExercises(userData, recentExerciseIds);
 
       state = state.copyWith(
         recommendedExercises: exercises,
