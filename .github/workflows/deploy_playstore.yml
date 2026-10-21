@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - ci/setup-playstore-deploy-and-fix-in-pr-test
 
   workflow_dispatch:
 
