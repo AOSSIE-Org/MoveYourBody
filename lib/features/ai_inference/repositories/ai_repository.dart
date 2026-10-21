@@ -18,7 +18,7 @@ class AiModelRepository {
 
   Future<Uint8List?> generateEmbedding(String text) async {
     if (text.trim().isEmpty) {
-      debugPrint("≡ƒºá AI Repo: Input text is empty. Skipping embedding generation.");
+      debugPrint("Γëí╞Æ┬║├í AI Repo: Input text is empty. Skipping embedding generation.");
       return null;
     }
     final onnxService = _ref.read(onnxServiceProvider);

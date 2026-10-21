@@ -34,10 +34,10 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       final tagSetupRepo = ref.read(tagRepositoryProvider);
       final onboardingData = ref.read(onboardingViewModelProvider);
 
-      debugPrint("≡ƒÜÇ Pipeline Phase 1: Initializing ONNX Engine...");
+      debugPrint("Γëí╞Æ├£├ç Pipeline Phase 1: Initializing ONNX Engine...");
       await aiModelRepo.initModel();
 
-      debugPrint("≡ƒÜÇ Pipeline Phase 2: Initializing static exercises DB...");
+      debugPrint("Γëí╞Æ├£├ç Pipeline Phase 2: Initializing static exercises DB...");
       await DatabaseService.instance.exercisesDatabase;
 
       Uint8List? customGoalBytes;
@@ -45,7 +45,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
 
       if (onboardingData.customGoal.trim().isNotEmpty) {
         debugPrint(
-          "≡ƒºá Pipeline Phase 3: Generating embedding for Custom Goal: '${onboardingData.customGoal}'",
+          "Γëí╞Æ┬║├í Pipeline Phase 3: Generating embedding for Custom Goal: '${onboardingData.customGoal}'",
         );
         customGoalBytes = await aiModelRepo.generateEmbedding(
           onboardingData.customGoal.trim(),
@@ -54,7 +54,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
 
       if (onboardingData.customHealthIssue.trim().isNotEmpty) {
         debugPrint(
-          "≡ƒºá Pipeline Phase 4: Generating embedding for Custom Injury: '${onboardingData.customHealthIssue}'",
+          "Γëí╞Æ┬║├í Pipeline Phase 4: Generating embedding for Custom Injury: '${onboardingData.customHealthIssue}'",
         );
         customHealthBytes = await aiModelRepo.generateEmbedding(
           onboardingData.customHealthIssue.trim(),
@@ -84,7 +84,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
           );
       await ref.read(userRepositoryProvider).debugPrintUserData();
       debugPrint(
-        "≡ƒÆ╛ Pipeline Phase 5: Saving complete profile to UserTable and extracting top tags.",
+        "Γëí╞Æ├åΓò¢ Pipeline Phase 5: Saving complete profile to UserTable and extracting top tags.",
       );
 
       ref.read(aiInferenceViewModelProvider.notifier).setEngineReady();
@@ -92,11 +92,11 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       if (!mounted) return;
 
       debugPrint(
-        "≡ƒÄ» Pipeline Perfect: All operations complete. Redirecting to Home.",
+        "Γëí╞Æ├ä┬╗ Pipeline Perfect: All operations complete. Redirecting to Home.",
       );
       context.go(AppRoutes.home);
     } catch (e) {
-      debugPrint("Γ¥î Critical Pipeline Crash: $e");
+      debugPrint("╬ô┬Ñ├« Critical Pipeline Crash: $e");
       if (mounted) context.go(AppRoutes.home);
     }
   }

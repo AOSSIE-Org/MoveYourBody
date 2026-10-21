@@ -1,109 +1,148 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
-import 'package:move_your_body/features/home/services/stt_service.dart';
-import 'package:move_your_body/features/home/services/tts_service.dart';
 
-enum VoiceCommand { resume, pause, skip }
+import 'package:flutter/foundation.dart';
+
+import 'tts_service.dart';
+import 'voice_command_detector.dart';
+
+enum VoiceCommand {
+  resume,
+  pause,
+  skip,
+}
+
 class VoiceCommandService {
-  VoiceCommandService({required TtsService ttsService})
-      : _ttsService = ttsService;
+  VoiceCommandService({
+    required TtsService ttsService,
+  }) : _ttsService = ttsService;
 
   final TtsService _ttsService;
-  final SttService _sttService = SttService();
-  ValueChanged<VoiceCommand>? onCommandDetected;
+
+  late final VoiceCommandDetector _detector =
+      VoiceCommandDetector(
+    onCommandDetected: _onCommandDetected,
+  );
+
+  bool Function(VoiceCommand)? onCommandDetected;
 
   bool _isActive = false;
-  static const _postTtsBuffer = Duration(milliseconds: 500);
+  bool _isInitialized = false;
 
-  static const Map<String, VoiceCommand> _commandKeywords = {
-    'start': VoiceCommand.resume,
-    'resume': VoiceCommand.resume,
-    'play': VoiceCommand.resume,
-    'go': VoiceCommand.resume,
-    'continue': VoiceCommand.resume,
-    'pause': VoiceCommand.pause,
-    'stop': VoiceCommand.pause,
-    'wait': VoiceCommand.pause,
-    'hold': VoiceCommand.pause,
-    'skip': VoiceCommand.skip,
-    'next': VoiceCommand.skip,
-  };
+  static const _postTtsBuffer =
+      Duration(milliseconds: 500);
 
   static const Map<VoiceCommand, String> _confirmations = {
     VoiceCommand.resume: 'Resuming',
     VoiceCommand.pause: 'Paused',
     VoiceCommand.skip: 'Skipping',
   };
-  Future<bool> init() async {
-    final available = await _sttService.init();
-    _ttsService.onSpeakingChanged = _onTtsSpeakingChanged;
 
-    return available;
-  }
-  void startListening() {
-    _isActive = true;
-    if (!_ttsService.isSpeaking) {
-      _sttService.startListening(onResult: _onSttResult);
+  Future<bool> init() async {
+    try {
+      await _detector.init();
+
+      _ttsService.onSpeakingChanged =
+          _onTtsSpeakingChanged;
+
+      _isInitialized = true;
+
+      return true;
+    } catch (e, stackTrace) {
+      debugPrint(
+        'VoiceCommandService init error: $e',
+      );
+      debugPrint('$stackTrace');
+
+      return false;
     }
   }
+
+  void startListening() {
+    if (!_isInitialized) {
+      debugPrint(
+        'VoiceCommandService: not initialized',
+      );
+      return;
+    }
+
+    if (_isActive) return;
+
+    _isActive = true;
+
+    if (!_ttsService.isSpeaking) {
+      unawaited(_detector.start());
+    }
+  }
+
   void stopListening() {
     _isActive = false;
-    _sttService.stopListening();
+
+    unawaited(_detector.stop());
   }
+
   void dispose() {
-    stopListening();
+    _isActive = false;
+
     _ttsService.onSpeakingChanged = null;
-    _sttService.dispose();
+
+    unawaited(_detector.dispose());
   }
 
   void _onTtsSpeakingChanged(bool isSpeaking) {
     if (!_isActive) return;
 
     if (isSpeaking) {
-      _sttService.stopListening();
-    } else {
-      Future.delayed(_postTtsBuffer, () {
-        if (_isActive && !_ttsService.isSpeaking) {
-          _sttService.startListening(onResult: _onSttResult);
-        }
-      });
+      unawaited(_detector.stop());
+      return;
+    }
+
+    Future.delayed(_postTtsBuffer, () {
+      if (!_isActive) return;
+
+      if (_ttsService.isSpeaking) return;
+
+      unawaited(_detector.start());
+    });
+  }
+
+  void _onCommandDetected(
+    VoiceCommand command,
+  ) {
+    if (!_isActive) return;
+
+    debugPrint(
+      'VoiceCommandService: detected ${command.name}',
+    );
+
+    final shouldConfirm = onCommandDetected?.call(command) ?? true;
+
+    if (shouldConfirm) {
+      _speakConfirmationAndRestart(command);
     }
   }
 
-  void _onSttResult(String recognizedText) {
-    debugPrint('STT heard: "$recognizedText"');
-
-    final command = _detectIntent(recognizedText);
-    if (command == null) return;
-
-    debugPrint('Voice command detected: ${command.name}');
-    _sttService.stopListening();
-    _ttsService.stop();
-    onCommandDetected?.call(command);
-    _speakConfirmationAndRestart(command);
-  }
-  VoiceCommand? _detectIntent(String text) {
-    final normalized = text.toLowerCase().trim();
-
-    for (final entry in _commandKeywords.entries) {
-      if (normalized.contains(entry.key)) {
-        return entry.value;
-      }
-    }
-
-    return null;
-  }
-  Future<void> _speakConfirmationAndRestart(VoiceCommand command) async {
+  Future<void> _speakConfirmationAndRestart(
+    VoiceCommand command,
+  ) async {
     final message = _confirmations[command];
-    if (message != null) {
-      await _ttsService.speakConfirmation(message);
-    }
-    if (_isActive) {
-      Future.delayed(_postTtsBuffer, () {
-        if (_isActive && !_ttsService.isSpeaking) {
-          _sttService.startListening(onResult: _onSttResult);
-        }
-      });
-    }
+
+    if (message == null) return;
+    await _detector.stop();
+
+    if (!_isActive) return;
+
+    await _ttsService.speakConfirmation(
+      message,
+    );
+
+    if (!_isActive) return;
+
+    Future.delayed(_postTtsBuffer, () {
+      if (!_isActive) return;
+
+      if (!_ttsService.isSpeaking) {
+        unawaited(_detector.start());
+      }
+    });
   }
 }
