@@ -55,7 +55,7 @@ class AiInferenceViewModel extends _$AiInferenceViewModel {
 
   void setEngineReady() {
     state = state.copyWith(isReady: true);
-    debugPrint("Γëí╞Æ├▒├╗ AI Inference State: Explicitly set to READY");
+    debugPrint("╬ô├½├¡Γò₧├åΓö£ΓûÆΓö£Γòù AI Inference State: Explicitly set to READY");
   }
 
   Future<void> processUserQuery({

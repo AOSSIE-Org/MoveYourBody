@@ -50,10 +50,6 @@ class InstructionsCard extends StatelessWidget {
             Icons.skip_next,
             "Skip - to skip current exercise",
           ),
-          _buildVoiceControlRow(
-            Icons.add_circle_outline,
-            "Add time - +10 seconds",
-          ),
         ],
       ),
     );
