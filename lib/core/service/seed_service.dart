@@ -11,7 +11,7 @@ import '../model/exercise_data.dart';
 class SeedService {
   Future<void> seedExercises() async {
     try {
-      final db = await DatabaseService.instance.database;
+      final db = await DatabaseService.instance.userDatabase;
 
       final existingExercises = await db.rawQuery(
         'SELECT COUNT(*) as count FROM ${ExerciseTable.tableName}',
@@ -48,7 +48,7 @@ class SeedService {
   }
 
   Future<void> debugPrintExercises() async {
-    final db = await DatabaseService.instance.database;
+    final db = await DatabaseService.instance.userDatabase;
     final result = await db.query(ExerciseTable.tableName);
     debugPrint('Total exercises: ${result.length}');
     for (final exercise in result) {

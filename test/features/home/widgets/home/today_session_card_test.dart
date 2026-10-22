@@ -25,17 +25,15 @@ void main() {
         homeViewModelProvider.overrideWith(() => FakeHomeViewModel(state)),
       ],
       child: const MaterialApp(
-        home: Scaffold(
-          body: SingleChildScrollView(
-            child: TodaySessionCard(),
-          ),
-        ),
+        home: Scaffold(body: SingleChildScrollView(child: TodaySessionCard())),
       ),
     );
   }
 
   group('TodaySessionCard', () {
-    testWidgets('shows loading indicator when loading', (WidgetTester tester) async {
+    testWidgets('shows loading indicator when loading', (
+      WidgetTester tester,
+    ) async {
       final state = HomeState(
         selectedDate: DateTime.now(),
         currentWeekDays: [],
@@ -47,7 +45,9 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('shows error message when there is an error', (WidgetTester tester) async {
+    testWidgets('shows error message when there is an error', (
+      WidgetTester tester,
+    ) async {
       final state = HomeState(
         selectedDate: DateTime.now(),
         currentWeekDays: [],
@@ -59,7 +59,9 @@ void main() {
       expect(find.text('Error loading recommendations'), findsOneWidget);
     });
 
-    testWidgets('shows empty state when no exercises are available', (WidgetTester tester) async {
+    testWidgets('shows empty state when no exercises are available', (
+      WidgetTester tester,
+    ) async {
       final state = HomeState(
         selectedDate: DateTime.now(),
         currentWeekDays: [],
@@ -68,13 +70,18 @@ void main() {
 
       await tester.pumpWidget(createTestWidget(state));
 
-      expect(find.text("No exercises available for today's session."), findsOneWidget);
-      
+      expect(
+        find.text("No exercises available for today's session."),
+        findsOneWidget,
+      );
+
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
       expect(button.enabled, isFalse);
     });
 
-    testWidgets('shows exercises and start button for new session', (WidgetTester tester) async {
+    testWidgets('shows exercises and start button for new session', (
+      WidgetTester tester,
+    ) async {
       final mockEx = MockExercise();
       when(() => mockEx.name).thenReturn('Squats');
       when(() => mockEx.difficulty).thenReturn(Difficulty.intermediate);
@@ -91,12 +98,14 @@ void main() {
       expect(find.text('Squats'), findsOneWidget);
       expect(find.text('INTERMEDIATE'), findsOneWidget);
       expect(find.text('Start Session'), findsOneWidget);
-      
+
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
       expect(button.enabled, isTrue);
     });
 
-    testWidgets('shows resume button for incomplete session', (WidgetTester tester) async {
+    testWidgets('shows resume button for incomplete session', (
+      WidgetTester tester,
+    ) async {
       final mockEx = MockExercise();
       when(() => mockEx.name).thenReturn('Pushups');
       when(() => mockEx.difficulty).thenReturn(Difficulty.beginner);

@@ -201,7 +201,9 @@ class TodaySessionCard extends ConsumerWidget {
               onPressed: exercises.isEmpty
                   ? null
                   : () async {
-                      final viewModel = ref.read(homeViewModelProvider.notifier);
+                      final viewModel = ref.read(
+                        homeViewModelProvider.notifier,
+                      );
                       final session = await viewModel.createSession();
                       if (session != null && context.mounted) {
                         context.push(AppRoutes.sessionDetailsPath(session.id!));
@@ -209,7 +211,9 @@ class TodaySessionCard extends ConsumerWidget {
                     },
               icon: Icon(Icons.play_arrow_rounded, size: 22 * scale),
               label: Text(
-                homeState.hasIncompleteSession ? "Resume Session" : "Start Session",
+                homeState.hasIncompleteSession
+                    ? "Resume Session"
+                    : "Start Session",
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 16 * scale,

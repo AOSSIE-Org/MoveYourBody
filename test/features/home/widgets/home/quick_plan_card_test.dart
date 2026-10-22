@@ -3,7 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:move_your_body/features/home/widgets/home/quick_plan_card.dart';
 
 void main() {
-  testWidgets('QuickPlanCard renders title and handles loading state', (WidgetTester tester) async {
+  testWidgets('QuickPlanCard renders title and handles loading state', (
+    WidgetTester tester,
+  ) async {
     const testTitle = 'Fat Burn Blast';
     const testImagePath = 'assets/images/fat_burn_blast.png';
 

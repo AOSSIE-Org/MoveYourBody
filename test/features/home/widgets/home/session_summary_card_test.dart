@@ -3,17 +3,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:move_your_body/features/home/widgets/home/session_summary_card.dart';
 
 void main() {
-  testWidgets('SessionSummaryCard renders time and burn values correctly', (WidgetTester tester) async {
+  testWidgets('SessionSummaryCard renders time and burn values correctly', (
+    WidgetTester tester,
+  ) async {
     const testTime = '45 Min';
     const testBurn = '320 kcal';
 
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
-          body: SessionSummaryCard(
-            time: testTime,
-            burn: testBurn,
-          ),
+          body: SessionSummaryCard(time: testTime, burn: testBurn),
         ),
       ),
     );

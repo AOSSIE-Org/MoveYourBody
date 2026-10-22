@@ -13,10 +13,12 @@ class CreateCustomPlanScreen extends ConsumerStatefulWidget {
   const CreateCustomPlanScreen({super.key});
 
   @override
-  ConsumerState<CreateCustomPlanScreen> createState() => _CreateCustomPlanScreenState();
+  ConsumerState<CreateCustomPlanScreen> createState() =>
+      _CreateCustomPlanScreenState();
 }
 
-class _CreateCustomPlanScreenState extends ConsumerState<CreateCustomPlanScreen> {
+class _CreateCustomPlanScreenState
+    extends ConsumerState<CreateCustomPlanScreen> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -40,13 +42,16 @@ class _CreateCustomPlanScreenState extends ConsumerState<CreateCustomPlanScreen>
     if (selectedExercises.isEmpty) return;
 
     final TextEditingController nameController = TextEditingController();
-    
+
     final bool? result = await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
           backgroundColor: AppColors.surface,
-          title: const Text('Name Your Workout', style: TextStyle(color: Colors.white)),
+          title: const Text(
+            'Name Your Workout',
+            style: TextStyle(color: Colors.white),
+          ),
           content: TextField(
             controller: nameController,
             autofocus: true,
@@ -54,18 +59,31 @@ class _CreateCustomPlanScreenState extends ConsumerState<CreateCustomPlanScreen>
             decoration: const InputDecoration(
               hintText: 'e.g. My Sunday Leg Day',
               hintStyle: TextStyle(color: AppColors.textSecondary),
-              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.divider)),
-              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary)),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.divider),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.primary),
+              ),
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel', style: TextStyle(color: Colors.white70)),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.white70),
+              ),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Save', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
+              child: const Text(
+                'Save',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         );
@@ -73,7 +91,9 @@ class _CreateCustomPlanScreenState extends ConsumerState<CreateCustomPlanScreen>
     );
 
     if (result == true && nameController.text.trim().isNotEmpty) {
-      final id = await ref.read(createCustomPlanViewModelProvider.notifier).saveCustomPlan(nameController.text.trim());
+      final id = await ref
+          .read(createCustomPlanViewModelProvider.notifier)
+          .saveCustomPlan(nameController.text.trim());
       if (id != null) {
         if (mounted) {
           ref.read(customPlansViewModelProvider.notifier).refreshPlans();
@@ -97,7 +117,10 @@ class _CreateCustomPlanScreenState extends ConsumerState<CreateCustomPlanScreen>
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 child: Row(
                   children: [
                     IconButton(
@@ -107,21 +130,39 @@ class _CreateCustomPlanScreenState extends ConsumerState<CreateCustomPlanScreen>
                     Expanded(
                       child: TextField(
                         controller: _searchController,
-                        style: TextStyle(fontSize: 15 * scale, color: Colors.white),
+                        style: TextStyle(
+                          fontSize: 15 * scale,
+                          color: Colors.white,
+                        ),
                         decoration: InputDecoration(
                           hintText: "Search exercises to add",
-                          hintStyle: TextStyle(fontSize: 15 * scale, color: AppColors.textSecondary),
-                          prefixIcon: Icon(Icons.search, size: 22 * scale, color: Colors.white),
+                          hintStyle: TextStyle(
+                            fontSize: 15 * scale,
+                            color: AppColors.textSecondary,
+                          ),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            size: 22 * scale,
+                            color: Colors.white,
+                          ),
                           filled: true,
                           fillColor: AppColors.surface,
-                          contentPadding: EdgeInsets.symmetric(vertical: 16 * scale, horizontal: 16 * scale),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 16 * scale,
+                            horizontal: 16 * scale,
+                          ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(18 * scale),
-                            borderSide: const BorderSide(color: AppColors.divider),
+                            borderSide: const BorderSide(
+                              color: AppColors.divider,
+                            ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(18 * scale),
-                            borderSide: const BorderSide(color: AppColors.primary, width: 1.4),
+                            borderSide: const BorderSide(
+                              color: AppColors.primary,
+                              width: 1.4,
+                            ),
                           ),
                         ),
                       ),
@@ -134,32 +175,59 @@ class _CreateCustomPlanScreenState extends ConsumerState<CreateCustomPlanScreen>
                     ? const Center(child: CircularProgressIndicator())
                     : searchState.filteredExercises.isEmpty
                     ? const Center(
-                        child: Text("No exercises found.", style: TextStyle(color: Colors.white)),
+                        child: Text(
+                          "No exercises found.",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       )
                     : ListView.builder(
-                        padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 20.0),
+                        padding: const EdgeInsets.only(
+                          left: 16.0,
+                          right: 16.0,
+                          top: 16.0,
+                          bottom: 20.0,
+                        ),
                         itemCount: searchState.filteredExercises.length,
                         itemBuilder: (context, index) {
                           final exercise = searchState.filteredExercises[index];
-                          final isSelected = selectedExercises.any((e) => e.exerciseId == exercise.exerciseId);
+                          final isSelected = selectedExercises.any(
+                            (e) => e.exerciseId == exercise.exerciseId,
+                          );
 
                           return Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               GestureDetector(
-                                onTap: () => ref.read(createCustomPlanViewModelProvider.notifier).toggleExercise(exercise),
+                                onTap: () => ref
+                                    .read(
+                                      createCustomPlanViewModelProvider
+                                          .notifier,
+                                    )
+                                    .toggleExercise(exercise),
                                 child: Padding(
-                                  padding: const EdgeInsets.only(right: 12.0, bottom: 16.0),
+                                  padding: const EdgeInsets.only(
+                                    right: 12.0,
+                                    bottom: 16.0,
+                                  ),
                                   child: Icon(
-                                    isSelected ? Icons.check_circle : Icons.circle_outlined,
-                                    color: isSelected ? AppColors.primary : AppColors.textSecondary,
+                                    isSelected
+                                        ? Icons.check_circle
+                                        : Icons.circle_outlined,
+                                    color: isSelected
+                                        ? AppColors.primary
+                                        : AppColors.textSecondary,
                                     size: 28,
                                   ),
                                 ),
                               ),
                               Expanded(
                                 child: GestureDetector(
-                                  onTap: () => ref.read(createCustomPlanViewModelProvider.notifier).toggleExercise(exercise),
+                                  onTap: () => ref
+                                      .read(
+                                        createCustomPlanViewModelProvider
+                                            .notifier,
+                                      )
+                                      .toggleExercise(exercise),
                                   child: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
@@ -167,7 +235,11 @@ class _CreateCustomPlanScreenState extends ConsumerState<CreateCustomPlanScreen>
                                     child: SearchExerciseTile(
                                       exercise: exercise,
                                       onInfoTap: () {
-                                        context.push(AppRoutes.exerciseInfoPath(exercise.exerciseId));
+                                        context.push(
+                                          AppRoutes.exerciseInfoPath(
+                                            exercise.exerciseId,
+                                          ),
+                                        );
                                       },
                                     ),
                                   ),
@@ -180,7 +252,10 @@ class _CreateCustomPlanScreenState extends ConsumerState<CreateCustomPlanScreen>
               ),
               if (selectedExercises.isNotEmpty)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.background,
                     border: Border(top: BorderSide(color: AppColors.divider)),
@@ -190,12 +265,20 @@ class _CreateCustomPlanScreenState extends ConsumerState<CreateCustomPlanScreen>
                     height: 54,
                     child: ElevatedButton.icon(
                       onPressed: _showSaveDialog,
-                      label: Text('Save Plan (${selectedExercises.length})', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      label: Text(
+                        'Save Plan (${selectedExercises.length})',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
                       icon: const Icon(Icons.save),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                       ),
                     ),
                   ),

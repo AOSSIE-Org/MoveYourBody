@@ -20,6 +20,7 @@ class SttService {
 
     return _isInitialized;
   }
+
   void startListening({required ValueChanged<String> onResult}) {
     if (!_isInitialized) {
       debugPrint('STT: Cannot listen — not initialized');
@@ -42,7 +43,6 @@ class SttService {
     stopListening();
     _stt.cancel();
   }
-
 
   ValueChanged<String>? _onResult;
 

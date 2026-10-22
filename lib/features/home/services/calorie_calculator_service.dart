@@ -40,10 +40,10 @@ class CalorieCalculatorService {
 
     final baseMet = _getBaseMetForType(exercise.type);
     final intensityMultiplier = _getIntensityMultiplier(exercise.intensity);
-    
+
     final finalMet = baseMet * intensityMultiplier;
     final durationInHours = durationInSeconds / 3600.0;
-    
+
     return finalMet * userWeightKg * durationInHours;
   }
 }

@@ -46,7 +46,9 @@ void main() {
       );
     }
 
-    testWidgets('shows current exercise animation when not resting', (WidgetTester tester) async {
+    testWidgets('shows current exercise animation when not resting', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget(false, nextExercise));
       final animationPreview = find.byType(AnimationPreview);
       expect(animationPreview, findsOneWidget);
@@ -55,20 +57,26 @@ void main() {
       expect(previewWidget.exercise.exerciseId, 'current');
     });
 
-    testWidgets('shows next exercise animation when resting and next is not null', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget(true, nextExercise));
-      
-      final animationPreview = find.byType(AnimationPreview);
-      expect(animationPreview, findsOneWidget);
+    testWidgets(
+      'shows next exercise animation when resting and next is not null',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(createTestWidget(true, nextExercise));
 
-      final previewWidget = tester.widget<AnimationPreview>(animationPreview);
-      expect(previewWidget.exercise.exerciseId, 'next');
-    });
+        final animationPreview = find.byType(AnimationPreview);
+        expect(animationPreview, findsOneWidget);
 
-    testWidgets('shows coffee icon when resting and next is null (session end)', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget(true, null));
-      expect(find.byType(AnimationPreview), findsNothing);
-      expect(find.byIcon(Icons.coffee), findsOneWidget);
-    });
+        final previewWidget = tester.widget<AnimationPreview>(animationPreview);
+        expect(previewWidget.exercise.exerciseId, 'next');
+      },
+    );
+
+    testWidgets(
+      'shows coffee icon when resting and next is null (session end)',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(createTestWidget(true, null));
+        expect(find.byType(AnimationPreview), findsNothing);
+        expect(find.byIcon(Icons.coffee), findsOneWidget);
+      },
+    );
   });
 }

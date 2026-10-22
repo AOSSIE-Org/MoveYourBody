@@ -18,7 +18,7 @@ class HomeAppBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Hi Champ ≡ƒæï",
+                "Hi Champ 👋",
                 style: textTheme.bodyMedium?.copyWith(
                   color: AppColors.textSecondary,
                 ),
@@ -33,12 +33,16 @@ class HomeAppBar extends StatelessWidget {
             ],
           ),
         ),
-        
+
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.notifications_active_outlined, color: Colors.white, size: 28),
+              icon: const Icon(
+                Icons.notifications_active_outlined,
+                color: Colors.white,
+                size: 28,
+              ),
               onPressed: () {
                 NotificationSettingsDialog.show(context);
               },

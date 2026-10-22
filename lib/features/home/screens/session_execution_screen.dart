@@ -38,14 +38,6 @@ class SessionExecutionScreen extends ConsumerWidget {
       );
     }
 
-    if (state.currentPhase == ExecutionPhase.finished) {
-      return const AppScaffold(
-        child: Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
-        ),
-      );
-    }
-
     final currentExercise = state.exercises[state.currentExerciseIndex];
     final isResting = state.currentPhase == ExecutionPhase.rest;
 
@@ -87,7 +79,8 @@ class SessionExecutionScreen extends ConsumerWidget {
                 flex: 4,
                 child: ExecutionAnimationBox(
                   exercise: currentExercise,
-                  isResting: isResting ||
+                  isResting:
+                      isResting ||
                       state.currentPhase == ExecutionPhase.preparation,
                   nextExercise: nextAnimExercise,
                 ),

@@ -60,7 +60,7 @@ class WelcomeScreen extends StatelessWidget {
                                   ),
                                   child: ClipOval(
                                     child: Image.asset(
-                                      'assets/images/logo.png',
+                                      'assets/images/move_your_body_logo.png',
                                       fit: BoxFit.cover,
                                     ),
                                   ),

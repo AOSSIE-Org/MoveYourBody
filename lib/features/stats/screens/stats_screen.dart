@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/constants/app_constants.dart';
 import 'package:move_your_body/core/widgets/app_scaffold.dart';
 import 'package:move_your_body/core/theme/app_colors.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
@@ -115,7 +116,7 @@ class StatsScreen extends ConsumerWidget {
                 ],
               ),
 
-            const SizedBox(height: 80),
+            const SizedBox(height: AppConstants.bottomNavBarSpacing),
           ],
         ),
       ),

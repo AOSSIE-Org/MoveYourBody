@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:move_your_body/core/database/schema/exercise_schema.dart';
 import 'package:move_your_body/core/database/schema/quick_plan_schema.dart';
@@ -11,23 +10,22 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:flutter/foundation.dart';
 
 class DatabaseService {
   static final DatabaseService instance = DatabaseService._internal();
 
   DatabaseService._internal();
 
-  Database? _database;
+  Database? _userdatabase;
   Database? _exercisesDatabase;
 
-  Future<Database> get database async {
-    if (_database != null) return _database!;
+  Future<Database> get userDatabase async {
+    if (_userdatabase != null) return _userdatabase!;
 
-    _database = await _initDatabase();
-    return _database!;
+    _userdatabase = await _initDatabase();
+    return _userdatabase!;
   }
-
-  Future<Database> get userDatabase => database;
 
   Future<Database> get exercisesDatabase async {
     if (_exercisesDatabase != null) return _exercisesDatabase!;
@@ -37,8 +35,7 @@ class DatabaseService {
   }
 
   Future<Database> _initDatabase() async {
-    final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'move_your_body.db');
+    final path = join(await getDatabasesPath(), 'move_your_body.db');
     debugPrint('DB PATH: $path');
     return openDatabase(
       path,
@@ -54,9 +51,10 @@ class DatabaseService {
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
           await ExerciseDatabaseService.createTable(db);
+          await TagsDatabaseService.createTable(db);
         }
         if (oldVersion < 3) {
-          await TagsDatabaseService.createTable(db);
+          await SessionScheduleDatabaseService.createTable(db);
         }
         if (oldVersion < 4) {
           await SessionExercisesDatabaseService.createTable(db);
@@ -87,17 +85,14 @@ class DatabaseService {
   }
 
   Future<Database> _initExercisesDatabase() async {
-    final basePath = await getDatabasesPath();
-    final dbPath = join(basePath, 'exercises.db');
+    final dbDirectory = await getDatabasesPath();
+    final dbPath = join(dbDirectory, 'exercises.db');
 
     await _copyExercisesDatabaseIfNeeded(dbPath);
 
     debugPrint('EXERCISES DB PATH: $dbPath');
 
-    return openDatabase(
-      dbPath,
-      readOnly: true,
-    );
+    return openDatabase(dbPath, readOnly: true);
   }
 
   Future<void> _copyExercisesDatabaseIfNeeded(String dbPath) async {
@@ -117,32 +112,22 @@ class DatabaseService {
       return;
     }
 
-    debugPrint(
-      'New version detected: $currentAppVersion (was $copiedVersion). Copying exercises DB...',
-    );
+    debugPrint('Copying exercises.db...');
+
+    await dbFile.parent.create(recursive: true);
 
     if (await dbFile.exists()) {
       await dbFile.delete();
     }
 
-    final data = await rootBundle.load(
-      'assets/exercises.db',
-    );
+    final data = await rootBundle.load('assets/exercises.db');
 
     final bytes = data.buffer.asUint8List();
 
-    await dbFile.writeAsBytes(
-      bytes,
-      flush: true,
-    );
+    await dbFile.writeAsBytes(bytes, flush: true);
 
-    await prefs.setString(
-      'exercise_userdatabase_version',
-      currentAppVersion,
-    );
+    await prefs.setString('exercise_userdatabase_version', currentAppVersion);
 
-    debugPrint(
-      'Exercises database copied for app version $currentAppVersion',
-    );
+    debugPrint('Exercises database copied for app version $currentAppVersion');
   }
 }

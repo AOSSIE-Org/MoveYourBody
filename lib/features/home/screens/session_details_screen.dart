@@ -122,9 +122,7 @@ class SessionDetailsScreen extends ConsumerWidget {
                   );
                 },
                 onInfoTap: () {
-                  context.push(
-                    AppRoutes.exerciseInfoPath(exercise.exerciseId),
-                  );
+                  context.push(AppRoutes.exerciseInfoPath(exercise.exerciseId));
                 },
               ),
             ),
@@ -162,10 +160,7 @@ class SessionDetailsScreen extends ConsumerWidget {
                   SizedBox(width: 8),
                   Text(
                     "Let's start",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

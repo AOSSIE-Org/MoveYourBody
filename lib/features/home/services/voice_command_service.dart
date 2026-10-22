@@ -5,21 +5,15 @@ import 'package:flutter/foundation.dart';
 import 'tts_service.dart';
 import 'voice_command_detector.dart';
 
-enum VoiceCommand {
-  resume,
-  pause,
-  skip,
-}
+enum VoiceCommand { resume, pause, skip }
 
 class VoiceCommandService {
-  VoiceCommandService({
-    required TtsService ttsService,
-  }) : _ttsService = ttsService;
+  VoiceCommandService({required TtsService ttsService})
+    : _ttsService = ttsService;
 
   final TtsService _ttsService;
 
-  late final VoiceCommandDetector _detector =
-      VoiceCommandDetector(
+  late final VoiceCommandDetector _detector = VoiceCommandDetector(
     onCommandDetected: _onCommandDetected,
   );
 
@@ -28,8 +22,7 @@ class VoiceCommandService {
   bool _isActive = false;
   bool _isInitialized = false;
 
-  static const _postTtsBuffer =
-      Duration(milliseconds: 500);
+  static const _postTtsBuffer = Duration(milliseconds: 500);
 
   static const Map<VoiceCommand, String> _confirmations = {
     VoiceCommand.resume: 'Resuming',
@@ -41,16 +34,13 @@ class VoiceCommandService {
     try {
       await _detector.init();
 
-      _ttsService.onSpeakingChanged =
-          _onTtsSpeakingChanged;
+      _ttsService.onSpeakingChanged = _onTtsSpeakingChanged;
 
       _isInitialized = true;
 
       return true;
     } catch (e, stackTrace) {
-      debugPrint(
-        'VoiceCommandService init error: $e',
-      );
+      debugPrint('VoiceCommandService init error: $e');
       debugPrint('$stackTrace');
 
       return false;
@@ -59,9 +49,7 @@ class VoiceCommandService {
 
   void startListening() {
     if (!_isInitialized) {
-      debugPrint(
-        'VoiceCommandService: not initialized',
-      );
+      debugPrint('VoiceCommandService: not initialized');
       return;
     }
 
@@ -105,14 +93,10 @@ class VoiceCommandService {
     });
   }
 
-  void _onCommandDetected(
-    VoiceCommand command,
-  ) {
+  void _onCommandDetected(VoiceCommand command) {
     if (!_isActive) return;
 
-    debugPrint(
-      'VoiceCommandService: detected ${command.name}',
-    );
+    debugPrint('VoiceCommandService: detected ${command.name}');
 
     final shouldConfirm = onCommandDetected?.call(command) ?? true;
 
@@ -121,9 +105,7 @@ class VoiceCommandService {
     }
   }
 
-  Future<void> _speakConfirmationAndRestart(
-    VoiceCommand command,
-  ) async {
+  Future<void> _speakConfirmationAndRestart(VoiceCommand command) async {
     final message = _confirmations[command];
 
     if (message == null) return;
@@ -131,9 +113,7 @@ class VoiceCommandService {
 
     if (!_isActive) return;
 
-    await _ttsService.speakConfirmation(
-      message,
-    );
+    await _ttsService.speakConfirmation(message);
 
     if (!_isActive) return;
 

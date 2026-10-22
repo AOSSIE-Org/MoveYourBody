@@ -11,13 +11,16 @@ void main() {
       repository = NotificationRepository();
     });
 
-    test('getNotificationTimes returns empty list when no data is saved', () async {
-      SharedPreferences.setMockInitialValues({});
+    test(
+      'getNotificationTimes returns empty list when no data is saved',
+      () async {
+        SharedPreferences.setMockInitialValues({});
 
-      final result = await repository.getNotificationTimes();
+        final result = await repository.getNotificationTimes();
 
-      expect(result, isEmpty);
-    });
+        expect(result, isEmpty);
+      },
+    );
 
     test('getNotificationTimes correctly parses stored time strings', () async {
       SharedPreferences.setMockInitialValues({
@@ -33,35 +36,41 @@ void main() {
       expect(result[1].minute, 45);
     });
 
-    test('getNotificationTimes falls back to default time for malformed format', () async {
-      SharedPreferences.setMockInitialValues({
-        'notification_times': ['invalid', 'not:a_number'],
-      });
+    test(
+      'getNotificationTimes falls back to default time for malformed format',
+      () async {
+        SharedPreferences.setMockInitialValues({
+          'notification_times': ['invalid', 'not:a_number'],
+        });
 
-      final result = await repository.getNotificationTimes();
+        final result = await repository.getNotificationTimes();
 
-      expect(result.length, 2);
-      expect(result[0].hour, 9);
-      expect(result[0].minute, 0);
-      expect(result[1].hour, 9);
-      expect(result[1].minute, 0);
-    });
+        expect(result.length, 2);
+        expect(result[0].hour, 9);
+        expect(result[0].minute, 0);
+        expect(result[1].hour, 9);
+        expect(result[1].minute, 0);
+      },
+    );
 
-    test('saveNotificationTimes formats and persists times with two-digit padding', () async {
-      SharedPreferences.setMockInitialValues({});
+    test(
+      'saveNotificationTimes formats and persists times with two-digit padding',
+      () async {
+        SharedPreferences.setMockInitialValues({});
 
-      const times = [
-        TimeOfDay(hour: 7, minute: 5),
-        TimeOfDay(hour: 21, minute: 40),
-      ];
+        const times = [
+          TimeOfDay(hour: 7, minute: 5),
+          TimeOfDay(hour: 21, minute: 40),
+        ];
 
-      await repository.saveNotificationTimes(times);
+        await repository.saveNotificationTimes(times);
 
-      final prefs = await SharedPreferences.getInstance();
-      final savedStrings = prefs.getStringList('notification_times');
+        final prefs = await SharedPreferences.getInstance();
+        final savedStrings = prefs.getStringList('notification_times');
 
-      expect(savedStrings, isNotNull);
-      expect(savedStrings, ['07:05', '21:40']);
-    });
+        expect(savedStrings, isNotNull);
+        expect(savedStrings, ['07:05', '21:40']);
+      },
+    );
   });
 }

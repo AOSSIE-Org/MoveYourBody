@@ -34,10 +34,10 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       final tagSetupRepo = ref.read(tagRepositoryProvider);
       final onboardingData = ref.read(onboardingViewModelProvider);
 
-      debugPrint("Γò¼├┤Γö£┬╜Γö£┬í╬ô├▓ΓéºΓö£├Ñ╬ô├╢┬úΓö¼├║╬ô├╢┬úΓö£┬║ Pipeline Phase 1: Initializing ONNX Engine...");
+      debugPrint("🚀 Pipeline Phase 1: Initializing ONNX Engine...");
       await aiModelRepo.initModel();
 
-      debugPrint("Γò¼├┤Γö£┬╜Γö£┬í╬ô├▓ΓéºΓö£├Ñ╬ô├╢┬úΓö¼├║╬ô├╢┬úΓö£┬║ Pipeline Phase 2: Initializing static exercises DB...");
+      debugPrint("🚀 Pipeline Phase 2: Initializing static exercises DB...");
       await DatabaseService.instance.exercisesDatabase;
 
       Uint8List? customGoalBytes;
@@ -45,7 +45,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
 
       if (onboardingData.customGoal.trim().isNotEmpty) {
         debugPrint(
-          "Γò¼├┤Γö£┬╜Γö£┬í╬ô├▓ΓéºΓö£├Ñ╬ô├╢┬╝╬ô├▓├ª╬ô├╢┬úΓö£┬í Pipeline Phase 3: Generating embedding for Custom Goal: '${onboardingData.customGoal}'",
+          "🧠 Pipeline Phase 3: Generating embedding for Custom Goal: '${onboardingData.customGoal}'",
         );
         customGoalBytes = await aiModelRepo.generateEmbedding(
           onboardingData.customGoal.trim(),
@@ -54,7 +54,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
 
       if (onboardingData.customHealthIssue.trim().isNotEmpty) {
         debugPrint(
-          "Γò¼├┤Γö£┬╜Γö£┬í╬ô├▓ΓéºΓö£├Ñ╬ô├╢┬╝╬ô├▓├ª╬ô├╢┬úΓö£┬í Pipeline Phase 4: Generating embedding for Custom Injury: '${onboardingData.customHealthIssue}'",
+          "🧠 Pipeline Phase 4: Generating embedding for Custom Injury: '${onboardingData.customHealthIssue}'",
         );
         customHealthBytes = await aiModelRepo.generateEmbedding(
           onboardingData.customHealthIssue.trim(),
@@ -84,7 +84,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
           );
       await ref.read(userRepositoryProvider).debugPrintUserData();
       debugPrint(
-        "Γò¼├┤Γö£┬╜Γö£┬í╬ô├▓ΓéºΓö£├Ñ╬ô├╢┬úΓö£├æΓò¼├┤Γö£ΓûôΓö¼├│ Pipeline Phase 5: Saving complete profile to UserTable and extracting top tags.",
+        "💾 Pipeline Phase 5: Saving complete profile to UserTable and extracting top tags.",
       );
 
       ref.read(aiInferenceViewModelProvider.notifier).setEngineReady();
@@ -92,11 +92,11 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       if (!mounted) return;
 
       debugPrint(
-        "Γò¼├┤Γö£┬╜Γö£┬í╬ô├▓ΓéºΓö£├Ñ╬ô├╢┬úΓö£├▒╬ô├╢┬╝╬ô├▓├╣ Pipeline Perfect: All operations complete. Redirecting to Home.",
+        "🎯 Pipeline Perfect: All operations complete. Redirecting to Home.",
       );
       context.go(AppRoutes.home);
     } catch (e) {
-      debugPrint("╬ô├▓┬╝Γö£Γöñ╬ô├╢┬╝Γö£├ª╬ô├╢┬úΓö¼┬╜ Critical Pipeline Crash: $e");
+      debugPrint("❌ Critical Pipeline Crash: $e");
       if (mounted) context.go(AppRoutes.home);
     }
   }
@@ -116,7 +116,10 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 32,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(24),

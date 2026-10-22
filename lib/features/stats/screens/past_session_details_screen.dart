@@ -161,7 +161,9 @@ class PastSessionDetailsScreen extends ConsumerWidget {
                           _StatItem(
                             icon: Icons.local_fire_department,
                             title: 'CALORIES',
-                            value: session.caloriesBurned?.toStringAsFixed(1) ?? '0',
+                            value:
+                                session.caloriesBurned?.toStringAsFixed(1) ??
+                                '0',
                             unit: 'kcal',
                             color: Colors.orangeAccent,
                           ),

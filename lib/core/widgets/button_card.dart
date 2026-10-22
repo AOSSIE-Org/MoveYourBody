@@ -14,6 +14,7 @@ class ButtonCard extends StatelessWidget {
   final String? subtitle;
   final bool selected;
   final VoidCallback onTap;
+
   final double? titleFontSize;
 
   @override
@@ -40,7 +41,7 @@ class ButtonCard extends StatelessWidget {
               border: Border.all(
                 color: selected
                     ? colorScheme.primary
-                    : colorScheme.outline.withValues(alpha: 0.25),
+                    : colorScheme.outline.withValues(alpha: 1),
                 width: 2,
               ),
             ),
@@ -54,7 +55,7 @@ class ButtonCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w600,
-                      fontSize: titleFontSize ?? 25,
+                      fontSize: titleFontSize,
                     ),
                   ),
                 ),

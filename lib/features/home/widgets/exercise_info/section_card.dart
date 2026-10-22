@@ -5,11 +5,7 @@ class SectionCard extends StatelessWidget {
   final String title;
   final Widget child;
 
-  const SectionCard({
-    super.key,
-    required this.title,
-    required this.child,
-  });
+  const SectionCard({super.key, required this.title, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +15,7 @@ class SectionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

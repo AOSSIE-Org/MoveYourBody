@@ -11,8 +11,9 @@ class ExecutionControls extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isPaused = ref.watch(
-      sessionExecutionViewModelProvider(sessionId)
-          .select((state) => state.isPaused),
+      sessionExecutionViewModelProvider(
+        sessionId,
+      ).select((state) => state.isPaused),
     );
 
     final viewModel = ref.read(
@@ -31,7 +32,9 @@ class ExecutionControls extends ConsumerWidget {
               padding: EdgeInsets.zero,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24),
-                side: BorderSide(color: AppColors.textSecondary.withValues(alpha: 0.3)),
+                side: BorderSide(
+                  color: AppColors.textSecondary.withValues(alpha: 0.3),
+                ),
               ),
             ),
             child: Text(

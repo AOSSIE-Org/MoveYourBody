@@ -27,14 +27,14 @@ class ExecutionAnimationBox extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: isResting
           ? (nextExercise != null
-              ? AnimationPreview(exercise: nextExercise!, height: null)
-              : const Center(
-                  child: Icon(
-                    Icons.coffee,
-                    size: 80,
-                    color: AppColors.textSecondary,
-                  ),
-                ))
+                ? AnimationPreview(exercise: nextExercise!, height: null)
+                : const Center(
+                    child: Icon(
+                      Icons.coffee,
+                      size: 80,
+                      color: AppColors.textSecondary,
+                    ),
+                  ))
           : AnimationPreview(exercise: exercise, height: null),
     );
   }

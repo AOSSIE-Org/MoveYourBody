@@ -296,41 +296,45 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
         (s) => s.intensityFeedback == IntensityFeedback.high.name,
       );
 
-      String newDifficulty = currentUserData.difficulty;
-      String newIntensity = currentUserData.intensity;
+      final currentUserData = await userRepo.getUserData();
 
-      if (allEasy) {
-        if (newDifficulty == Difficulty.beginner.name) {
-          newDifficulty = Difficulty.intermediate.name;
-        } else if (newDifficulty == Difficulty.intermediate.name) {
-          newDifficulty = Difficulty.advanced.name;
+      if (currentUserData != null) {
+        String newDifficulty = currentUserData.difficulty;
+        String newIntensity = currentUserData.intensity;
+
+        if (allEasy) {
+          if (newDifficulty == Difficulty.beginner.name) {
+            newDifficulty = Difficulty.intermediate.name;
+          } else if (newDifficulty == Difficulty.intermediate.name) {
+            newDifficulty = Difficulty.advanced.name;
+          }
+        } else if (allHard) {
+          if (newDifficulty == Difficulty.advanced.name) {
+            newDifficulty = Difficulty.intermediate.name;
+          } else if (newDifficulty == Difficulty.intermediate.name) {
+            newDifficulty = Difficulty.beginner.name;
+          }
         }
-      } else if (allHard) {
-        if (newDifficulty == Difficulty.advanced.name) {
-          newDifficulty = Difficulty.intermediate.name;
-        } else if (newDifficulty == Difficulty.intermediate.name) {
-          newDifficulty = Difficulty.beginner.name;
+        if (allLight) {
+          if (newIntensity == Intensity.low.name) {
+            newIntensity = Intensity.moderate.name;
+          } else if (newIntensity == Intensity.moderate.name) {
+            newIntensity = Intensity.high.name;
+          }
+        } else if (allHigh) {
+          if (newIntensity == Intensity.high.name) {
+            newIntensity = Intensity.moderate.name;
+          } else if (newIntensity == Intensity.moderate.name) {
+            newIntensity = Intensity.low.name;
+          }
         }
-      }
-      if (allLight) {
-        if (newIntensity == Intensity.low.name) {
-          newIntensity = Intensity.moderate.name;
-        } else if (newIntensity == Intensity.moderate.name) {
-          newIntensity = Intensity.high.name;
+        if (newDifficulty != currentUserData.difficulty ||
+            newIntensity != currentUserData.intensity) {
+          await userRepo.updateDifficultyAndIntensity(
+            newDifficulty,
+            newIntensity,
+          );
         }
-      } else if (allHigh) {
-        if (newIntensity == Intensity.high.name) {
-          newIntensity = Intensity.moderate.name;
-        } else if (newIntensity == Intensity.moderate.name) {
-          newIntensity = Intensity.low.name;
-        }
-      }
-      if (newDifficulty != currentUserData.difficulty ||
-          newIntensity != currentUserData.intensity) {
-        await userRepo.updateDifficultyAndIntensity(
-          newDifficulty,
-          newIntensity,
-        );
       }
     }
   }

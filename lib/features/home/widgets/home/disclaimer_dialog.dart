@@ -27,7 +27,10 @@ class _DisclaimerDialogState extends State<DisclaimerDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      insetPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+      insetPadding: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+        vertical: 24.0,
+      ),
       backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
@@ -43,9 +46,9 @@ class _DisclaimerDialogState extends State<DisclaimerDialog> {
             const SizedBox(height: 12),
             Text(
               "Important Precautions",
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontSize: 20,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontSize: 20),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -76,11 +79,11 @@ class _DisclaimerDialogState extends State<DisclaimerDialog> {
                         context,
                         "Exercise Safely",
                         "• Warm up before exercising and use proper form.\n"
-                        "• Exercise in a safe environment with enough space.\n"
-                        "• Use equipment only as intended and ensure it is stable.\n"
-                        "• Stay hydrated and rest when needed.\n"
-                        "• Stop exercising if you feel unwell, dizzy, or experience unusual pain.\n"
-                        "• Choose exercises that match your current fitness level and physical abilities.",
+                            "• Exercise in a safe environment with enough space.\n"
+                            "• Use equipment only as intended and ensure it is stable.\n"
+                            "• Stay hydrated and rest when needed.\n"
+                            "• Stop exercising if you feel unwell, dizzy, or experience unusual pain.\n"
+                            "• Choose exercises that match your current fitness level and physical abilities.",
                       ),
                       _buildSection(
                         context,
@@ -109,8 +112,8 @@ class _DisclaimerDialogState extends State<DisclaimerDialog> {
                   child: Text(
                     "I acknowledge I have read and understood these precautions.",
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textPrimary,
-                        ),
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                 ),
               ],
@@ -131,7 +134,9 @@ class _DisclaimerDialogState extends State<DisclaimerDialog> {
                 style: ElevatedButton.styleFrom(
                   disabledBackgroundColor: AppColors.surface,
                   disabledForegroundColor: AppColors.textSecondary,
-                  side: _isChecked ? BorderSide.none : const BorderSide(color: AppColors.divider),
+                  side: _isChecked
+                      ? BorderSide.none
+                      : const BorderSide(color: AppColors.divider),
                 ),
                 child: const Text("Continue"),
               ),
@@ -151,17 +156,17 @@ class _DisclaimerDialogState extends State<DisclaimerDialog> {
           Text(
             title,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryLight,
-                ),
+              fontWeight: FontWeight.bold,
+              color: AppColors.primaryLight,
+            ),
           ),
           const SizedBox(height: 6),
           Text(
             content,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textSecondary,
-                  height: 1.4,
-                ),
+              color: AppColors.textSecondary,
+              height: 1.4,
+            ),
           ),
         ],
       ),

@@ -37,11 +37,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: ButtonCard(
-              title: 'Advanced',
-              selected: true,
-              onTap: () {},
-            ),
+            body: ButtonCard(title: 'Advanced', selected: true, onTap: () {}),
           ),
         ),
       );

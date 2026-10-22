@@ -12,11 +12,7 @@ void main() {
 
   testWidgets('HomeScreen builds successfully', (WidgetTester tester) async {
     await tester.pumpWidget(
-      const ProviderScope(
-        child: MaterialApp(
-          home: HomeScreen(),
-        ),
-      ),
+      const ProviderScope(child: MaterialApp(home: HomeScreen())),
     );
 
     expect(find.byType(HomeScreen), findsOneWidget);

@@ -22,36 +22,42 @@ void main() {
       await db.delete(SessionScheduleTable.tableName);
     });
 
-    test('getCompletedSessions should return only completed sessions', () async {
-      final db = await DatabaseService.instance.userDatabase;
+    test(
+      'getCompletedSessions should return only completed sessions',
+      () async {
+        final db = await DatabaseService.instance.userDatabase;
 
-      final completedSession = Session(
-        createdAt: DateTime.now().subtract(const Duration(days: 1)),
-        sessionDuration: 30,
-        sessionStatus: SessionStatus.completed,
-        caloriesBurned: 250.0,
-      );
+        final completedSession = Session(
+          createdAt: DateTime.now().subtract(const Duration(days: 1)),
+          sessionDuration: 30,
+          sessionStatus: SessionStatus.completed,
+          caloriesBurned: 250.0,
+        );
 
-      final inProgressSession = Session(
-        createdAt: DateTime.now(),
-        sessionDuration: 15,
-        sessionStatus: SessionStatus.inProgress,
-        caloriesBurned: 100.0,
-      );
+        final inProgressSession = Session(
+          createdAt: DateTime.now(),
+          sessionDuration: 15,
+          sessionStatus: SessionStatus.inProgress,
+          caloriesBurned: 100.0,
+        );
 
-      await db.insert(SessionScheduleTable.tableName, completedSession.toMap());
-      await db.insert(
-        SessionScheduleTable.tableName,
-        inProgressSession.toMap(),
-      );
+        await db.insert(
+          SessionScheduleTable.tableName,
+          completedSession.toMap(),
+        );
+        await db.insert(
+          SessionScheduleTable.tableName,
+          inProgressSession.toMap(),
+        );
 
-      final result = await repository.getCompletedSessions();
+        final result = await repository.getCompletedSessions();
 
-      expect(result, isNotEmpty);
-      expect(result.length, 1);
-      expect(result.first.sessionStatus, SessionStatus.completed);
-      expect(result.first.caloriesBurned, 250.0);
-    });
+        expect(result, isNotEmpty);
+        expect(result.length, 1);
+        expect(result.first.sessionStatus, SessionStatus.completed);
+        expect(result.first.caloriesBurned, 250.0);
+      },
+    );
 
     test(
       'getCompletedSessions should return empty list if no completed sessions exist',

@@ -26,7 +26,7 @@ enum Difficulty { beginner, intermediate, advanced }
 
 enum Intensity { low, moderate, high }
 
-enum Equipment { stabilityBall, bench, dumbbells, yogaMat, jumpRope, pullUpBar}
+enum Equipment { stabilityBall, bench, dumbbells, yogaMat, jumpRope, pullUpBar }
 
 class Exercise {
   final String exerciseId;

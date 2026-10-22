@@ -11,7 +11,10 @@ void main() {
     });
 
     test('constructor sets custom values properly', () {
-      const times = [TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 18, minute: 30)];
+      const times = [
+        TimeOfDay(hour: 8, minute: 0),
+        TimeOfDay(hour: 18, minute: 30),
+      ];
       const state = NotificationSettingsState(times: times, isLoading: false);
       expect(state.times, times);
       expect(state.isLoading, isFalse);

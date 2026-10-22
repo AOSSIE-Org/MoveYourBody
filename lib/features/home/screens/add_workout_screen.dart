@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/constants/app_constants.dart';
 import 'package:move_your_body/core/theme/app_colors.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
 import 'package:move_your_body/features/home/view_model/custom_plans_view_model.dart';
@@ -18,7 +19,10 @@ class AddWorkoutScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text('My Workouts', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text(
+          'My Workouts',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -46,16 +50,23 @@ class AddWorkoutScreen extends ConsumerWidget {
                     );
                   }
                   return ListView.builder(
+                    padding: const EdgeInsets.only(
+                      bottom: AppConstants.bottomNavBarSpacing,
+                    ),
                     itemCount: plans.length,
                     itemBuilder: (context, index) {
                       final plan = plans[index];
                       return GestureDetector(
                         onTap: () async {
-                           final repo = ref.read(quickPlanRepositoryProvider);
-                           final session = await repo.createSessionFromPlan(plan.id);
-                           if (session != null && context.mounted) {
-                              context.push(AppRoutes.sessionDetailsPath(session.id!));
-                           }
+                          final repo = ref.read(quickPlanRepositoryProvider);
+                          final session = await repo.createSessionFromPlan(
+                            plan.id,
+                          );
+                          if (session != null && context.mounted) {
+                            context.push(
+                              AppRoutes.sessionDetailsPath(session.id!),
+                            );
+                          }
                         },
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 12.0),
@@ -63,7 +74,10 @@ class AddWorkoutScreen extends ConsumerWidget {
                           decoration: BoxDecoration(
                             color: AppColors.surface,
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: AppColors.divider, width: 1),
+                            border: Border.all(
+                              color: AppColors.divider,
+                              width: 1,
+                            ),
                           ),
                           child: Row(
                             children: [
@@ -73,7 +87,11 @@ class AddWorkoutScreen extends ConsumerWidget {
                                   color: AppColors.primary.withAlpha(30),
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(Icons.fitness_center, color: AppColors.primary, size: 28),
+                                child: const Icon(
+                                  Icons.fitness_center,
+                                  color: AppColors.primary,
+                                  size: 28,
+                                ),
                               ),
                               const SizedBox(width: 16),
                               Expanded(
@@ -86,7 +104,10 @@ class AddWorkoutScreen extends ConsumerWidget {
                                   ),
                                 ),
                               ),
-                              const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+                              const Icon(
+                                Icons.chevron_right,
+                                color: AppColors.textSecondary,
+                              ),
                             ],
                           ),
                         ),

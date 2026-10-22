@@ -9,7 +9,9 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:move_your_body/core/database/db_config.dart';
 
 class MockUserRepository extends Mock implements UserRepository {}
+
 class MockRecommendationService extends Mock implements RecommendationService {}
+
 class MockUserData extends Mock implements UserData {}
 
 void main() {
@@ -31,7 +33,7 @@ void main() {
         userRepository: mockUserRepository,
         recommendationService: mockRecommendationService,
       );
-      
+
       final db = await DatabaseService.instance.userDatabase;
       try {
         await db.delete('session_schedule');
@@ -40,25 +42,33 @@ void main() {
     });
 
     test('createSession returns null when user data is null', () async {
-      when(() => mockUserRepository.getUserData()).thenAnswer((_) async => null);
+      when(
+        () => mockUserRepository.getUserData(),
+      ).thenAnswer((_) async => null);
     });
 
     test('createSession creates session when user data exists', () async {
       final mockUserData = MockUserData();
-      when(() => mockUserRepository.getUserData()).thenAnswer((_) async => mockUserData);
-      when(() => mockRecommendationService.recommendExercises(mockUserData, any()))
-          .thenAnswer((_) async => []);
+      when(
+        () => mockUserRepository.getUserData(),
+      ).thenAnswer((_) async => mockUserData);
+      when(
+        () => mockRecommendationService.recommendExercises(mockUserData, any()),
+      ).thenAnswer((_) async => []);
 
       final session = await repo.createSession();
-      
+
       expect(session, isA<Session>());
       expect(session?.exercises, isEmpty);
       expect(session?.sessionStatus, SessionStatus.created);
     });
 
-    test('getLatestIncompleteSession returns null when database is empty', () async {
-      final session = await repo.getLatestIncompleteSession();
-      expect(session, isNull);
-    });
+    test(
+      'getLatestIncompleteSession returns null when database is empty',
+      () async {
+        final session = await repo.getLatestIncompleteSession();
+        expect(session, isNull);
+      },
+    );
   });
 }

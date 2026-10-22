@@ -9,7 +9,7 @@ void main() {
   group('CalorieCalculatorService', () {
     test('returns 0.0 if weight or duration is zero or less', () {
       final exercise = MockExercise();
-      
+
       expect(
         CalorieCalculatorService.calculateCaloriesBurned(
           exercise: exercise,

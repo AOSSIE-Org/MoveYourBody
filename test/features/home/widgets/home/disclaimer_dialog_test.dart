@@ -9,11 +9,7 @@ void main() {
   });
 
   Widget createWidgetUnderTest() {
-    return const MaterialApp(
-      home: Scaffold(
-        body: DisclaimerDialog(),
-      ),
-    );
+    return const MaterialApp(home: Scaffold(body: DisclaimerDialog()));
   }
 
   group('DisclaimerDialog Widget Tests', () {
@@ -28,7 +24,9 @@ void main() {
       expect(find.text('Voice Control Precaution'), findsOneWidget);
       expect(find.text('General Fitness Disclaimer'), findsOneWidget);
       expect(
-        find.text('I acknowledge I have read and understood these precautions.'),
+        find.text(
+          'I acknowledge I have read and understood these precautions.',
+        ),
         findsOneWidget,
       );
       expect(find.text('Continue'), findsOneWidget);
@@ -43,49 +41,50 @@ void main() {
       expect(button.onPressed, isNull);
     });
 
-    testWidgets('checking the box enables Continue button and tapping saves preference and pops', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) => ElevatedButton(
-                onPressed: () => showDialog(
-                  context: context,
-                  builder: (_) => const DisclaimerDialog(),
+    testWidgets(
+      'checking the box enables Continue button and tapping saves preference and pops',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Builder(
+                builder: (context) => ElevatedButton(
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (_) => const DisclaimerDialog(),
+                  ),
+                  child: const Text('Open Dialog'),
                 ),
-                child: const Text('Open Dialog'),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      await tester.tap(find.text('Open Dialog'));
-      await tester.pumpAndSettle();
+        await tester.tap(find.text('Open Dialog'));
+        await tester.pumpAndSettle();
 
-      expect(find.byType(DisclaimerDialog), findsOneWidget);
+        expect(find.byType(DisclaimerDialog), findsOneWidget);
 
-      await tester.tap(find.byType(Checkbox));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byType(Checkbox));
+        await tester.pumpAndSettle();
 
-      final Checkbox checkbox = tester.widget(find.byType(Checkbox));
-      expect(checkbox.value, isTrue);
+        final Checkbox checkbox = tester.widget(find.byType(Checkbox));
+        expect(checkbox.value, isTrue);
 
-      final ElevatedButton button = tester.widget(
-        find.widgetWithText(ElevatedButton, 'Continue'),
-      );
-      expect(button.onPressed, isNotNull);
+        final ElevatedButton button = tester.widget(
+          find.widgetWithText(ElevatedButton, 'Continue'),
+        );
+        expect(button.onPressed, isNotNull);
 
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Continue'));
-      await tester.pumpAndSettle();
+        await tester.tap(find.widgetWithText(ElevatedButton, 'Continue'));
+        await tester.pumpAndSettle();
 
-      expect(find.byType(DisclaimerDialog), findsNothing);
+        expect(find.byType(DisclaimerDialog), findsNothing);
 
-      final prefs = await SharedPreferences.getInstance();
-      expect(prefs.getBool('disclaimer_accepted'), isTrue);
-    });
+        final prefs = await SharedPreferences.getInstance();
+        expect(prefs.getBool('disclaimer_accepted'), isTrue);
+      },
+    );
 
     testWidgets('showIfNeeded shows dialog when not accepted', (
       WidgetTester tester,

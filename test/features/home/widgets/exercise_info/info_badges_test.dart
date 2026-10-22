@@ -8,10 +8,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: ExerciseBadge(
-              label: 'TEST BADGE',
-              color: Colors.blue,
-            ),
+            body: ExerciseBadge(label: 'TEST BADGE', color: Colors.blue),
           ),
         ),
       );
@@ -19,14 +16,13 @@ void main() {
       expect(find.text('TEST BADGE'), findsOneWidget);
     });
 
-    testWidgets('MuscleChip renders primary muscle correctly', (WidgetTester tester) async {
+    testWidgets('MuscleChip renders primary muscle correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: MuscleChip(
-              label: 'chest_muscle',
-              isPrimary: true,
-            ),
+            body: MuscleChip(label: 'chest_muscle', isPrimary: true),
           ),
         ),
       );

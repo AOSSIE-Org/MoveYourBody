@@ -21,16 +21,14 @@ void main() {
       overrides: [
         homeViewModelProvider.overrideWith(() => FakeHomeViewModel(state)),
       ],
-      child: const MaterialApp(
-        home: Scaffold(
-          body: WeekSelector(),
-        ),
-      ),
+      child: const MaterialApp(home: Scaffold(body: WeekSelector())),
     );
   }
 
   group('WeekSelector', () {
-    testWidgets('renders nothing when currentWeekDays is empty', (WidgetTester tester) async {
+    testWidgets('renders nothing when currentWeekDays is empty', (
+      WidgetTester tester,
+    ) async {
       final state = HomeState(
         selectedDate: DateTime.now(),
         currentWeekDays: [],
@@ -41,14 +39,16 @@ void main() {
       expect(find.byType(ListView), findsNothing);
     });
 
-    testWidgets('renders days and correctly highlights selected day', (WidgetTester tester) async {
+    testWidgets('renders days and correctly highlights selected day', (
+      WidgetTester tester,
+    ) async {
       final now = DateTime(2023, 10, 10);
-      final weekDays = List.generate(7, (index) => DateTime(2023, 10, 8).add(Duration(days: index)));
-
-      final state = HomeState(
-        selectedDate: now,
-        currentWeekDays: weekDays,
+      final weekDays = List.generate(
+        7,
+        (index) => DateTime(2023, 10, 8).add(Duration(days: index)),
       );
+
+      final state = HomeState(selectedDate: now, currentWeekDays: weekDays);
 
       await tester.pumpWidget(createTestWidget(state));
 

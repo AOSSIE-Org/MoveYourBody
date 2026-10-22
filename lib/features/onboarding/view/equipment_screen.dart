@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:move_your_body/core/widgets/onboarding_progress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
 import 'package:move_your_body/core/widgets/button_card.dart';
-import 'package:move_your_body/core/widgets/onboarding_progress.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/widgets/app_scaffold.dart';
 import '../view_model/onboarding_view_model.dart';
@@ -28,7 +28,9 @@ class EquipmentScreen extends ConsumerWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              /// Progress
               const OnboardingProgress(currentStep: 5),
+
               const SizedBox(height: 10),
 
               Text(

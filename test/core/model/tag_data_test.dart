@@ -38,7 +38,10 @@ void main() {
     });
 
     test('copyWith updates properties properly', () {
-      final updated = tag.copyWith(tagName: 'Cardio Boost', tagType: TagType.injury);
+      final updated = tag.copyWith(
+        tagName: 'Cardio Boost',
+        tagType: TagType.injury,
+      );
 
       expect(updated.id, tag.id);
       expect(updated.tagName, 'Cardio Boost');

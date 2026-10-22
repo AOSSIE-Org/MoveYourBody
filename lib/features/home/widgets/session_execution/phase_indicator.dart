@@ -15,22 +15,28 @@ class PhaseIndicator extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: isResting ? Colors.blue.withValues(alpha: 0.2) : 
-               isPrep ? Colors.orange.withValues(alpha: 0.2) : 
-               AppColors.primary.withValues(alpha: 0.2),
+        color: isResting
+            ? Colors.blue.withValues(alpha: 0.2)
+            : isPrep
+            ? Colors.orange.withValues(alpha: 0.2)
+            : AppColors.primary.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isResting ? Colors.blue : 
-                 isPrep ? Colors.orange : 
-                 AppColors.primary,
+          color: isResting
+              ? Colors.blue
+              : isPrep
+              ? Colors.orange
+              : AppColors.primary,
         ),
       ),
       child: Text(
         _getPhaseText(phase).toUpperCase(),
         style: TextStyle(
-          color: isResting ? Colors.blue : 
-                 isPrep ? Colors.orange : 
-                 AppColors.primary,
+          color: isResting
+              ? Colors.blue
+              : isPrep
+              ? Colors.orange
+              : AppColors.primary,
           fontWeight: FontWeight.bold,
           letterSpacing: 1.5,
         ),
@@ -40,10 +46,14 @@ class PhaseIndicator extends StatelessWidget {
 
   String _getPhaseText(ExecutionPhase phase) {
     switch (phase) {
-      case ExecutionPhase.preparation: return "Get Ready";
-      case ExecutionPhase.workout: return "Workout";
-      case ExecutionPhase.rest: return "Rest";
-      case ExecutionPhase.finished: return "Finished";
+      case ExecutionPhase.preparation:
+        return "Get Ready";
+      case ExecutionPhase.workout:
+        return "Workout";
+      case ExecutionPhase.rest:
+        return "Rest";
+      case ExecutionPhase.finished:
+        return "Finished";
     }
   }
 }

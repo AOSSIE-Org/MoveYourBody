@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/constants/app_constants.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
 import 'package:move_your_body/features/home/view_model/quick_plan_view_model.dart';
 import 'package:move_your_body/features/home/widgets/home/home_app_bar.dart';
@@ -51,7 +52,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return AppScaffold(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        padding: const EdgeInsets.fromLTRB(
+          20,
+          16,
+          20,
+          AppConstants.bottomNavBarSpacing,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -77,15 +83,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   : ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: quickPlanState.plans.length,
-                      separatorBuilder: (context, index) => const SizedBox(width: 16),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 16),
                       itemBuilder: (context, index) {
                         final plan = quickPlanState.plans[index];
                         final isThisPlanLoading =
-                            quickPlanState.tapStatus == QuickPlanStatus.loading && quickPlanState.tappedPlanId == plan.id;
+                            quickPlanState.tapStatus ==
+                                QuickPlanStatus.loading &&
+                            quickPlanState.tappedPlanId == plan.id;
 
                         return QuickPlanCard(
                           title: plan.name,
-                          imagePath: plan.imagePath ?? 'assets/images/fat_burn_blast.png',
+                          imagePath:
+                              plan.imagePath ??
+                              'assets/images/fat_burn_blast.png',
                           isLoading: isThisPlanLoading,
                           onTap: () async {
                             final session = await quickPlanViewModel
@@ -101,8 +112,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
             ),
             const SizedBox(height: 24),
+
             // const WeeklyStatsCard(),
-            const SizedBox(height: 20),
           ],
         ),
       ),

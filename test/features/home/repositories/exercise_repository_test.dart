@@ -11,15 +11,16 @@ void main() {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
     SharedPreferences.setMockInitialValues({});
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-      const MethodChannel('dev.fluttercommunity.plus/package_info'),
-      (MethodCall methodCall) async => {
-        'appName': 'Test',
-        'packageName': 'test',
-        'version': '1.0',
-        'buildNumber': '1',
-      },
-    );
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+          const MethodChannel('dev.fluttercommunity.plus/package_info'),
+          (MethodCall methodCall) async => {
+            'appName': 'Test',
+            'packageName': 'test',
+            'version': '1.0',
+            'buildNumber': '1',
+          },
+        );
   });
 
   group('ExerciseRepository', () {

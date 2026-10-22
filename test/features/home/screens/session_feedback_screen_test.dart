@@ -10,12 +10,12 @@ void main() {
     databaseFactory = databaseFactoryFfi;
   });
 
-  testWidgets('SessionFeedbackScreen builds successfully', (WidgetTester tester) async {
+  testWidgets('SessionFeedbackScreen builds successfully', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       const ProviderScope(
-        child: MaterialApp(
-          home: SessionFeedbackScreen(sessionId: 1),
-        ),
+        child: MaterialApp(home: SessionFeedbackScreen(sessionId: 1)),
       ),
     );
 

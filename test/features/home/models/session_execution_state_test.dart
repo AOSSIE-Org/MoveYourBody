@@ -53,7 +53,10 @@ void main() {
         preparationTime: 5,
         restTime: 20,
       );
-      final edited = original.copyWith(currentPhase: ExecutionPhase.workout, isPaused: true);
+      final edited = original.copyWith(
+        currentPhase: ExecutionPhase.workout,
+        isPaused: true,
+      );
       expect(edited.currentPhase, ExecutionPhase.workout);
       expect(edited.isPaused, true);
       expect(edited, isNot(equals(original)));

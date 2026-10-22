@@ -6,7 +6,8 @@ import 'package:move_your_body/features/notifications/repositories/notification_
 import 'package:move_your_body/features/notifications/services/notification_service.dart';
 import 'package:move_your_body/features/notifications/view_model/notification_settings_view_model.dart';
 
-class MockNotificationRepository extends Mock implements NotificationRepository {}
+class MockNotificationRepository extends Mock
+    implements NotificationRepository {}
 
 class MockNotificationService extends Mock implements NotificationService {}
 
@@ -24,11 +25,13 @@ void main() {
 
     when(() => mockService.init()).thenAnswer((_) async {});
     when(() => mockService.requestPermissions()).thenAnswer((_) async {});
-    when(() => mockRepo.getNotificationTimes()).thenAnswer(
-      (_) async => [const TimeOfDay(hour: 9, minute: 0)],
-    );
+    when(
+      () => mockRepo.getNotificationTimes(),
+    ).thenAnswer((_) async => [const TimeOfDay(hour: 9, minute: 0)]);
     when(() => mockRepo.saveNotificationTimes(any())).thenAnswer((_) async {});
-    when(() => mockService.scheduleDailyNotifications(any())).thenAnswer((_) async {});
+    when(
+      () => mockService.scheduleDailyNotifications(any()),
+    ).thenAnswer((_) async {});
 
     container = ProviderContainer(
       overrides: [
@@ -39,7 +42,7 @@ void main() {
 
     subscription = container.listen(
       notificationSettingsViewModelProvider,
-      (_, __) {},
+      (_, _) {},
     );
   });
 
@@ -64,23 +67,32 @@ void main() {
       verify(() => mockRepo.getNotificationTimes()).called(1);
     });
 
-    test('addTime appends time in sorted order and saves & schedules', () async {
-      final notifier = container.read(notificationSettingsViewModelProvider.notifier);
-      await Future.delayed(const Duration(milliseconds: 50));
+    test(
+      'addTime appends time in sorted order and saves & schedules',
+      () async {
+        final notifier = container.read(
+          notificationSettingsViewModelProvider.notifier,
+        );
+        await Future.delayed(const Duration(milliseconds: 50));
 
-      await notifier.addTime(const TimeOfDay(hour: 7, minute: 30));
+        await notifier.addTime(const TimeOfDay(hour: 7, minute: 30));
 
-      final state = subscription.read();
-      expect(state.times.length, 2);
-      expect(state.times[0], const TimeOfDay(hour: 7, minute: 30));
-      expect(state.times[1], const TimeOfDay(hour: 9, minute: 0));
+        final state = subscription.read();
+        expect(state.times.length, 2);
+        expect(state.times[0], const TimeOfDay(hour: 7, minute: 30));
+        expect(state.times[1], const TimeOfDay(hour: 9, minute: 0));
 
-      verify(() => mockRepo.saveNotificationTimes(state.times)).called(1);
-      verify(() => mockService.scheduleDailyNotifications(state.times)).called(1);
-    });
+        verify(() => mockRepo.saveNotificationTimes(state.times)).called(1);
+        verify(
+          () => mockService.scheduleDailyNotifications(state.times),
+        ).called(1);
+      },
+    );
 
     test('addTime ignores duplicate times', () async {
-      final notifier = container.read(notificationSettingsViewModelProvider.notifier);
+      final notifier = container.read(
+        notificationSettingsViewModelProvider.notifier,
+      );
       await Future.delayed(const Duration(milliseconds: 50));
 
       await notifier.addTime(const TimeOfDay(hour: 9, minute: 0));
@@ -92,7 +104,9 @@ void main() {
     });
 
     test('removeTime deletes specified time and saves & schedules', () async {
-      final notifier = container.read(notificationSettingsViewModelProvider.notifier);
+      final notifier = container.read(
+        notificationSettingsViewModelProvider.notifier,
+      );
       await Future.delayed(const Duration(milliseconds: 50));
 
       await notifier.removeTime(const TimeOfDay(hour: 9, minute: 0));

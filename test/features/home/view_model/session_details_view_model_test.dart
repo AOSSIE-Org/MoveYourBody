@@ -15,7 +15,10 @@ void main() {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
-      expect(() => container.read(sessionDetailsViewModelProvider(1)), returnsNormally);
+      expect(
+        () => container.read(sessionDetailsViewModelProvider(1)),
+        returnsNormally,
+      );
     });
   });
 }

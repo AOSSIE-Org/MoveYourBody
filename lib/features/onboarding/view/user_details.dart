@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:move_your_body/core/widgets/onboarding_progress.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
-import 'package:move_your_body/core/widgets/app_toast.dart';
-import 'package:move_your_body/core/widgets/onboarding_progress.dart';
 
 import '../../../core/widgets/app_scaffold.dart';
 import '../view_model/onboarding_view_model.dart';
 
 class UserdataScreen extends ConsumerWidget {
   const UserdataScreen({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final onboardingNotifier = ref.read(onboardingViewModelProvider.notifier);
-    final onboardingState = ref.watch(onboardingViewModelProvider);
     final textTheme = Theme.of(context).textTheme;
 
     return AppScaffold(
@@ -25,10 +22,11 @@ class UserdataScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const OnboardingProgress(currentStep: 6),
-            const SizedBox(height: 10),
+
+            const SizedBox(height: 24),
 
             Text(
-              'Let\'s personalize your fitness journey',
+              'A few details about you',
               textAlign: TextAlign.center,
               style: textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.w700,
@@ -59,8 +57,6 @@ class UserdataScreen extends ConsumerWidget {
 
                 if (weight != null && weight > 0 && weight <= 500) {
                   onboardingNotifier.setWeight(weight);
-                } else if (value.isEmpty) {
-                  onboardingNotifier.setWeight(null);
                 }
               },
               decoration: InputDecoration(
@@ -84,8 +80,6 @@ class UserdataScreen extends ConsumerWidget {
 
                 if (height != null && height > 50 && height <= 250) {
                   onboardingNotifier.setHeight(height);
-                } else if (value.isEmpty) {
-                  onboardingNotifier.setHeight(null);
                 }
               },
               decoration: InputDecoration(
@@ -107,8 +101,6 @@ class UserdataScreen extends ConsumerWidget {
 
                 if (age != null && age > 0 && age <= 150) {
                   onboardingNotifier.setAge(age);
-                } else if (value.isEmpty) {
-                  onboardingNotifier.setAge(null);
                 }
               },
               decoration: InputDecoration(
@@ -125,15 +117,7 @@ class UserdataScreen extends ConsumerWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  final username = onboardingState.username?.trim() ?? '';
-                  if (username.isEmpty ||
-                      onboardingState.weight == null ||
-                      onboardingState.height == null ||
-                      onboardingState.age == null) {
-                    AppToast.show(context, 'Please fill in all fields');
-                    return;
-                  }
+                onPressed: () async {
                   if (context.mounted) {
                     context.go(AppRoutes.loading);
                   }

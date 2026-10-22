@@ -7,18 +7,20 @@ void main() {
   group('PhaseIndicator', () {
     Widget createTestWidget(ExecutionPhase phase) {
       return MaterialApp(
-        home: Scaffold(
-          body: PhaseIndicator(phase: phase),
-        ),
+        home: Scaffold(body: PhaseIndicator(phase: phase)),
       );
     }
 
-    testWidgets('renders GET READY for preparation phase', (WidgetTester tester) async {
+    testWidgets('renders GET READY for preparation phase', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget(ExecutionPhase.preparation));
       expect(find.text('GET READY'), findsOneWidget);
     });
 
-    testWidgets('renders WORKOUT for workout phase', (WidgetTester tester) async {
+    testWidgets('renders WORKOUT for workout phase', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget(ExecutionPhase.workout));
       expect(find.text('WORKOUT'), findsOneWidget);
     });
@@ -28,7 +30,9 @@ void main() {
       expect(find.text('REST'), findsOneWidget);
     });
 
-    testWidgets('renders FINISHED for finished phase', (WidgetTester tester) async {
+    testWidgets('renders FINISHED for finished phase', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createTestWidget(ExecutionPhase.finished));
       expect(find.text('FINISHED'), findsOneWidget);
     });

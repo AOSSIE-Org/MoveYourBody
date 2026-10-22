@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../repositories/ai_repository.dart';
-
 import '../services/cosine_similairty.dart';
 
 part 'generated/ai_inference_view_model.g.dart';
@@ -55,7 +54,7 @@ class AiInferenceViewModel extends _$AiInferenceViewModel {
 
   void setEngineReady() {
     state = state.copyWith(isReady: true);
-    debugPrint("Γò¼├┤Γö£┬╜Γö£┬í╬ô├▓ΓéºΓö£├Ñ╬ô├╢┬ú╬ô├╗├å╬ô├╢┬ú╬ô├▓├╣ AI Inference State: Explicitly set to READY");
+    debugPrint("🤖 AI Inference State: Explicitly set to READY");
   }
 
   Future<void> processUserQuery({

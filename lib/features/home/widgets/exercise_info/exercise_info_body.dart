@@ -61,7 +61,6 @@ class ExerciseInfoBody extends StatelessWidget {
           child: Text(
             exercise.name,
             textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -281,11 +280,8 @@ class ExerciseInfoBody extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "╬ô├▓┬╝Γö£Γöñ╬ô├╢┬úΓö£┬║╬ô├╢┬ú╬ô├╢├⌐ ",
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
-                        ),
+                        "• ",
+                        style: TextStyle(color: Colors.white70, fontSize: 14),
                       ),
                       Expanded(
                         child: Text(

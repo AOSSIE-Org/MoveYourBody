@@ -34,36 +34,42 @@ void main() {
       service = NotificationService(plugin: mockPlugin);
     });
 
-    test('notificationServiceProvider provides NotificationService instance', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
+    test(
+      'notificationServiceProvider provides NotificationService instance',
+      () {
+        final container = ProviderContainer();
+        addTearDown(container.dispose);
 
-      final instance = container.read(notificationServiceProvider);
-      expect(instance, isA<NotificationService>());
-    });
+        final instance = container.read(notificationServiceProvider);
+        expect(instance, isA<NotificationService>());
+      },
+    );
 
     test('isInitialized is initially false', () {
       expect(service.isInitialized, isFalse);
     });
 
-    test('scheduleDailyNotifications with empty list calls cancelAll and returns', () async {
-      when(() => mockPlugin.cancelAll()).thenAnswer((_) async {});
+    test(
+      'scheduleDailyNotifications with empty list calls cancelAll and returns',
+      () async {
+        when(() => mockPlugin.cancelAll()).thenAnswer((_) async {});
 
-      await service.scheduleDailyNotifications([]);
+        await service.scheduleDailyNotifications([]);
 
-      verify(() => mockPlugin.cancelAll()).called(1);
-      verifyNever(
-        () => mockPlugin.zonedSchedule(
-          id: any(named: 'id'),
-          title: any(named: 'title'),
-          body: any(named: 'body'),
-          scheduledDate: any(named: 'scheduledDate'),
-          notificationDetails: any(named: 'notificationDetails'),
-          androidScheduleMode: any(named: 'androidScheduleMode'),
-          matchDateTimeComponents: any(named: 'matchDateTimeComponents'),
-        ),
-      );
-    });
+        verify(() => mockPlugin.cancelAll()).called(1);
+        verifyNever(
+          () => mockPlugin.zonedSchedule(
+            id: any(named: 'id'),
+            title: any(named: 'title'),
+            body: any(named: 'body'),
+            scheduledDate: any(named: 'scheduledDate'),
+            notificationDetails: any(named: 'notificationDetails'),
+            androidScheduleMode: any(named: 'androidScheduleMode'),
+            matchDateTimeComponents: any(named: 'matchDateTimeComponents'),
+          ),
+        );
+      },
+    );
 
     test('scheduleDailyNotifications with times schedules each time', () async {
       when(() => mockPlugin.cancelAll()).thenAnswer((_) async {});

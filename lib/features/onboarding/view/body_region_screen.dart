@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:move_your_body/core/widgets/onboarding_progress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
-import 'package:move_your_body/core/widgets/app_toast.dart';
 import 'package:move_your_body/core/widgets/button_card.dart';
-import 'package:move_your_body/core/widgets/onboarding_progress.dart';
 
 import '../../../core/widgets/app_scaffold.dart';
 import '../view_model/onboarding_view_model.dart';
@@ -29,6 +28,7 @@ class BodyRegionScreen extends ConsumerWidget {
         child: Column(
           children: [
             const OnboardingProgress(currentStep: 4),
+
             const SizedBox(height: 10),
 
             Text(
@@ -56,9 +56,7 @@ class BodyRegionScreen extends ConsumerWidget {
 
             ButtonCard(
               title: 'Upper Body',
-              selected: selectedBodyRegions.contains(
-                BodyRegion.upperBody.name,
-              ),
+              selected: selectedBodyRegions.contains(BodyRegion.upperBody.name),
               titleFontSize: 20,
               onTap: () {
                 onboardingNotifier.toggleTargetBodyRegion(
@@ -82,9 +80,7 @@ class BodyRegionScreen extends ConsumerWidget {
 
             ButtonCard(
               title: 'Lower Body',
-              selected: selectedBodyRegions.contains(
-                BodyRegion.lowerBody.name,
-              ),
+              selected: selectedBodyRegions.contains(BodyRegion.lowerBody.name),
               titleFontSize: 20,
               onTap: () {
                 onboardingNotifier.toggleTargetBodyRegion(
@@ -107,26 +103,19 @@ class BodyRegionScreen extends ConsumerWidget {
               },
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
 
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  if (selectedBodyRegions.isEmpty) {
-                    AppToast.show(
-                      context,
-                      'Please select atleast one target body region',
-                    );
-                    return;
-                  }
                   context.push(AppRoutes.equipments);
                 },
                 child: const Text('Continue'),
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
           ],
         ),
       ),

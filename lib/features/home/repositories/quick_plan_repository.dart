@@ -87,7 +87,10 @@ class QuickPlanRepository {
   Future<List<QuickPlan>> fetchAllPlans() async {
     try {
       final db = await DatabaseService.instance.userDatabase;
-      final maps = await db.query(QuickPlanTable.tableName, where: '${QuickPlanTable.isCustom} = 0');
+      final maps = await db.query(
+        QuickPlanTable.tableName,
+        where: '${QuickPlanTable.isCustom} = 0',
+      );
       return maps.map((m) => QuickPlan.fromMap(m)).toList();
     } catch (e, st) {
       debugPrint('Error fetching quick plans: $e\n$st');
@@ -98,7 +101,10 @@ class QuickPlanRepository {
   Future<List<QuickPlan>> fetchCustomPlans() async {
     try {
       final db = await DatabaseService.instance.userDatabase;
-      final maps = await db.query(QuickPlanTable.tableName, where: '${QuickPlanTable.isCustom} = 1');
+      final maps = await db.query(
+        QuickPlanTable.tableName,
+        where: '${QuickPlanTable.isCustom} = 1',
+      );
       return maps.map((m) => QuickPlan.fromMap(m)).toList();
     } catch (e, st) {
       debugPrint('Error fetching custom plans: $e\n$st');
@@ -111,15 +117,29 @@ class QuickPlanRepository {
       final db = await DatabaseService.instance.userDatabase;
 
       if (!force) {
-        final existing = await db.query(QuickPlanTable.tableName, limit: 1);
+        final existing = await db.query(
+          QuickPlanTable.tableName,
+          where: '${QuickPlanTable.isCustom} = 0',
+          limit: 1,
+        );
         if (existing.isNotEmpty) {
           debugPrint('Plans already seeded, skipping.');
           return;
         }
       }
 
-      await db.delete(QuickPlanTable.tableName);
-      await db.delete(QuickPlanExercisesTable.tableName);
+      await db.delete(
+        QuickPlanTable.tableName,
+        where: '${QuickPlanTable.isCustom} = 0',
+      );
+      final presetPlanIds = plans.map((p) => p.planId).toList();
+      final idPlaceholders = List.filled(presetPlanIds.length, '?').join(',');
+
+      await db.delete(
+        QuickPlanExercisesTable.tableName,
+        where: '${QuickPlanExercisesTable.planId} IN ($idPlaceholders)',
+        whereArgs: presetPlanIds,
+      );
 
       final exercisesDb = await DatabaseService.instance.exercisesDatabase;
       final userData = await _userRepository.getUserData();
@@ -268,7 +288,7 @@ class QuickPlanRepository {
   Future<int?> createCustomPlan(String name, List<String> exerciseIds) async {
     try {
       final db = await DatabaseService.instance.userDatabase;
-      
+
       return await db.transaction<int?>((txn) async {
         final planId = await txn.insert(QuickPlanTable.tableName, {
           QuickPlanTable.name: name,
@@ -283,7 +303,7 @@ class QuickPlanRepository {
             QuickPlanExercisesTable.orderIndex: i,
           });
         }
-        
+
         return planId;
       });
     } catch (e, st) {

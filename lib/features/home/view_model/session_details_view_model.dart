@@ -29,13 +29,11 @@ class SessionDetailsViewModel extends _$SessionDetailsViewModel {
       }
 
       final exerciseRepo = ref.read(exerciseRepositoryProvider);
-      final exerciseIds =
-          session.exercises.map((e) => e.exerciseId).toList();
+      final exerciseIds = session.exercises.map((e) => e.exerciseId).toList();
       final exercises = await exerciseRepo.getExercisesByIds(exerciseIds);
 
       final defaultDurations = <String, int>{
-        for (final exercise in exercises)
-          exercise.exerciseId: 30,
+        for (final exercise in exercises) exercise.exerciseId: 30,
       };
 
       state = state.copyWith(
@@ -45,10 +43,7 @@ class SessionDetailsViewModel extends _$SessionDetailsViewModel {
         isLoading: false,
       );
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, errorMessage: e.toString());
     }
   }
 

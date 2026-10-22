@@ -20,9 +20,7 @@ class NotificationSettingsDialog extends ConsumerWidget {
 
     return Dialog(
       backgroundColor: AppColors.background,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       insetPadding: const EdgeInsets.all(20),
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -36,9 +34,9 @@ class NotificationSettingsDialog extends ConsumerWidget {
                 Text(
                   "Daily Reminders",
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
@@ -89,7 +87,11 @@ class NotificationSettingsDialog extends ConsumerWidget {
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.access_time, color: AppColors.primary, size: 20),
+                              Icon(
+                                Icons.access_time,
+                                color: AppColors.primary,
+                                size: 20,
+                              ),
                               const SizedBox(width: 12),
                               Text(
                                 time.format(context),
@@ -103,7 +105,10 @@ class NotificationSettingsDialog extends ConsumerWidget {
                           ),
                           IconButton(
                             onPressed: () => viewModel.removeTime(time),
-                            icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+                            icon: const Icon(
+                              Icons.delete_outline,
+                              color: Colors.redAccent,
+                            ),
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints(),
                           ),
