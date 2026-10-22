@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:move_your_body/core/constants/app_constants.dart';
 import 'package:move_your_body/core/theme/app_colors.dart';
 import '../../../core/widgets/app_scaffold.dart';
 import '../view_model/onboarding_view_model.dart';
@@ -26,7 +27,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
             left: 20,
             right: 20,
             top: 24,
-            bottom: 70 + bottomInset,
+            bottom: AppConstants.bottomNavBarSpacing + bottomInset,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

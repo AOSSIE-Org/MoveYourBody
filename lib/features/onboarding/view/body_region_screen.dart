@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:move_your_body/core/widgets/onboarding_progress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_your_body/core/model/exercise_data.dart';
@@ -13,7 +14,6 @@ class BodyRegionScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     final selectedBodyRegions = ref.watch(
@@ -27,34 +27,7 @@ class BodyRegionScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () => context.pop(),
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                ),
-
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      6,
-                      (index) => Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: index == 2
-                              ? colorScheme.primary
-                              : colorScheme.onSurface.withValues(alpha: 0.25),
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            const OnboardingProgress(currentStep: 4),
 
             const SizedBox(height: 10),
 

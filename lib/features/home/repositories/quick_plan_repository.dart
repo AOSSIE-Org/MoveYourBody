@@ -117,15 +117,29 @@ class QuickPlanRepository {
       final db = await DatabaseService.instance.userDatabase;
 
       if (!force) {
-        final existing = await db.query(QuickPlanTable.tableName, limit: 1);
+        final existing = await db.query(
+          QuickPlanTable.tableName,
+          where: '${QuickPlanTable.isCustom} = 0',
+          limit: 1,
+        );
         if (existing.isNotEmpty) {
           debugPrint('Plans already seeded, skipping.');
           return;
         }
       }
 
-      await db.delete(QuickPlanTable.tableName);
-      await db.delete(QuickPlanExercisesTable.tableName);
+      await db.delete(
+        QuickPlanTable.tableName,
+        where: '${QuickPlanTable.isCustom} = 0',
+      );
+      final presetPlanIds = plans.map((p) => p.planId).toList();
+      final idPlaceholders = List.filled(presetPlanIds.length, '?').join(',');
+
+      await db.delete(
+        QuickPlanExercisesTable.tableName,
+        where: '${QuickPlanExercisesTable.planId} IN ($idPlaceholders)',
+        whereArgs: presetPlanIds,
+      );
 
       final exercisesDb = await DatabaseService.instance.exercisesDatabase;
       final userData = await _userRepository.getUserData();

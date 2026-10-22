@@ -1,134 +1,93 @@
 import 'package:flutter/material.dart';
+import 'package:move_your_body/core/widgets/onboarding_progress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/model/exercise_data.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
-import 'package:move_your_body/features/onboarding/view_model/onboarding_view_model.dart';
-import '../../../core/widgets/app_scaffold.dart';
-import '../../../core/widgets/feature_chip.dart';
+import 'package:move_your_body/core/widgets/button_card.dart';
 
-class HealthIssuesScreen extends ConsumerWidget {
-  const HealthIssuesScreen({super.key});
-  static const Map<String, String> healthIssuesMap = {
-    'Lower Back Pain': 'lower_back_pain',
-    'Knee Pain': 'knee_pain',
-    'Hip Pain': 'hip_pain',
-    'Shoulder Injury': 'shoulder_injury',
-    'Wrist Injury': 'wrist_injury',
-    'Neck Injury': 'neck_injury',
-    'Ankle Injury': 'ankle_injury',
-    'Pregnancy': 'pregnancy',
-    'Elbow Injury': 'elbow_injury',
-    'Rotator Cuff Injury': 'rotator_cuff_injury',
-    'Herniated Disc': 'herniated_disc',
-    'High Blood Pressure': 'high_blood_pressure',
-    'Osteoporosis': 'osteoporosis',
-    'Post-Abdominal Surgery': 'post_abdominal_surgery',
-  };
+import '../../../core/widgets/app_scaffold.dart';
+import '../view_model/onboarding_view_model.dart';
+
+class IntensityScreen extends ConsumerWidget {
+  const IntensityScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedHealthIssues = ref.watch(
-      onboardingViewModelProvider.select((state) => state.healthIssueTags),
-    );
-    final onboardingNotifier = ref.read(onboardingViewModelProvider.notifier);
-    final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+
+    final selectedIntensity = ref.watch(
+      onboardingViewModelProvider.select((state) => state.intensity),
+    );
+
+    final onboardingNotifier = ref.read(onboardingViewModelProvider.notifier);
 
     return AppScaffold(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () => context.pop(),
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                  tooltip: 'Go back',
-                ),
-
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      6,
-                      (index) => Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: index == 0 ? 8 : 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: index == 0
-                              ? colorScheme.primary
-                              : colorScheme.onSurface.withValues(alpha: 0.25),
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            /// Progress
+            const OnboardingProgress(currentStep: 3),
 
             const SizedBox(height: 10),
 
             Text(
-              'Choose Your Health Issues',
+              'Choose your Intensity Level',
               textAlign: TextAlign.center,
               style: textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 25),
+            const SizedBox(height: 20),
 
-            /// GOAL CHIPS
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 10,
-              runSpacing: 12,
-              children: healthIssuesMap.entries.map((entry) {
-                final uiText = entry.key;
-                final dbTag = entry.value;
-                final isSelected = selectedHealthIssues.contains(dbTag);
-                return FeatureChip(
-                  text: uiText,
-                  selected: isSelected,
-                  onTap: () {
-                    onboardingNotifier.toggleHealthIssue(dbTag);
-                  },
-                );
-              }).toList(),
-            ),
-
-            const SizedBox(height: 25),
-
-            TextField(
-              onChanged: (value) {
-                onboardingNotifier.updateCustomHealthIssue(value);
+            ButtonCard(
+              title: 'Light',
+              subtitle:
+                  'Easy-paced workouts focused on mobility, consistency, and recovery.',
+              selected: selectedIntensity == Intensity.low.name,
+              onTap: () {
+                onboardingNotifier.setIntensity(Intensity.low.name);
               },
-              maxLines: 1,
-              decoration: InputDecoration(
-                hintText: 'Any custom health issues',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                contentPadding: const EdgeInsets.all(10),
-              ),
             ),
 
-            const SizedBox(height: 28),
+            const SizedBox(height: 20),
 
+            ButtonCard(
+              title: 'Moderate',
+              subtitle:
+                  'Balanced challenge to improve endurance, fitness and strength.',
+              selected: selectedIntensity == Intensity.moderate.name,
+              onTap: () {
+                onboardingNotifier.setIntensity(Intensity.moderate.name);
+              },
+            ),
+
+            const SizedBox(height: 20),
+
+            ButtonCard(
+              title: 'High',
+              subtitle:
+                  'Demanding sessions designed to maximize performance and results.',
+              selected: selectedIntensity == Intensity.high.name,
+              onTap: () {
+                onboardingNotifier.setIntensity(Intensity.high.name);
+              },
+            ),
+
+            const SizedBox(height: 40),
             SizedBox(
+              width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  context.push(AppRoutes.difficulty);
+                  context.push(AppRoutes.targetBodyRegion);
                 },
                 child: const Text('Continue'),
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
           ],
         ),
       ),

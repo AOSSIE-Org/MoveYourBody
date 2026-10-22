@@ -92,12 +92,12 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       if (!mounted) return;
 
       debugPrint(
-        "🎯 Pipeline Perfect: All operations complete. Redirecting to Results.",
+        "🎯 Pipeline Perfect: All operations complete. Redirecting to Home.",
       );
-      context.go(AppRoutes.profile);
+      context.go(AppRoutes.home);
     } catch (e) {
       debugPrint("❌ Critical Pipeline Crash: $e");
-      if (mounted) context.go(AppRoutes.profile);
+      if (mounted) context.go(AppRoutes.home);
     }
   }
 

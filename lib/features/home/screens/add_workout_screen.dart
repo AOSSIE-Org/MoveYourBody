@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_your_body/core/constants/app_constants.dart';
 import 'package:move_your_body/core/theme/app_colors.dart';
 import 'package:move_your_body/core/routing/app_routes.dart';
 import 'package:move_your_body/features/home/view_model/custom_plans_view_model.dart';
@@ -49,6 +50,9 @@ class AddWorkoutScreen extends ConsumerWidget {
                     );
                   }
                   return ListView.builder(
+                    padding: const EdgeInsets.only(
+                      bottom: AppConstants.bottomNavBarSpacing,
+                    ),
                     itemCount: plans.length,
                     itemBuilder: (context, index) {
                       final plan = plans[index];

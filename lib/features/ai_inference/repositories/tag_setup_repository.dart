@@ -28,7 +28,7 @@ class TagSetupRepository {
   static const int defaultTopMatchLimit = 5;
 
   Future<void> processAndSeedTags() async {
-    final db = await DatabaseService.instance.database;
+    final db = await DatabaseService.instance.userDatabase;
 
     final String jsonString = await rootBundle.loadString(
       'assets/exercises/exercises.json',
@@ -91,7 +91,7 @@ class TagSetupRepository {
 
   Future<void> debugPrintAllCachedTags() async {
     try {
-      final db = await DatabaseService.instance.database;
+      final db = await DatabaseService.instance.userDatabase;
 
       final List<Map<String, dynamic>> maps = await db.query(
         TagsTable.tableName,
@@ -132,7 +132,7 @@ class TagSetupRepository {
         return [];
       }
 
-      final db = await DatabaseService.instance.database;
+      final db = await DatabaseService.instance.userDatabase;
       final userVector = _bytesToFloatVector(userEmbedding);
 
       if (userVector.isEmpty) {
@@ -190,7 +190,7 @@ class TagSetupRepository {
     required List<String> goals,
     required List<String> injuries,
   }) async {
-    final db = await DatabaseService.instance.database;
+    final db = await DatabaseService.instance.userDatabase;
     await db.update(
       UserTable.tableName,
       {
