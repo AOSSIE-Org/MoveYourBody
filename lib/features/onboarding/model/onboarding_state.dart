@@ -47,11 +47,17 @@ class OnboardingState {
       customGoal: customGoal ?? this.customGoal,
       healthIssueTags: healthIssueTags ?? this.healthIssueTags,
       customHealthIssue: customHealthIssue ?? this.customHealthIssue,
-      difficulty: identical(difficulty, _sentinel) ? this.difficulty : difficulty as String?,
-      intensity: identical(intensity, _sentinel) ? this.intensity : intensity as String?,
+      difficulty: identical(difficulty, _sentinel)
+          ? this.difficulty
+          : difficulty as String?,
+      intensity: identical(intensity, _sentinel)
+          ? this.intensity
+          : intensity as String?,
       targetbodyRegion: targetbodyRegion ?? this.targetbodyRegion,
       equipments: equipments ?? this.equipments,
-      username: identical(username, _sentinel) ? this.username : username as String?,
+      username: identical(username, _sentinel)
+          ? this.username
+          : username as String?,
       height: identical(height, _sentinel) ? this.height : height as double?,
       weight: identical(weight, _sentinel) ? this.weight : weight as double?,
       age: identical(age, _sentinel) ? this.age : age as int?,
