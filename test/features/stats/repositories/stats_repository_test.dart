@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:move_your_body/features/stats/repositories/stats_repository.dart';
-import 'package:move_your_body/core/database/db_config.dart';
-import 'package:move_your_body/core/database/tables/session_schedule_table.dart';
-import 'package:move_your_body/core/model/session_data.dart';
+import 'package:move_your_body/data/repositories/stats_repository.dart';
+import 'package:move_your_body/data/database/db_config.dart';
+import 'package:move_your_body/data/database/tables/session_schedule_table.dart';
+import 'package:move_your_body/domain/models/session_data.dart';
 
 void main() {
   setUpAll(() {

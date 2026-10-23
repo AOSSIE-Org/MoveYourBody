@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
-import 'package:move_your_body/core/model/user_data.dart';
+import 'package:move_your_body/data/repositories/user_repository.dart';
+import 'package:move_your_body/domain/models/user_data.dart';
 
 void main() {
   late UserRepository userRepository;

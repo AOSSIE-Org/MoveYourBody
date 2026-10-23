@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:move_your_body/features/ai_inference/repositories/tag_repository.dart';
-import 'package:move_your_body/core/model/tag_data.dart';
+import 'package:move_your_body/data/repositories/tag_repository.dart';
+import 'package:move_your_body/domain/models/tag_data.dart';
 
 void main() {
   setUpAll(() {

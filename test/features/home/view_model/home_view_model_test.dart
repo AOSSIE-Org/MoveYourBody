@@ -1,13 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:move_your_body/features/home/repositories/exercise_repository.dart';
-import 'package:move_your_body/features/home/repositories/session_repository.dart';
-import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
-import 'package:move_your_body/features/home/services/recommendation_service.dart';
-import 'package:move_your_body/features/home/view_model/home_view_model.dart';
-import 'package:move_your_body/core/model/session_data.dart';
-import 'package:move_your_body/core/model/user_data.dart';
+import 'package:move_your_body/data/repositories/exercise_repository.dart';
+import 'package:move_your_body/data/repositories/session_repository.dart';
+import 'package:move_your_body/data/repositories/user_repository.dart';
+import 'package:move_your_body/data/services/recommendation_service.dart';
+import 'package:move_your_body/ui/home/view_models/home_view_model.dart';
+import 'package:move_your_body/domain/models/session_data.dart';
+import 'package:move_your_body/domain/models/user_data.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class MockSessionRepository extends Mock implements SessionRepository {}

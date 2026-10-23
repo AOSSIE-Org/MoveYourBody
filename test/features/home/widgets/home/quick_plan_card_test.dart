@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/features/home/widgets/home/quick_plan_card.dart';
+import 'package:move_your_body/ui/home/widgets/home/quick_plan_card.dart';
 
 void main() {
   testWidgets('QuickPlanCard renders title and handles loading state', (

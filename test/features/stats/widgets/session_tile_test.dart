@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:move_your_body/features/stats/widgets/session_tile.dart';
-import 'package:move_your_body/core/model/session_data.dart';
-import 'package:move_your_body/core/routing/app_routes.dart';
+import 'package:move_your_body/ui/stats/widgets/session_tile.dart';
+import 'package:move_your_body/domain/models/session_data.dart';
+import 'package:move_your_body/routing/app_routes.dart';
 
 class MockGoRouter extends Mock implements GoRouter {}
 

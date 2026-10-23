@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:move_your_body/features/stats/screens/stats_screen.dart';
-import 'package:move_your_body/features/home/repositories/session_repository.dart';
-import 'package:move_your_body/core/model/session_data.dart';
+import 'package:move_your_body/ui/stats/widgets/stats_screen.dart';
+import 'package:move_your_body/data/repositories/session_repository.dart';
+import 'package:move_your_body/domain/models/session_data.dart';
 
 class MockSessionRepository extends Mock implements SessionRepository {}
 

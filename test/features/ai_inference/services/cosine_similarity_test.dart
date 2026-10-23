@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/features/ai_inference/services/cosine_similairty.dart';
+import 'package:move_your_body/data/services/cosine_similairty.dart';
 
 void main() {
   group('Cosine Similarity Utils Tests', () {

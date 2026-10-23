@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/features/home/widgets/session_execution/exercise_name_display.dart';
+import 'package:move_your_body/ui/home/widgets/session_execution/exercise_name_display.dart';
 
 void main() {
   group('ExerciseNameDisplay', () {

@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:move_your_body/features/home/repositories/exercise_repository.dart';
-import 'package:move_your_body/features/home/services/equipment_filter_service.dart';
-import 'package:move_your_body/features/home/services/recommendation_service.dart';
-import 'package:move_your_body/features/home/services/safety_filter_service.dart';
-import 'package:move_your_body/core/model/exercise_data.dart';
-import 'package:move_your_body/core/model/user_data.dart';
+import 'package:move_your_body/data/repositories/exercise_repository.dart';
+import 'package:move_your_body/data/services/equipment_filter_service.dart';
+import 'package:move_your_body/data/services/recommendation_service.dart';
+import 'package:move_your_body/data/services/safety_filter_service.dart';
+import 'package:move_your_body/domain/models/exercise_data.dart';
+import 'package:move_your_body/domain/models/user_data.dart';
 
 class MockExerciseRepository extends Mock implements ExerciseRepository {}
 
