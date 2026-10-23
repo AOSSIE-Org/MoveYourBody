@@ -8,7 +8,10 @@ import 'package:move_your_body/data/database/tables/tags_table.dart';
 import 'package:move_your_body/domain/models/tag_data.dart';
 import 'package:move_your_body/data/services/cosine_similairty.dart';
 
-final tagRepositoryProvider = Provider((ref) => TagRepository());
+final tagRepositoryProvider = Provider<TagRepository>((ref) {
+  final dbService = ref.read(databaseServiceProvider);
+  return TagRepository(dbService);
+});
 
 class TagMatch {
   final Tag tag;
@@ -18,12 +21,17 @@ class TagMatch {
 }
 
 class TagRepository {
+  final DatabaseService _dbService;
+
+  TagRepository([DatabaseService? dbService])
+      : _dbService = dbService ?? DatabaseService.instance;
+
   static const double defaultSimilarityThreshold = 0.60;
   static const int defaultTopMatchLimit = 5;
 
   Future<void> debugPrintAllCachedTags() async {
     try {
-      final db = await DatabaseService.instance.exercisesDatabase;
+      final db = await _dbService.exercisesDatabase;
 
       final List<Map<String, dynamic>> maps = await db.query(
         TagsTable.tableName,
@@ -54,7 +62,7 @@ class TagRepository {
   }
 
   Future<void> debugPrintExercises() async {
-    final db = await DatabaseService.instance.exercisesDatabase;
+    final db = await _dbService.exercisesDatabase;
     final result = await db.query(ExerciseTable.tableName);
     debugPrint('Total exercises: ${result.length}');
     for (final exercise in result) {
@@ -73,7 +81,7 @@ class TagRepository {
         return [];
       }
 
-      final db = await DatabaseService.instance.exercisesDatabase;
+      final db = await _dbService.exercisesDatabase;
       final userVector = _bytesToFloatVector(userEmbedding);
 
       if (userVector.isEmpty) {
@@ -131,7 +139,7 @@ class TagRepository {
     required List<String> goals,
     required List<String> injuries,
   }) async {
-    final db = await DatabaseService.instance.userDatabase;
+    final db = await _dbService.userDatabase;
     await db.update(
       UserTable.tableName,
       {

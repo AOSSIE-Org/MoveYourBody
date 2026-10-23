@@ -38,7 +38,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       await aiModelRepo.initModel();
 
       debugPrint("🚀 Pipeline Phase 2: Initializing static exercises DB...");
-      await DatabaseService.instance.exercisesDatabase;
+      await ref.read(databaseServiceProvider).exercisesDatabase;
 
       Uint8List? customGoalBytes;
       Uint8List? customHealthBytes;

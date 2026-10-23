@@ -6,29 +6,25 @@ import 'package:move_your_body/domain/models/exercise_data.dart';
 import 'package:move_your_body/data/services/animation_cache_service.dart';
 
 final exerciseRepositoryProvider = Provider<ExerciseRepository>((ref) {
-  return ExerciseRepository();
+  final dbService = ref.read(databaseServiceProvider);
+  return ExerciseRepository(dbService);
 });
 
 class ExerciseRepository {
+  final DatabaseService _dbService;
+
+  ExerciseRepository([DatabaseService? dbService])
+      : _dbService = dbService ?? DatabaseService.instance;
+
   Future<List<Exercise>> getAllExercises() async {
-    final db = await DatabaseService.instance.exercisesDatabase;
-
-    final maps = await db.query(ExerciseTable.tableName);
-
+    final maps = await _dbService.getAllExerciseRecords();
     return maps.map(Exercise.fromMap).toList();
   }
 
   Future<List<Exercise>> getExercisesByIds(List<String> exerciseIds) async {
     if (exerciseIds.isEmpty) return [];
 
-    final db = await DatabaseService.instance.exercisesDatabase;
-    final placeholders = List.filled(exerciseIds.length, '?').join(', ');
-
-    final maps = await db.query(
-      ExerciseTable.tableName,
-      where: '${ExerciseTable.exerciseId} IN ($placeholders)',
-      whereArgs: exerciseIds,
-    );
+    final maps = await _dbService.getExerciseRecordsByIds(exerciseIds);
 
     final exerciseMap = {
       for (final map in maps)

@@ -5,20 +5,24 @@ import 'package:move_your_body/domain/models/user_data.dart';
 import 'package:move_your_body/data/database/db_config.dart';
 
 final userRepositoryProvider = Provider<UserRepository>((ref) {
-  return UserRepository();
+  final dbService = ref.read(databaseServiceProvider);
+  return UserRepository(dbService);
 });
 
 class UserRepository {
+  final DatabaseService _dbService;
+
+  UserRepository([DatabaseService? dbService])
+      : _dbService = dbService ?? DatabaseService.instance;
+
   Future<void> saveUser(UserData user) async {
-    final db = await DatabaseService.instance.userDatabase;
-    await db.delete('user_data');
-    await db.insert('user_data', user.toMap());
+    await _dbService.deleteUserDb(UserTable.tableName);
+    await _dbService.insertUserRecord(user.toMap());
   }
 
   Future<UserData?> getUserData() async {
-    final db = await DatabaseService.instance.userDatabase;
     debugPrint("Fetching user data from database...");
-    final result = await db.query(UserTable.tableName, limit: 1);
+    final result = await _dbService.getUserRecords();
 
     if (result.isEmpty) {
       return null;
@@ -31,11 +35,13 @@ class UserRepository {
     String newDifficulty,
     String newIntensity,
   ) async {
-    final db = await DatabaseService.instance.userDatabase;
-    await db.update(UserTable.tableName, {
-      UserTable.difficulty: newDifficulty,
-      UserTable.intensity: newIntensity,
-    });
+    await _dbService.updateUserDb(
+      UserTable.tableName,
+      {
+        UserTable.difficulty: newDifficulty,
+        UserTable.intensity: newIntensity,
+      },
+    );
   }
 
   Future<void> deleteUserData() async {
@@ -46,9 +52,7 @@ class UserRepository {
       return;
     }
 
-    final db = await DatabaseService.instance.userDatabase;
-
-    await db.delete(UserTable.tableName);
+    await _dbService.deleteUserRecord(user.username);
 
     debugPrint('User data deleted successfully');
   }

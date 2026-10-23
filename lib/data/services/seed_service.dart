@@ -9,9 +9,14 @@ import 'package:move_your_body/data/database/tables/exercise_table.dart';
 import 'package:move_your_body/domain/models/exercise_data.dart';
 
 class SeedService {
+  final DatabaseService _dbService;
+
+  SeedService([DatabaseService? dbService])
+      : _dbService = dbService ?? DatabaseService.instance;
+
   Future<void> seedExercises() async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
 
       final existingExercises = await db.rawQuery(
         'SELECT COUNT(*) as count FROM ${ExerciseTable.tableName}',
@@ -48,7 +53,7 @@ class SeedService {
   }
 
   Future<void> debugPrintExercises() async {
-    final db = await DatabaseService.instance.userDatabase;
+    final db = await _dbService.userDatabase;
     final result = await db.query(ExerciseTable.tableName);
     debugPrint('Total exercises: ${result.length}');
     for (final exercise in result) {

@@ -1,37 +1,211 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:move_your_body/data/database/schema/exercise_schema.dart';
 import 'package:move_your_body/data/database/schema/quick_plan_schema.dart';
 import 'package:move_your_body/data/database/schema/session_exercises_schema.dart';
 import 'package:move_your_body/data/database/schema/session_schedule_schema.dart';
 import 'package:move_your_body/data/database/schema/tags_schema.dart';
 import 'package:move_your_body/data/database/schema/user_schema.dart';
+import 'package:move_your_body/data/database/tables/exercise_table.dart';
+import 'package:move_your_body/data/database/tables/user_table.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/foundation.dart';
 
+final databaseServiceProvider = Provider<DatabaseService>((ref) {
+  return DatabaseService();
+});
+
 class DatabaseService {
-  static final DatabaseService instance = DatabaseService._internal();
+  static final DatabaseService instance = DatabaseService();
 
-  DatabaseService._internal();
+  late final Future<Database> _userDatabaseFuture;
+  late final Future<Database> _exercisesDatabaseFuture;
 
-  Database? _userdatabase;
-  Database? _exercisesDatabase;
-
-  Future<Database> get userDatabase async {
-    if (_userdatabase != null) return _userdatabase!;
-
-    _userdatabase = await _initDatabase();
-    return _userdatabase!;
+  DatabaseService() {
+    _userDatabaseFuture = _initDatabase();
+    _exercisesDatabaseFuture = _initExercisesDatabase();
   }
 
-  Future<Database> get exercisesDatabase async {
-    if (_exercisesDatabase != null) return _exercisesDatabase!;
+  Future<Database> get userDatabase => _userDatabaseFuture;
+  Future<Database> get exercisesDatabase => _exercisesDatabaseFuture;
 
-    _exercisesDatabase = await _initExercisesDatabase();
-    return _exercisesDatabase!;
+  Future<List<Map<String, dynamic>>> getAllExerciseRecords() async {
+    final db = await _exercisesDatabaseFuture;
+    return await db.query(ExerciseTable.tableName);
+  }
+
+  Future<List<Map<String, dynamic>>> getExerciseRecordsByIds(
+    List<String> ids,
+  ) async {
+    if (ids.isEmpty) return [];
+    final db = await _exercisesDatabaseFuture;
+    final placeholders = List.filled(ids.length, '?').join(', ');
+    return await db.query(
+      ExerciseTable.tableName,
+      where: '${ExerciseTable.exerciseId} IN ($placeholders)',
+      whereArgs: ids,
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getUserRecords() async {
+    final db = await _userDatabaseFuture;
+    return await db.query(UserTable.tableName);
+  }
+
+  Future<int> insertUserRecord(Map<String, dynamic> data) async {
+    final db = await _userDatabaseFuture;
+    return await db.insert(
+      UserTable.tableName,
+      data,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<int> updateUserRecord(
+    Map<String, dynamic> data,
+    String username,
+  ) async {
+    final db = await _userDatabaseFuture;
+    return await db.update(
+      UserTable.tableName,
+      data,
+      where: '${UserTable.username} = ?',
+      whereArgs: [username],
+    );
+  }
+
+  Future<int> deleteUserRecord(String username) async {
+    final db = await _userDatabaseFuture;
+    return await db.delete(
+      UserTable.tableName,
+      where: '${UserTable.username} = ?',
+      whereArgs: [username],
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> queryUserDb(
+    String table, {
+    bool? distinct,
+    List<String>? columns,
+    String? where,
+    List<Object?>? whereArgs,
+    String? groupBy,
+    String? having,
+    String? orderBy,
+    int? limit,
+    int? offset,
+  }) async {
+    final db = await _userDatabaseFuture;
+    return await db.query(
+      table,
+      distinct: distinct,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+      groupBy: groupBy,
+      having: having,
+      orderBy: orderBy,
+      limit: limit,
+      offset: offset,
+    );
+  }
+
+  Future<int> insertUserDb(
+    String table,
+    Map<String, dynamic> values, {
+    ConflictAlgorithm? conflictAlgorithm,
+  }) async {
+    final db = await _userDatabaseFuture;
+    return await db.insert(
+      table,
+      values,
+      conflictAlgorithm: conflictAlgorithm,
+    );
+  }
+
+  Future<int> updateUserDb(
+    String table,
+    Map<String, dynamic> values, {
+    String? where,
+    List<Object?>? whereArgs,
+    ConflictAlgorithm? conflictAlgorithm,
+  }) async {
+    final db = await _userDatabaseFuture;
+    return await db.update(
+      table,
+      values,
+      where: where,
+      whereArgs: whereArgs,
+      conflictAlgorithm: conflictAlgorithm,
+    );
+  }
+
+  Future<int> deleteUserDb(
+    String table, {
+    String? where,
+    List<Object?>? whereArgs,
+  }) async {
+    final db = await _userDatabaseFuture;
+    return await db.delete(
+      table,
+      where: where,
+      whereArgs: whereArgs,
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> rawQueryUserDb(
+    String sql, [
+    List<Object?>? arguments,
+  ]) async {
+    final db = await _userDatabaseFuture;
+    return await db.rawQuery(sql, arguments);
+  }
+
+  Future<T> transactionUserDb<T>(
+    Future<T> Function(Transaction txn) action, {
+    bool? exclusive,
+  }) async {
+    final db = await _userDatabaseFuture;
+    return await db.transaction<T>(action, exclusive: exclusive);
+  }
+
+  Future<List<Map<String, dynamic>>> queryExercisesDb(
+    String table, {
+    bool? distinct,
+    List<String>? columns,
+    String? where,
+    List<Object?>? whereArgs,
+    String? groupBy,
+    String? having,
+    String? orderBy,
+    int? limit,
+    int? offset,
+  }) async {
+    final db = await _exercisesDatabaseFuture;
+    return await db.query(
+      table,
+      distinct: distinct,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+      groupBy: groupBy,
+      having: having,
+      orderBy: orderBy,
+      limit: limit,
+      offset: offset,
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> rawQueryExercisesDb(
+    String sql, [
+    List<Object?>? arguments,
+  ]) async {
+    final db = await _exercisesDatabaseFuture;
+    return await db.rawQuery(sql, arguments);
   }
 
   Future<Database> _initDatabase() async {

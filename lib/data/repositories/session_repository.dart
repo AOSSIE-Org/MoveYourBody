@@ -13,18 +13,22 @@ final sessionRepositoryProvider = Provider<SessionRepository>((ref) {
   return SessionRepository(
     userRepository: ref.read(userRepositoryProvider),
     recommendationService: ref.read(recommendationServiceProvider),
+    dbService: ref.read(databaseServiceProvider),
   );
 });
 
 class SessionRepository {
   final UserRepository _userRepository;
   final RecommendationService _recommendationService;
+  final DatabaseService _dbService;
 
   SessionRepository({
     required UserRepository userRepository,
     required RecommendationService recommendationService,
+    DatabaseService? dbService,
   }) : _userRepository = userRepository,
-       _recommendationService = recommendationService;
+       _recommendationService = recommendationService,
+       _dbService = dbService ?? DatabaseService.instance;
 
   Future<Session?> createSession() async {
     try {
@@ -39,7 +43,7 @@ class SessionRepository {
       final recommendedExercises = await _recommendationService
           .recommendExercises(userData, recentExerciseIds);
 
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
 
       return await db.transaction<Session?>((txn) async {
         final now = DateTime.now();
@@ -108,7 +112,7 @@ class SessionRepository {
 
   Future<Session?> getLatestIncompleteSession() async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
 
       final sessionResult = await db.query(
         SessionScheduleTable.tableName,
@@ -146,7 +150,7 @@ class SessionRepository {
 
   Future<Session?> getSessionById(int sessionId) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
 
       final List<Map<String, dynamic>> sessionResult = await db.rawQuery(
         '''
@@ -186,7 +190,7 @@ class SessionRepository {
 
   Future<Session?> createSessionFromExercises(List<Exercise> exercises) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
 
       return await db.transaction<Session?>((txn) async {
         final now = DateTime.now();
@@ -255,7 +259,7 @@ class SessionRepository {
 
   Future<void> updateSessionStatus(int sessionId, SessionStatus status) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
       await db.update(
         SessionScheduleTable.tableName,
         {SessionScheduleTable.sessionStatus: status.name},
@@ -273,7 +277,7 @@ class SessionRepository {
     required int performedDuration,
   }) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
       await db.update(
         SessionExercisesTable.tableName,
         {
@@ -297,7 +301,7 @@ class SessionRepository {
     String? intensityFeedback,
   }) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
       await db.update(
         SessionScheduleTable.tableName,
         {
@@ -317,7 +321,7 @@ class SessionRepository {
 
   Future<List<String>> getRecentExerciseIds(int sessionCount) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
 
       final sessionResult = await db.query(
         SessionScheduleTable.tableName,
@@ -355,7 +359,7 @@ class SessionRepository {
 
   Future<List<Session>> getLastThreeCompletedSessions() async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
 
       final List<Map<String, dynamic>> sessionResult = await db.rawQuery(
         '''
@@ -379,7 +383,7 @@ class SessionRepository {
 
   Future<List<Session>> getAllSessions() async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
       final List<Map<String, dynamic>> sessionResult = await db.rawQuery('''
         SELECT s.*, q.name AS ${SessionScheduleTable.quickPlanName}
         FROM ${SessionScheduleTable.tableName} s
@@ -394,7 +398,7 @@ class SessionRepository {
 
   Future<void> debugPrintAllSessions() async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
 
       final sessionResult = await db.query(SessionScheduleTable.tableName);
 

@@ -12,7 +12,10 @@ import 'package:move_your_body/domain/models/session_data.dart';
 import 'package:move_your_body/data/repositories/user_repository.dart';
 
 final quickPlanRepositoryProvider = Provider<QuickPlanRepository>((ref) {
-  return QuickPlanRepository(userRepository: ref.read(userRepositoryProvider));
+  return QuickPlanRepository(
+    userRepository: ref.read(userRepositoryProvider),
+    dbService: ref.read(databaseServiceProvider),
+  );
 });
 
 class QuickPlanDefinition {
@@ -35,9 +38,13 @@ class QuickPlanDefinition {
 
 class QuickPlanRepository {
   final UserRepository _userRepository;
+  final DatabaseService _dbService;
 
-  QuickPlanRepository({required UserRepository userRepository})
-    : _userRepository = userRepository;
+  QuickPlanRepository({
+    required UserRepository userRepository,
+    DatabaseService? dbService,
+  }) : _userRepository = userRepository,
+       _dbService = dbService ?? DatabaseService.instance;
 
   static const int _exercisesPerPlan = 12;
 
@@ -86,7 +93,7 @@ class QuickPlanRepository {
 
   Future<List<QuickPlan>> fetchAllPlans() async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
       final maps = await db.query(
         QuickPlanTable.tableName,
         where: '${QuickPlanTable.isCustom} = 0',
@@ -100,7 +107,7 @@ class QuickPlanRepository {
 
   Future<List<QuickPlan>> fetchCustomPlans() async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
       final maps = await db.query(
         QuickPlanTable.tableName,
         where: '${QuickPlanTable.isCustom} = 1',
@@ -114,7 +121,7 @@ class QuickPlanRepository {
 
   Future<void> seedPlansIfNeeded({bool force = false}) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
 
       if (!force) {
         final existing = await db.query(
@@ -141,7 +148,7 @@ class QuickPlanRepository {
         whereArgs: presetPlanIds,
       );
 
-      final exercisesDb = await DatabaseService.instance.exercisesDatabase;
+      final exercisesDb = await _dbService.exercisesDatabase;
       final userData = await _userRepository.getUserData();
 
       if (userData == null) return;
@@ -216,7 +223,7 @@ class QuickPlanRepository {
 
   Future<Session?> createSessionFromPlan(int planId) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
 
       final planExercisesResult = await db.query(
         QuickPlanExercisesTable.tableName,
@@ -287,7 +294,7 @@ class QuickPlanRepository {
 
   Future<int?> createCustomPlan(String name, List<String> exerciseIds) async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
 
       return await db.transaction<int?>((txn) async {
         final planId = await txn.insert(QuickPlanTable.tableName, {

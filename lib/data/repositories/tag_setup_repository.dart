@@ -22,13 +22,16 @@ class TagMatch {
 
 class TagSetupRepository {
   final Ref _ref;
-  TagSetupRepository(this._ref);
+  final DatabaseService _dbService;
+
+  TagSetupRepository(this._ref, [DatabaseService? dbService])
+      : _dbService = dbService ?? _ref.read(databaseServiceProvider);
 
   static const double defaultSimilarityThreshold = 0.60;
   static const int defaultTopMatchLimit = 5;
 
   Future<void> processAndSeedTags() async {
-    final db = await DatabaseService.instance.userDatabase;
+    final db = await _dbService.userDatabase;
 
     final String jsonString = await rootBundle.loadString(
       'assets/exercises/exercises.json',
@@ -91,7 +94,7 @@ class TagSetupRepository {
 
   Future<void> debugPrintAllCachedTags() async {
     try {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
 
       final List<Map<String, dynamic>> maps = await db.query(
         TagsTable.tableName,
@@ -132,7 +135,7 @@ class TagSetupRepository {
         return [];
       }
 
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await _dbService.userDatabase;
       final userVector = _bytesToFloatVector(userEmbedding);
 
       if (userVector.isEmpty) {
@@ -190,7 +193,7 @@ class TagSetupRepository {
     required List<String> goals,
     required List<String> injuries,
   }) async {
-    final db = await DatabaseService.instance.userDatabase;
+    final db = await _dbService.userDatabase;
     await db.update(
       UserTable.tableName,
       {

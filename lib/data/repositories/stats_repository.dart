@@ -3,15 +3,19 @@ import 'package:move_your_body/data/database/db_config.dart';
 import 'package:move_your_body/data/database/tables/session_schedule_table.dart';
 import 'package:move_your_body/domain/models/session_data.dart';
 
-final statsRepositoryProvider = Provider((ref) {
-  return StatsRepository();
+final statsRepositoryProvider = Provider<StatsRepository>((ref) {
+  final dbService = ref.read(databaseServiceProvider);
+  return StatsRepository(dbService);
 });
 
 class StatsRepository {
-  Future<List<Session>> getCompletedSessions() async {
-    final db = await DatabaseService.instance.userDatabase;
+  final DatabaseService _dbService;
 
-    final List<Map<String, dynamic>> maps = await db.rawQuery(
+  StatsRepository([DatabaseService? dbService])
+      : _dbService = dbService ?? DatabaseService.instance;
+
+  Future<List<Session>> getCompletedSessions() async {
+    final List<Map<String, dynamic>> maps = await _dbService.rawQueryUserDb(
       '''
       SELECT s.*, q.name AS ${SessionScheduleTable.quickPlanName}
       FROM ${SessionScheduleTable.tableName} s
