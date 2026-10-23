@@ -15,7 +15,7 @@ void main() {
 
   group('DatabaseService Tests', () {
     test('userDatabase initializes and creates required tables', () async {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await DatabaseService().userDatabase;
 
       final tables = await db.rawQuery(
         "SELECT name FROM sqlite_master WHERE type='table'",

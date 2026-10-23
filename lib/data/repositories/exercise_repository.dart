@@ -13,8 +13,7 @@ final exerciseRepositoryProvider = Provider<ExerciseRepository>((ref) {
 class ExerciseRepository {
   final DatabaseService _dbService;
 
-  ExerciseRepository([DatabaseService? dbService])
-      : _dbService = dbService ?? DatabaseService.instance;
+  ExerciseRepository(this._dbService);
 
   Future<List<Exercise>> getAllExercises() async {
     final maps = await _dbService.getAllExerciseRecords();

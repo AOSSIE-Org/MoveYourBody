@@ -11,8 +11,7 @@ final statsRepositoryProvider = Provider<StatsRepository>((ref) {
 class StatsRepository {
   final DatabaseService _dbService;
 
-  StatsRepository([DatabaseService? dbService])
-      : _dbService = dbService ?? DatabaseService.instance;
+  StatsRepository(this._dbService);
 
   Future<List<Session>> getCompletedSessions() async {
     final List<Map<String, dynamic>> maps = await _dbService.rawQueryUserDb(

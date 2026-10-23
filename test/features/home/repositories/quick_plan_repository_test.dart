@@ -1,3 +1,4 @@
+import 'package:move_your_body/data/database/db_config.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:move_your_body/data/repositories/quick_plan_repository.dart';
@@ -20,7 +21,7 @@ void main() {
 
     setUp(() {
       mockUserRepository = MockUserRepository();
-      repo = QuickPlanRepository(userRepository: mockUserRepository);
+      repo = QuickPlanRepository(userRepository: mockUserRepository, dbService: DatabaseService());
     });
 
     test('fetchAllPlans returns a List<QuickPlan>', () async {

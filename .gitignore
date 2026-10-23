@@ -348,3 +348,9 @@ build/
 .flutter-plugins-dependencies
 lib/generated/
 assets/exercises.db
+
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class

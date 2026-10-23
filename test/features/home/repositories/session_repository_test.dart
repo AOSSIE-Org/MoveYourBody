@@ -32,9 +32,10 @@ void main() {
       repo = SessionRepository(
         userRepository: mockUserRepository,
         recommendationService: mockRecommendationService,
+        dbService: DatabaseService(),
       );
 
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await DatabaseService().userDatabase;
       try {
         await db.delete('session_schedule');
         await db.delete('session_exercise');

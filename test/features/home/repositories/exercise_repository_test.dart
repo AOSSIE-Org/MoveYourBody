@@ -1,3 +1,4 @@
+import 'package:move_your_body/data/database/db_config.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:move_your_body/data/repositories/exercise_repository.dart';
 import 'package:move_your_body/domain/models/exercise_data.dart';
@@ -27,7 +28,7 @@ void main() {
     late ExerciseRepository repo;
 
     setUp(() {
-      repo = ExerciseRepository();
+      repo = ExerciseRepository(DatabaseService());
     });
 
     test('getAllExercises returns a List<Exercise>', () async {

@@ -16,16 +16,16 @@ void main() {
     late StatsRepository repository;
 
     setUp(() async {
-      repository = StatsRepository();
+      repository = StatsRepository(DatabaseService());
 
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await DatabaseService().userDatabase;
       await db.delete(SessionScheduleTable.tableName);
     });
 
     test(
       'getCompletedSessions should return only completed sessions',
       () async {
-        final db = await DatabaseService.instance.userDatabase;
+        final db = await DatabaseService().userDatabase;
 
         final completedSession = Session(
           createdAt: DateTime.now().subtract(const Duration(days: 1)),
@@ -62,7 +62,7 @@ void main() {
     test(
       'getCompletedSessions should return empty list if no completed sessions exist',
       () async {
-        final db = await DatabaseService.instance.userDatabase;
+        final db = await DatabaseService().userDatabase;
 
         final inProgressSession = Session(
           createdAt: DateTime.now(),

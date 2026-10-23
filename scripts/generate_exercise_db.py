@@ -38,15 +38,15 @@ def read_dart_schema_query(filepath):
     return ""
 
 def get_dart_schema_info():
-    ex_table_path = os.path.join(PROJECT_ROOT, "lib", "core", "database", "tables", "exercise_table.dart")
-    tags_table_path = os.path.join(PROJECT_ROOT, "lib", "core", "database", "tables", "tags_table.dart")
+    ex_table_path = os.path.join(PROJECT_ROOT, "lib", "data", "database", "tables", "exercise_table.dart")
+    tags_table_path = os.path.join(PROJECT_ROOT, "lib", "data", "database", "tables", "tags_table.dart")
     
     constants = {}
     constants.update(read_dart_table_constants(ex_table_path, "ExerciseTable"))
     constants.update(read_dart_table_constants(tags_table_path, "TagsTable"))
     
-    ex_schema_path = os.path.join(PROJECT_ROOT, "lib", "core", "database", "schema", "exercise_schema.dart")
-    tags_schema_path = os.path.join(PROJECT_ROOT, "lib", "core", "database", "schema", "tags_schema.dart")
+    ex_schema_path = os.path.join(PROJECT_ROOT, "lib", "data", "database", "schema", "exercise_schema.dart")
+    tags_schema_path = os.path.join(PROJECT_ROOT, "lib", "data", "database", "schema", "tags_schema.dart")
     
     ex_query = read_dart_schema_query(ex_schema_path)
     tags_query = read_dart_schema_query(tags_schema_path)

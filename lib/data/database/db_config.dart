@@ -20,7 +20,6 @@ final databaseServiceProvider = Provider<DatabaseService>((ref) {
 });
 
 class DatabaseService {
-  static final DatabaseService instance = DatabaseService();
 
   late final Future<Database> _userDatabaseFuture;
   late final Future<Database> _exercisesDatabaseFuture;

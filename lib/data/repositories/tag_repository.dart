@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:move_your_body/data/database/tables/exercise_table.dart';
 import 'package:move_your_body/data/database/tables/user_table.dart';
 import 'package:move_your_body/data/database/db_config.dart';
 import 'package:move_your_body/data/database/tables/tags_table.dart';
@@ -23,17 +22,15 @@ class TagMatch {
 class TagRepository {
   final DatabaseService _dbService;
 
-  TagRepository([DatabaseService? dbService])
-      : _dbService = dbService ?? DatabaseService.instance;
+  TagRepository(this._dbService);
 
   static const double defaultSimilarityThreshold = 0.60;
   static const int defaultTopMatchLimit = 5;
 
   Future<void> debugPrintAllCachedTags() async {
     try {
-      final db = await _dbService.exercisesDatabase;
 
-      final List<Map<String, dynamic>> maps = await db.query(
+      final List<Map<String, dynamic>> maps = await _dbService.queryExercisesDb(
         TagsTable.tableName,
       );
 
@@ -62,8 +59,7 @@ class TagRepository {
   }
 
   Future<void> debugPrintExercises() async {
-    final db = await _dbService.exercisesDatabase;
-    final result = await db.query(ExerciseTable.tableName);
+    final result = await _dbService.getAllExerciseRecords();
     debugPrint('Total exercises: ${result.length}');
     for (final exercise in result) {
       debugPrint(exercise.toString());
@@ -81,14 +77,13 @@ class TagRepository {
         return [];
       }
 
-      final db = await _dbService.exercisesDatabase;
       final userVector = _bytesToFloatVector(userEmbedding);
 
       if (userVector.isEmpty) {
         return [];
       }
 
-      final maps = await db.query(
+      final maps = await _dbService.queryExercisesDb(
         TagsTable.tableName,
         where: '${TagsTable.tagType} = ?',
         whereArgs: [type.name],
@@ -139,8 +134,7 @@ class TagRepository {
     required List<String> goals,
     required List<String> injuries,
   }) async {
-    final db = await _dbService.userDatabase;
-    await db.update(
+    await _dbService.updateUserDb(
       UserTable.tableName,
       {
         UserTable.goalTags: goals.join(','),

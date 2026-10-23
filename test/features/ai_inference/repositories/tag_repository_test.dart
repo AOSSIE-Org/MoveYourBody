@@ -1,3 +1,4 @@
+import 'package:move_your_body/data/database/db_config.dart';
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -15,7 +16,7 @@ void main() {
     late TagRepository repository;
 
     setUp(() {
-      repository = TagRepository();
+      repository = TagRepository(DatabaseService());
     });
 
     test(

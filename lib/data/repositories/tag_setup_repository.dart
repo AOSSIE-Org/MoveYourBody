@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:move_your_body/data/database/tables/user_table.dart';
 import 'package:move_your_body/data/repositories/ai_repository.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:move_your_body/data/database/db_config.dart';
 import 'package:move_your_body/data/database/tables/tags_table.dart';
 import 'package:move_your_body/domain/models/tag_data.dart';
@@ -31,7 +30,6 @@ class TagSetupRepository {
   static const int defaultTopMatchLimit = 5;
 
   Future<void> processAndSeedTags() async {
-    final db = await _dbService.userDatabase;
 
     final String jsonString = await rootBundle.loadString(
       'assets/exercises/exercises.json',
@@ -55,16 +53,16 @@ class TagSetupRepository {
     }
     print(uniqueGoals.length);
     print(uniqueInjuries.length);
-    await _processSet(db, uniqueGoals, TagType.goal);
-    await _processSet(db, uniqueInjuries, TagType.injury);
+    await _processSet(uniqueGoals, TagType.goal);
+    await _processSet(uniqueInjuries, TagType.injury);
   }
 
-  Future<void> _processSet(Database db, Set<String> tags, TagType type) async {
+  Future<void> _processSet(Set<String> tags, TagType type) async {
     final aiRepo = _ref.read(aiModelRepositoryProvider);
 
     for (String tagName in tags) {
       if (tagName.isEmpty) continue;
-      final List<Map<String, dynamic>> existing = await db.query(
+      final List<Map<String, dynamic>> existing = await _dbService.queryUserDb(
         TagsTable.tableName,
         where: '${TagsTable.tagName} = ? AND ${TagsTable.tagType} = ?',
         whereArgs: [tagName, type.name],
@@ -81,7 +79,7 @@ class TagSetupRepository {
             embedding: embeddingBytes,
           );
 
-          await db.insert(TagsTable.tableName, newTag.toMap());
+          await _dbService.insertUserDb(TagsTable.tableName, newTag.toMap());
           print("Local Inference Complete & Cached: [$type] $tagName");
         }
       } else {
@@ -94,9 +92,8 @@ class TagSetupRepository {
 
   Future<void> debugPrintAllCachedTags() async {
     try {
-      final db = await _dbService.userDatabase;
 
-      final List<Map<String, dynamic>> maps = await db.query(
+      final List<Map<String, dynamic>> maps = await _dbService.queryUserDb(
         TagsTable.tableName,
       );
 
@@ -135,14 +132,13 @@ class TagSetupRepository {
         return [];
       }
 
-      final db = await _dbService.userDatabase;
       final userVector = _bytesToFloatVector(userEmbedding);
 
       if (userVector.isEmpty) {
         return [];
       }
 
-      final maps = await db.query(
+      final maps = await _dbService.queryUserDb(
         TagsTable.tableName,
         where: '${TagsTable.tagType} = ?',
         whereArgs: [type.name],
@@ -193,8 +189,7 @@ class TagSetupRepository {
     required List<String> goals,
     required List<String> injuries,
   }) async {
-    final db = await _dbService.userDatabase;
-    await db.update(
+    await _dbService.updateUserDb(
       UserTable.tableName,
       {
         UserTable.goalTags: goals.join(','),

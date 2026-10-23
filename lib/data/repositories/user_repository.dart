@@ -12,8 +12,7 @@ final userRepositoryProvider = Provider<UserRepository>((ref) {
 class UserRepository {
   final DatabaseService _dbService;
 
-  UserRepository([DatabaseService? dbService])
-      : _dbService = dbService ?? DatabaseService.instance;
+  UserRepository(this._dbService);
 
   Future<void> saveUser(UserData user) async {
     await _dbService.deleteUserDb(UserTable.tableName);

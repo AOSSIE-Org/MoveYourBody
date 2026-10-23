@@ -25,10 +25,10 @@ class SessionRepository {
   SessionRepository({
     required UserRepository userRepository,
     required RecommendationService recommendationService,
-    DatabaseService? dbService,
+    required DatabaseService dbService,
   }) : _userRepository = userRepository,
        _recommendationService = recommendationService,
-       _dbService = dbService ?? DatabaseService.instance;
+       _dbService = dbService;
 
   Future<Session?> createSession() async {
     try {
@@ -43,9 +43,8 @@ class SessionRepository {
       final recommendedExercises = await _recommendationService
           .recommendExercises(userData, recentExerciseIds);
 
-      final db = await _dbService.userDatabase;
 
-      return await db.transaction<Session?>((txn) async {
+      return await _dbService.transactionUserDb<Session?>((txn) async {
         final now = DateTime.now();
 
         final sessionMap = {
@@ -112,9 +111,8 @@ class SessionRepository {
 
   Future<Session?> getLatestIncompleteSession() async {
     try {
-      final db = await _dbService.userDatabase;
 
-      final sessionResult = await db.query(
+      final sessionResult = await _dbService.queryUserDb(
         SessionScheduleTable.tableName,
         where:
             '${SessionScheduleTable.sessionStatus} IN (?, ?) AND ${SessionScheduleTable.isQuickPlan} = 0',
@@ -129,7 +127,7 @@ class SessionRepository {
 
       final session = Session.fromMap(sessionResult.first);
 
-      final exercisesResult = await db.query(
+      final exercisesResult = await _dbService.queryUserDb(
         SessionExercisesTable.tableName,
         where: '${SessionExercisesTable.sessionId} = ?',
         whereArgs: [session.id],
@@ -150,9 +148,8 @@ class SessionRepository {
 
   Future<Session?> getSessionById(int sessionId) async {
     try {
-      final db = await _dbService.userDatabase;
 
-      final List<Map<String, dynamic>> sessionResult = await db.rawQuery(
+      final List<Map<String, dynamic>> sessionResult = await _dbService.rawQueryUserDb(
         '''
         SELECT s.*, q.name AS ${SessionScheduleTable.quickPlanName}
         FROM ${SessionScheduleTable.tableName} s
@@ -169,7 +166,7 @@ class SessionRepository {
 
       final session = Session.fromMap(sessionResult.first);
 
-      final exercisesResult = await db.query(
+      final exercisesResult = await _dbService.queryUserDb(
         SessionExercisesTable.tableName,
         where: '${SessionExercisesTable.sessionId} = ?',
         whereArgs: [session.id],
@@ -190,9 +187,8 @@ class SessionRepository {
 
   Future<Session?> createSessionFromExercises(List<Exercise> exercises) async {
     try {
-      final db = await _dbService.userDatabase;
 
-      return await db.transaction<Session?>((txn) async {
+      return await _dbService.transactionUserDb<Session?>((txn) async {
         final now = DateTime.now();
 
         final sessionMap = {
@@ -259,8 +255,7 @@ class SessionRepository {
 
   Future<void> updateSessionStatus(int sessionId, SessionStatus status) async {
     try {
-      final db = await _dbService.userDatabase;
-      await db.update(
+      await _dbService.updateUserDb(
         SessionScheduleTable.tableName,
         {SessionScheduleTable.sessionStatus: status.name},
         where: '${SessionScheduleTable.id} = ?',
@@ -277,8 +272,7 @@ class SessionRepository {
     required int performedDuration,
   }) async {
     try {
-      final db = await _dbService.userDatabase;
-      await db.update(
+      await _dbService.updateUserDb(
         SessionExercisesTable.tableName,
         {
           SessionExercisesTable.exerciseStatus: status.name,
@@ -301,8 +295,7 @@ class SessionRepository {
     String? intensityFeedback,
   }) async {
     try {
-      final db = await _dbService.userDatabase;
-      await db.update(
+      await _dbService.updateUserDb(
         SessionScheduleTable.tableName,
         {
           SessionScheduleTable.sessionStatus: SessionStatus.completed.name,
@@ -321,9 +314,8 @@ class SessionRepository {
 
   Future<List<String>> getRecentExerciseIds(int sessionCount) async {
     try {
-      final db = await _dbService.userDatabase;
 
-      final sessionResult = await db.query(
+      final sessionResult = await _dbService.queryUserDb(
         SessionScheduleTable.tableName,
         columns: [SessionScheduleTable.id],
         where: '${SessionScheduleTable.sessionStatus} = ?',
@@ -338,7 +330,7 @@ class SessionRepository {
           .map((e) => e[SessionScheduleTable.id] as int)
           .toList();
 
-      final exerciseResult = await db.query(
+      final exerciseResult = await _dbService.queryUserDb(
         SessionExercisesTable.tableName,
         columns: [SessionExercisesTable.exerciseId],
         where:
@@ -359,9 +351,8 @@ class SessionRepository {
 
   Future<List<Session>> getLastThreeCompletedSessions() async {
     try {
-      final db = await _dbService.userDatabase;
 
-      final List<Map<String, dynamic>> sessionResult = await db.rawQuery(
+      final List<Map<String, dynamic>> sessionResult = await _dbService.rawQueryUserDb(
         '''
         SELECT s.*, q.name AS ${SessionScheduleTable.quickPlanName}
         FROM ${SessionScheduleTable.tableName} s
@@ -383,8 +374,7 @@ class SessionRepository {
 
   Future<List<Session>> getAllSessions() async {
     try {
-      final db = await _dbService.userDatabase;
-      final List<Map<String, dynamic>> sessionResult = await db.rawQuery('''
+      final List<Map<String, dynamic>> sessionResult = await _dbService.rawQueryUserDb('''
         SELECT s.*, q.name AS ${SessionScheduleTable.quickPlanName}
         FROM ${SessionScheduleTable.tableName} s
         LEFT JOIN quick_plans q ON s.${SessionScheduleTable.quickPlanId} = q.id
@@ -398,9 +388,8 @@ class SessionRepository {
 
   Future<void> debugPrintAllSessions() async {
     try {
-      final db = await _dbService.userDatabase;
 
-      final sessionResult = await db.query(SessionScheduleTable.tableName);
+      final sessionResult = await _dbService.queryUserDb(SessionScheduleTable.tableName);
 
       debugPrint('=== ALL SESSIONS IN DATABASE ===');
       for (var sessionMap in sessionResult) {

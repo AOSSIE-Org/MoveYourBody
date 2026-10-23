@@ -1,3 +1,4 @@
+import 'package:move_your_body/data/database/db_config.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:move_your_body/data/repositories/user_repository.dart';
@@ -9,7 +10,7 @@ void main() {
   setUpAll(() {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
-    userRepository = UserRepository();
+    userRepository = UserRepository(DatabaseService());
   });
 
   tearDown(() async {
