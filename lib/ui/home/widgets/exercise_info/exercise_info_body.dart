@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_your_body/domain/models/exercise_data.dart';
-import 'package:move_your_body/utils/theme/app_colors.dart';
+import 'package:move_your_body/utils/theme/app_themes.dart';
 import 'package:move_your_body/ui/common/app_scaffold.dart';
 import 'animation_preview.dart';
 import 'info_badges.dart';

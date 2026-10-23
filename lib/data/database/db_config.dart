@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:move_your_body/data/database/schema/exercise_schema.dart';
@@ -9,31 +10,32 @@ import 'package:move_your_body/data/database/schema/tags_schema.dart';
 import 'package:move_your_body/data/database/schema/user_schema.dart';
 import 'package:move_your_body/data/database/tables/exercise_table.dart';
 import 'package:move_your_body/data/database/tables/user_table.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:flutter/foundation.dart';
 
 final databaseServiceProvider = Provider<DatabaseService>((ref) {
   return DatabaseService();
 });
 
 class DatabaseService {
+  /// Version of the bundled exercises asset database, Increase this version only when `assets/exercises.db`;
+  ///  is updated to trigger copying the new database to device storage on app launch.
+  static const int exercisesDbVersion = 1;
 
   late final Future<Database> _userDatabaseFuture;
-  late final Future<Database> _exercisesDatabaseFuture;
+  Future<Database>? _exercisesDatabaseFuture;
 
   DatabaseService() {
     _userDatabaseFuture = _initDatabase();
-    _exercisesDatabaseFuture = _initExercisesDatabase();
   }
 
   Future<Database> get userDatabase => _userDatabaseFuture;
-  Future<Database> get exercisesDatabase => _exercisesDatabaseFuture;
+  Future<Database> get exercisesDatabase =>
+      _exercisesDatabaseFuture ??= _initExercisesDatabase();
 
   Future<List<Map<String, dynamic>>> getAllExerciseRecords() async {
-    final db = await _exercisesDatabaseFuture;
+    final db = await exercisesDatabase;
     return await db.query(ExerciseTable.tableName);
   }
 
@@ -41,7 +43,7 @@ class DatabaseService {
     List<String> ids,
   ) async {
     if (ids.isEmpty) return [];
-    final db = await _exercisesDatabaseFuture;
+    final db = await exercisesDatabase;
     final placeholders = List.filled(ids.length, '?').join(', ');
     return await db.query(
       ExerciseTable.tableName,
@@ -184,7 +186,7 @@ class DatabaseService {
     int? limit,
     int? offset,
   }) async {
-    final db = await _exercisesDatabaseFuture;
+    final db = await exercisesDatabase;
     return await db.query(
       table,
       distinct: distinct,
@@ -203,7 +205,7 @@ class DatabaseService {
     String sql, [
     List<Object?>? arguments,
   ]) async {
-    final db = await _exercisesDatabaseFuture;
+    final db = await exercisesDatabase;
     return await db.rawQuery(sql, arguments);
   }
 
@@ -270,15 +272,13 @@ class DatabaseService {
 
   Future<void> _copyExercisesDatabaseIfNeeded(String dbPath) async {
     final prefs = await SharedPreferences.getInstance();
-    final packageInfo = await PackageInfo.fromPlatform();
 
-    final currentAppVersion = packageInfo.version;
-    final copiedVersion = prefs.getString('exercise_userdatabase_version');
+    final copiedVersion = prefs.getInt('copied_exercises_db_version') ?? 0;
 
     final dbFile = File(dbPath);
 
     final shouldCopy =
-        !await dbFile.exists() || copiedVersion != currentAppVersion;
+        !await dbFile.exists() || copiedVersion < exercisesDbVersion;
 
     if (!shouldCopy) {
       debugPrint('Exercises database already up to date.');
@@ -299,8 +299,8 @@ class DatabaseService {
 
     await dbFile.writeAsBytes(bytes, flush: true);
 
-    await prefs.setString('exercise_userdatabase_version', currentAppVersion);
+    await prefs.setInt('copied_exercises_db_version', exercisesDbVersion);
 
-    debugPrint('Exercises database copied for app version $currentAppVersion');
+    debugPrint('Exercises database copied at version $exercisesDbVersion');
   }
 }

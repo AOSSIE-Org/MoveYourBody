@@ -55,23 +55,4 @@ class UserRepository {
 
     debugPrint('User data deleted successfully');
   }
-
-  Future<void> debugPrintUserData() async {
-    final user = await getUserData();
-    debugPrint('===================');
-    debugPrint(user?.username.toString());
-    debugPrint(user?.age.toString());
-    debugPrint(user?.height.toString());
-    debugPrint(user?.weight.toString());
-    debugPrint(user?.goalTags.toString());
-    debugPrint(user?.healthIssueTags.toString());
-    debugPrint(user?.difficulty.toString());
-    debugPrint(user?.intensity.toString());
-    debugPrint(user?.targetBodyRegion.toString());
-    debugPrint(user?.equipments.toString());
-    debugPrint(user?.isOnboarded.toString());
-    debugPrint(user?.healthIssueEmbeddings.toString());
-    debugPrint(user?.goalEmbeddings.toString());
-    debugPrint('===================');
-  }
 }

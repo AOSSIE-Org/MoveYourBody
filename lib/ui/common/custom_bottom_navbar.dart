@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../utils/theme/app_colors.dart';
+import '../../utils/theme/app_themes.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final StatefulNavigationShell navigationShell;

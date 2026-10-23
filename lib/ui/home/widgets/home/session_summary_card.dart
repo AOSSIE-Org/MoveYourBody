@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:move_your_body/utils/theme/app_colors.dart';
+import 'package:move_your_body/utils/theme/app_themes.dart';
 
 class SessionSummaryCard extends StatelessWidget {
   final String time;

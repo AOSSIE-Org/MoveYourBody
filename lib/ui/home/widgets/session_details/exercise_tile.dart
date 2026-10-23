@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:move_your_body/utils/theme/app_colors.dart';
+import 'package:move_your_body/utils/theme/app_themes.dart';
 
 class ExerciseTile extends StatelessWidget {
   final String title;

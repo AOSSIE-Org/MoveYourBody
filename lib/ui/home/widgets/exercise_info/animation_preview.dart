@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:move_your_body/domain/models/exercise_data.dart';
 import 'package:move_your_body/ui/home/view_models/session_details_view_model.dart';
-import 'package:move_your_body/utils/theme/app_colors.dart';
+import 'package:move_your_body/utils/theme/app_themes.dart';
 import 'package:video_player/video_player.dart';
 
 class AnimationPreview extends ConsumerStatefulWidget {

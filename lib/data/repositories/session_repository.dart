@@ -385,29 +385,4 @@ class SessionRepository {
       return [];
     }
   }
-
-  Future<void> debugPrintAllSessions() async {
-    try {
-
-      final sessionResult = await _dbService.queryUserDb(SessionScheduleTable.tableName);
-
-      debugPrint('=== ALL SESSIONS IN DATABASE ===');
-      for (var sessionMap in sessionResult) {
-        final session = Session.fromMap(sessionMap);
-        debugPrint(
-          'Session ID: ${session.id} | Status: ${session.sessionStatus.name}',
-        );
-        debugPrint(
-          'Duration: ${session.sessionDuration}s | Calories: ${session.caloriesBurned}',
-        );
-        debugPrint('Difficulty Feedback: ${session.difficultyFeedback}');
-        debugPrint('Intensity Feedback: ${session.intensityFeedback}');
-        debugPrint('----------------------------------');
-      }
-      debugPrint('================================');
-    } catch (e, stackTrace) {
-      debugPrint('Error printing sessions: $e');
-      debugPrint('$stackTrace');
-    }
-  }
 }

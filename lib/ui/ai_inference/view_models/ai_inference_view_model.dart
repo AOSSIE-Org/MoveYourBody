@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:move_your_body/data/repositories/ai_repository.dart';
-import 'package:move_your_body/data/services/cosine_similairty.dart';
+import 'package:move_your_body/data/repositories/ai_model_repository.dart';
+import 'package:move_your_body/utils/cosine_similairty.dart';
 
 part 'generated/ai_inference_view_model.g.dart';
 
@@ -81,7 +81,7 @@ class AiInferenceViewModel extends _$AiInferenceViewModel {
         double highestScore = -1.0;
 
         for (var entry in targetEmbeddingsDb.entries) {
-          double score = SimilarityUtils.calculateCosineSimilarity(
+          double score = SimilarityHelper.calculateCosineSimilarity(
             userEmbedding,
             entry.value,
           );

@@ -4,13 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_your_body/domain/models/tag_data.dart';
 import 'package:move_your_body/routing/app_routes.dart';
-import 'package:move_your_body/data/repositories/ai_repository.dart';
+import 'package:move_your_body/data/repositories/ai_model_repository.dart';
 import 'package:move_your_body/data/repositories/tag_repository.dart';
 import 'package:move_your_body/ui/ai_inference/view_models/ai_inference_view_model.dart';
-import 'package:move_your_body/data/repositories/user_repository.dart';
 import 'package:move_your_body/ui/onboarding/view_models/onboarding_view_model.dart';
 import 'package:move_your_body/data/database/db_config.dart';
-import '../../utils/theme/app_colors.dart';
+import '../../utils/theme/app_themes.dart';
 
 class LoadingScreen extends ConsumerStatefulWidget {
   const LoadingScreen({super.key});
@@ -82,7 +81,6 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
             goalEmbed: customGoalBytes,
             healthEmbed: customHealthBytes,
           );
-      await ref.read(userRepositoryProvider).debugPrintUserData();
       debugPrint(
         "💾 Pipeline Phase 5: Saving complete profile to UserTable and extracting top tags.",
       );

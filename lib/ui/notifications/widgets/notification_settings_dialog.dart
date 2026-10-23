@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:move_your_body/utils/theme/app_colors.dart';
+import 'package:move_your_body/utils/theme/app_themes.dart';
 import 'package:move_your_body/ui/notifications/view_models/notification_settings_view_model.dart';
 
 class NotificationSettingsDialog extends ConsumerWidget {

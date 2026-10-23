@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:move_your_body/ui/notifications/widgets/notification_settings_dialog.dart';
-import 'package:move_your_body/utils/theme/app_colors.dart';
+import 'package:move_your_body/utils/theme/app_themes.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({super.key, required this.username});

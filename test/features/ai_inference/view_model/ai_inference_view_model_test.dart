@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:move_your_body/data/repositories/ai_repository.dart';
+import 'package:move_your_body/data/repositories/ai_model_repository.dart';
 import 'package:move_your_body/ui/ai_inference/view_models/ai_inference_view_model.dart';
 
 class MockAiModelRepository extends Mock implements AiModelRepository {}

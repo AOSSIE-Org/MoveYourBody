@@ -51,3 +51,10 @@ class Tag {
     );
   }
 }
+
+class TagMatch {
+  final Tag tag;
+  final double score;
+
+  const TagMatch({required this.tag, required this.score});
+}

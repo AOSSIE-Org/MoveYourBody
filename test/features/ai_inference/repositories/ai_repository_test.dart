@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:move_your_body/data/repositories/ai_repository.dart';
+import 'package:move_your_body/data/repositories/ai_model_repository.dart';
 import 'package:move_your_body/data/services/onnx_service.dart';
 import 'package:move_your_body/data/services/tokenizer_service.dart';
 

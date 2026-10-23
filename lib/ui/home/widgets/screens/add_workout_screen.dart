@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_your_body/utils/constants/app_constants.dart';
-import 'package:move_your_body/utils/theme/app_colors.dart';
+import 'package:move_your_body/utils/theme/app_themes.dart';
 import 'package:move_your_body/routing/app_routes.dart';
 import 'package:move_your_body/ui/home/view_models/custom_plans_view_model.dart';
 import 'package:move_your_body/data/repositories/quick_plan_repository.dart';

@@ -5,19 +5,12 @@ import 'package:move_your_body/data/database/tables/user_table.dart';
 import 'package:move_your_body/data/database/db_config.dart';
 import 'package:move_your_body/data/database/tables/tags_table.dart';
 import 'package:move_your_body/domain/models/tag_data.dart';
-import 'package:move_your_body/data/services/cosine_similairty.dart';
+import 'package:move_your_body/utils/cosine_similairty.dart';
 
 final tagRepositoryProvider = Provider<TagRepository>((ref) {
   final dbService = ref.read(databaseServiceProvider);
   return TagRepository(dbService);
 });
-
-class TagMatch {
-  final Tag tag;
-  final double score;
-
-  const TagMatch({required this.tag, required this.score});
-}
 
 class TagRepository {
   final DatabaseService _dbService;
@@ -26,45 +19,6 @@ class TagRepository {
 
   static const double defaultSimilarityThreshold = 0.60;
   static const int defaultTopMatchLimit = 5;
-
-  Future<void> debugPrintAllCachedTags() async {
-    try {
-
-      final List<Map<String, dynamic>> maps = await _dbService.queryExercisesDb(
-        TagsTable.tableName,
-      );
-
-      debugPrint("================ DB VERIFICATION START ================");
-      debugPrint("Total Tags Found in Database: ${maps.length}");
-
-      if (maps.isEmpty) {
-        debugPrint("❌ No tags found in the database.");
-        debugPrint("=====================================================");
-        return;
-      }
-
-      for (var map in maps) {
-        final tag = Tag.fromMap(map);
-
-        final int embeddingLength = tag.embedding?.length ?? 0;
-
-        debugPrint(
-          "📌 ID: ${tag.id} | Name: ${tag.tagName} | Type: ${tag.tagType.name} | Embedding Size: $embeddingLength bytes",
-        );
-      }
-      debugPrint("================= DB VERIFICATION END =================");
-    } catch (e) {
-      debugPrint("❌ Error reading tags from database: $e");
-    }
-  }
-
-  Future<void> debugPrintExercises() async {
-    final result = await _dbService.getAllExerciseRecords();
-    debugPrint('Total exercises: ${result.length}');
-    for (final exercise in result) {
-      debugPrint(exercise.toString());
-    }
-  }
 
   Future<List<String>> findTopMatches({
     required TagType type,
@@ -96,7 +50,7 @@ class TagRepository {
         if (tag.embedding == null || tag.embedding!.isEmpty) continue;
 
         final tagVector = _bytesToFloatVector(tag.embedding!);
-        final score = SimilarityUtils.calculateCosineSimilarity(
+        final score = SimilarityHelper.calculateCosineSimilarity(
           userVector,
           tagVector,
         );

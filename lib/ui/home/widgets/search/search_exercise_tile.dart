@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:move_your_body/domain/models/exercise_data.dart';
-import 'package:move_your_body/utils/theme/app_colors.dart';
+import 'package:move_your_body/utils/theme/app_themes.dart';
 
 class SearchExerciseTile extends StatelessWidget {
   final Exercise exercise;

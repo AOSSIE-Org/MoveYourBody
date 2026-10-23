@@ -5,7 +5,7 @@ import 'package:move_your_body/domain/models/session_data.dart';
 import 'package:move_your_body/ui/common/app_scaffold.dart';
 import 'package:move_your_body/ui/stats/view_models/stats_view_model.dart';
 import 'package:move_your_body/ui/stats/widgets/session_tile.dart';
-import 'package:move_your_body/utils/theme/app_colors.dart';
+import 'package:move_your_body/utils/theme/app_themes.dart';
 
 class AllSessionsScreen extends ConsumerWidget {
   const AllSessionsScreen({super.key});

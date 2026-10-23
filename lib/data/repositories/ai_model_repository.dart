@@ -4,17 +4,21 @@ import '../services/onnx_service.dart';
 import '../services/tokenizer_service.dart';
 import 'package:flutter/material.dart';
 
-final aiModelRepositoryProvider = Provider((ref) => AiModelRepository(ref));
+final aiModelRepositoryProvider = Provider<AiModelRepository>((ref) {
+  final onnxService = ref.read(onnxServiceProvider);
+  final tokenizerService = ref.read(tokenizerServiceProvider);
+  return AiModelRepository(onnxService, tokenizerService);
+});
 
 class AiModelRepository {
-  final Ref _ref;
-  AiModelRepository(this._ref);
-  Future<void> initModel() async {
-    final onnxService = _ref.read(onnxServiceProvider);
-    final tokenizerService = _ref.read(tokenizerServiceProvider);
+  final OnnxService _onnxService;
+  final TokenizerService _tokenizerService;
 
-    await tokenizerService.init();
-    await onnxService.init();
+  AiModelRepository(this._onnxService, this._tokenizerService);
+
+  Future<void> initModel() async {
+    await _tokenizerService.init();
+    await _onnxService.init();
   }
 
   Future<Uint8List?> generateEmbedding(String text) async {
@@ -24,11 +28,9 @@ class AiModelRepository {
       );
       return null;
     }
-    final onnxService = _ref.read(onnxServiceProvider);
-    final tokenizerService = _ref.read(tokenizerServiceProvider);
-    final tokens = tokenizerService.encode(text);
+    final tokens = _tokenizerService.encode(text);
     if (tokens == null) return null;
-    final List<double> embeddingVector = await onnxService.runInference(
+    final List<double> embeddingVector = await _onnxService.runInference(
       tokens['input_ids']!,
       tokens['attention_mask']!,
       tokens['token_type_ids']!,

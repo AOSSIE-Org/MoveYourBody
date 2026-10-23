@@ -1,6 +1,8 @@
 import 'dart:math';
 
-class SimilarityUtils {
+class SimilarityHelper {
+  SimilarityHelper._();
+
   static double calculateCosineSimilarity(List<double> v1, List<double> v2) {
     if (v1.length != v2.length || v1.isEmpty) return 0.0;
 
@@ -18,3 +20,6 @@ class SimilarityUtils {
     return dotProduct / (sqrt(normA) * sqrt(normB));
   }
 }
+
+typedef SimilarityHelpers = SimilarityHelper;
+typedef SimilarityUtils = SimilarityHelper;

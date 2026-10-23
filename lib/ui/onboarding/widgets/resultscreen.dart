@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:move_your_body/utils/constants/app_constants.dart';
-import 'package:move_your_body/utils/theme/app_colors.dart';
+import 'package:move_your_body/utils/theme/app_themes.dart';
 import 'package:move_your_body/ui/common/app_scaffold.dart';
 import 'package:move_your_body/ui/onboarding/view_models/onboarding_view_model.dart';
 

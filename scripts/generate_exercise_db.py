@@ -179,10 +179,10 @@ def main():
     db_size_mb = os.path.getsize(DB_PATH) / (1024 * 1024)
     embedding_dim = dim1 if dim1 > 0 else dim2
     
-    print(f"Exercises inserted : {len(exercises)}\n")
-    print(f"Tags inserted : {goal_count + injury_count}\n")
-    print(f"Embedding dimension : {embedding_dim}\n")
-    print(f"Database size : {db_size_mb:.1f} MB")
+    debugPrint(f"Exercises inserted : {len(exercises)}\n")
+    debugPrint(f"Tags inserted : {goal_count + injury_count}\n")
+    debugPrint(f"Embedding dimension : {embedding_dim}\n")
+    debugPrint(f"Database size : {db_size_mb:.1f} MB")
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:move_your_body/utils/theme/app_colors.dart';
+import 'package:move_your_body/utils/theme/app_themes.dart';
 
 class QuickPlanCard extends StatelessWidget {
   final String title;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:move_your_body/domain/models/exercise_data.dart';
-import 'package:move_your_body/utils/theme/app_colors.dart';
+import 'package:move_your_body/utils/theme/app_themes.dart';
 import 'package:move_your_body/ui/home/widgets/exercise_info/animation_preview.dart';
 
 class ExecutionAnimationBox extends StatelessWidget {
