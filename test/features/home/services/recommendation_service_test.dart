@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:move_your_body/data/repositories/exercise_repository.dart';
-import 'package:move_your_body/data/services/equipment_filter_service.dart';
+import 'package:move_your_body/utils/equipment_filter.dart';
 import 'package:move_your_body/data/services/recommendation_service.dart';
-import 'package:move_your_body/data/services/safety_filter_service.dart';
+import 'package:move_your_body/utils/safety_filter_service.dart';
 import 'package:move_your_body/domain/models/exercise_data.dart';
 import 'package:move_your_body/domain/models/user_data.dart';
 
@@ -11,8 +11,8 @@ class MockExerciseRepository extends Mock implements ExerciseRepository {}
 
 class MockSafetyFilterService extends Mock implements SafetyFilterService {}
 
-class MockEquipmentFilterService extends Mock
-    implements EquipmentFilterService {}
+class MockEquipmentFilter extends Mock
+    implements EquipmentFilter {}
 
 class MockUserData extends Mock implements UserData {}
 
@@ -23,12 +23,12 @@ void main() {
     late RecommendationService service;
     late MockExerciseRepository mockExerciseRepo;
     late MockSafetyFilterService mockSafetyFilter;
-    late MockEquipmentFilterService mockEquipmentFilter;
+    late MockEquipmentFilter mockEquipmentFilter;
 
     setUp(() {
       mockExerciseRepo = MockExerciseRepository();
       mockSafetyFilter = MockSafetyFilterService();
-      mockEquipmentFilter = MockEquipmentFilterService();
+      mockEquipmentFilter = MockEquipmentFilter();
 
       service = RecommendationService(
         mockExerciseRepo,

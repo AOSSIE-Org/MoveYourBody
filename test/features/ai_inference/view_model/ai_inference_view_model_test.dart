@@ -52,10 +52,13 @@ void main() {
       expect(state.isReady, isTrue);
     });
 
-    test('processUserQuery should do nothing if engine is not ready', () async {
+    test('processUserQuery should throw if engine is not ready', () async {
       final notifier = container.read(aiInferenceViewModelProvider.notifier);
 
-      await notifier.processUserQuery(query: 'test', targetEmbeddingsDb: {});
+      expect(
+        () => notifier.processUserQuery(query: 'test', targetEmbeddingsDb: {}),
+        throwsA(isA<StateError>()),
+      );
 
       verifyNever(() => mockRepo.generateEmbedding(any()));
       final state = container.read(aiInferenceViewModelProvider);
@@ -93,7 +96,7 @@ void main() {
       ).called(1);
     });
 
-    test('processUserQuery should handle null embedding gracefully', () async {
+    test('processUserQuery should throw when embedding is null', () async {
       final notifier = container.read(aiInferenceViewModelProvider.notifier);
       notifier.setEngineReady();
 
@@ -101,14 +104,14 @@ void main() {
         () => mockRepo.generateEmbedding('invalid'),
       ).thenAnswer((_) async => null);
 
-      await notifier.processUserQuery(query: 'invalid', targetEmbeddingsDb: {});
-
-      final state = container.read(aiInferenceViewModelProvider);
-      expect(state.isProcessing, isFalse);
-      expect(state.bestMatchResult, 'Error parsing query');
+      expect(
+        () =>
+            notifier.processUserQuery(query: 'invalid', targetEmbeddingsDb: {}),
+        throwsA(isA<Exception>()),
+      );
     });
 
-    test('processUserQuery should catch exceptions from repository', () async {
+    test('processUserQuery should catch exceptions from repository and rethrow', () async {
       final notifier = container.read(aiInferenceViewModelProvider.notifier);
       notifier.setEngineReady();
 
@@ -116,14 +119,13 @@ void main() {
         () => mockRepo.generateEmbedding('error_trigger'),
       ).thenThrow(Exception('Simulated Crash'));
 
-      await notifier.processUserQuery(
-        query: 'error_trigger',
-        targetEmbeddingsDb: {},
+      expect(
+        () => notifier.processUserQuery(
+          query: 'error_trigger',
+          targetEmbeddingsDb: {},
+        ),
+        throwsA(isA<Exception>()),
       );
-
-      final state = container.read(aiInferenceViewModelProvider);
-      expect(state.isProcessing, isFalse);
-      expect(state.bestMatchResult, 'Error occurred while processing query');
     });
   });
 }

@@ -51,3 +51,21 @@ class QuickPlan {
     );
   }
 }
+
+class QuickPlanDefinition {
+  final int planId;
+  final String name;
+  final String description;
+  final String imagePath;
+  final List<String> goalTagFilters;
+  final List<String> bodyRegionFilters;
+
+  const QuickPlanDefinition({
+    required this.planId,
+    required this.name,
+    required this.description,
+    required this.imagePath,
+    required this.goalTagFilters,
+    required this.bodyRegionFilters,
+  });
+}

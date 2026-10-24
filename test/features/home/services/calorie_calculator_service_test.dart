@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:move_your_body/data/services/calorie_calculator_service.dart';
+import 'package:move_your_body/utils/calorie_calculator.dart';
 import 'package:move_your_body/domain/models/exercise_data.dart';
 
 class MockExercise extends Mock implements Exercise {}

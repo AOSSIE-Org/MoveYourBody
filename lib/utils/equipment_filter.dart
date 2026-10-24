@@ -2,11 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:move_your_body/domain/models/exercise_data.dart';
 import 'package:move_your_body/domain/models/user_data.dart';
 
-final equipmentFilterServiceProvider = Provider<EquipmentFilterService>((ref) {
-  return EquipmentFilterService();
+final equipmentFilterProvider = Provider<EquipmentFilter>((ref) {
+  return EquipmentFilter();
 });
 
-class EquipmentFilterService {
+class EquipmentFilter {
   List<Exercise> filterExercises({
     required List<Exercise> exercises,
     required UserData user,

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:move_your_body/domain/models/session_data.dart';
 import 'package:move_your_body/domain/models/exercise_data.dart';
 import 'package:move_your_body/data/repositories/session_repository.dart';
-import 'package:move_your_body/data/services/calorie_calculator_service.dart';
+import 'package:move_your_body/utils/calorie_calculator.dart';
 import 'package:move_your_body/data/services/tts_service.dart';
 import 'package:move_your_body/data/services/voice_command_service.dart';
 import 'package:move_your_body/ui/home/view_models/session_details_view_model.dart';

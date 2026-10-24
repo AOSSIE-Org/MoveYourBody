@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:move_your_body/data/services/equipment_filter_service.dart';
+import 'package:move_your_body/utils/equipment_filter.dart';
 import 'package:move_your_body/domain/models/exercise_data.dart';
 import 'package:move_your_body/domain/models/user_data.dart';
 
@@ -9,11 +9,11 @@ class MockExercise extends Mock implements Exercise {}
 class MockUserData extends Mock implements UserData {}
 
 void main() {
-  group('EquipmentFilterService', () {
-    late EquipmentFilterService service;
+  group('EquipmentFilter', () {
+    late EquipmentFilter service;
 
     setUp(() {
-      service = EquipmentFilterService();
+      service = EquipmentFilter();
     });
 
     test('returns all exercises if none require equipment', () {

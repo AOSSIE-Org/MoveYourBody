@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:move_your_body/domain/models/exercise_data.dart';
 import 'package:move_your_body/domain/models/user_data.dart';
-import 'package:move_your_body/data/services/equipment_filter_service.dart';
-import 'package:move_your_body/data/services/safety_filter_service.dart';
+import 'package:move_your_body/utils/equipment_filter.dart';
+import 'package:move_your_body/utils/safety_filter_service.dart';
 
 import '../repositories/exercise_repository.dart';
 
@@ -10,7 +10,7 @@ final recommendationServiceProvider = Provider<RecommendationService>((ref) {
   return RecommendationService(
     ref.read(exerciseRepositoryProvider),
     ref.read(safetyFilterServiceProvider),
-    ref.read(equipmentFilterServiceProvider),
+    ref.read(equipmentFilterProvider),
   );
 });
 
@@ -24,7 +24,7 @@ class RecommendationWeights {
 class RecommendationService {
   final ExerciseRepository _exerciseRepository;
   final SafetyFilterService _safetyFilterService;
-  final EquipmentFilterService _equipmentFilterService;
+  final EquipmentFilter _equipmentFilterService;
 
   RecommendationService(
     this._exerciseRepository,

@@ -9,42 +9,17 @@ import 'package:move_your_body/domain/models/exercise_data.dart';
 import 'package:move_your_body/domain/models/quick_plan_data.dart';
 import 'package:move_your_body/domain/models/session_data.dart';
 
-import 'package:move_your_body/data/repositories/user_repository.dart';
+import 'package:move_your_body/domain/models/user_data.dart';
 
 final quickPlanRepositoryProvider = Provider<QuickPlanRepository>((ref) {
-  return QuickPlanRepository(
-    userRepository: ref.read(userRepositoryProvider),
-    dbService: ref.read(databaseServiceProvider),
-  );
+  return QuickPlanRepository(dbService: ref.read(databaseServiceProvider));
 });
 
-class QuickPlanDefinition {
-  final int planId;
-  final String name;
-  final String description;
-  final String imagePath;
-  final List<String> goalTagFilters;
-  final List<String> bodyRegionFilters;
-
-  const QuickPlanDefinition({
-    required this.planId,
-    required this.name,
-    required this.description,
-    required this.imagePath,
-    required this.goalTagFilters,
-    required this.bodyRegionFilters,
-  });
-}
-
 class QuickPlanRepository {
-  final UserRepository _userRepository;
   final DatabaseService _dbService;
 
-  QuickPlanRepository({
-    required UserRepository userRepository,
-    required DatabaseService dbService,
-  }) : _userRepository = userRepository,
-       _dbService = dbService;
+  QuickPlanRepository({required DatabaseService dbService})
+    : _dbService = dbService;
 
   static const int _exercisesPerPlan = 12;
 
@@ -144,9 +119,9 @@ class QuickPlanRepository {
         whereArgs: presetPlanIds,
       );
 
-      final userData = await _userRepository.getUserData();
-
-      if (userData == null) return;
+      final userRecords = await _dbService.getUserRecords();
+      if (userRecords.isEmpty) return;
+      final userData = UserData.fromMap(userRecords.first);
 
       for (final plan in plans) {
         await _dbService.insertUserDb(QuickPlanTable.tableName, {
@@ -156,10 +131,7 @@ class QuickPlanRepository {
           QuickPlanTable.imagePath: plan.imagePath,
         });
 
-        final exercises = await _fetchExercisesForPlan(
-          plan,
-          userData,
-        );
+        final exercises = await _fetchExercisesForPlan(plan, userData);
 
         for (int i = 0; i < exercises.length; i++) {
           await _dbService.insertUserDb(QuickPlanExercisesTable.tableName, {
@@ -216,7 +188,6 @@ class QuickPlanRepository {
 
   Future<Session?> createSessionFromPlan(int planId) async {
     try {
-
       final planExercisesResult = await _dbService.queryUserDb(
         QuickPlanExercisesTable.tableName,
         where: '${QuickPlanExercisesTable.planId} = ?',

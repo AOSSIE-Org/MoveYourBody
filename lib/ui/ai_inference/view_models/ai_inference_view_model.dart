@@ -1,47 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:move_your_body/data/repositories/ai_model_repository.dart';
+import 'package:move_your_body/domain/models/ai_state.dart';
 import 'package:move_your_body/utils/cosine_similairty.dart';
 
 part 'generated/ai_inference_view_model.g.dart';
 
-class AiState {
-  final bool isReady;
-  final bool isProcessing;
-  final String? bestMatchResult;
-
-  const AiState({
-    this.isReady = false,
-    this.isProcessing = false,
-    this.bestMatchResult,
-  });
-
-  AiState copyWith({
-    bool? isReady,
-    bool? isProcessing,
-    String? bestMatchResult,
-  }) {
-    return AiState(
-      isReady: isReady ?? this.isReady,
-      isProcessing: isProcessing ?? this.isProcessing,
-      bestMatchResult: bestMatchResult ?? this.bestMatchResult,
-    );
-  }
-}
-
 @Riverpod(keepAlive: true)
 class AiInferenceViewModel extends _$AiInferenceViewModel {
   @override
-  AiState build() {
-    return const AiState();
-  }
+  AiState build() => const AiState();
 
   Future<void> initializeAiAndTags() async {
     try {
       debugPrint("AI Lifecycle: Starting initialization pipeline...");
       final aiModelRepo = ref.read(aiModelRepositoryProvider);
       await aiModelRepo.initModel();
-      // now Tags are pre-seeded in the read-only exercisesDatabase
 
       if (!ref.mounted) return;
 
@@ -49,6 +23,7 @@ class AiInferenceViewModel extends _$AiInferenceViewModel {
       debugPrint("AI Lifecycle: Pipeline is READY and Cached");
     } catch (e) {
       debugPrint("AI Lifecycle: Initialization Critical Error: $e");
+      rethrow;
     }
   }
 
@@ -62,50 +37,43 @@ class AiInferenceViewModel extends _$AiInferenceViewModel {
     required Map<String, List<double>> targetEmbeddingsDb,
   }) async {
     if (!state.isReady) {
-      debugPrint("AI Engine: Engine is not ready yet!");
-      return;
+      throw StateError("AI Engine is not ready yet!");
     }
+    state = state.copyWith(isProcessing: true);
     try {
-      state = state.copyWith(isProcessing: true);
-
       final aiModelRepo = ref.read(aiModelRepositoryProvider);
       final embeddingBytes = await aiModelRepo.generateEmbedding(query);
 
-      if (embeddingBytes != null) {
-        final float32Buffer = embeddingBytes.buffer.asFloat32List();
-        final List<double> userEmbedding = float32Buffer.toList();
-
-        if (!ref.mounted) return;
-
-        String bestMatch = "No Match Found";
-        double highestScore = -1.0;
-
-        for (var entry in targetEmbeddingsDb.entries) {
-          double score = SimilarityHelper.calculateCosineSimilarity(
-            userEmbedding,
-            entry.value,
-          );
-          if (score > highestScore) {
-            highestScore = score;
-            bestMatch = entry.key;
-          }
-        }
-
-        state = state.copyWith(isProcessing: false, bestMatchResult: bestMatch);
-      } else {
-        if (!ref.mounted) return;
-        state = state.copyWith(
-          isProcessing: false,
-          bestMatchResult: "Error parsing query",
-        );
+      if (embeddingBytes == null) {
+        throw Exception("Failed to generate embedding for query: $query");
       }
+
+      final float32Buffer = embeddingBytes.buffer.asFloat32List();
+      final List<double> userEmbedding = float32Buffer.toList();
+
+      if (!ref.mounted) return;
+
+      String bestMatch = "No Match Found";
+      double highestScore = -1.0;
+
+      for (var entry in targetEmbeddingsDb.entries) {
+        double score = SimilarityHelper.calculateCosineSimilarity(
+          userEmbedding,
+          entry.value,
+        );
+        if (score > highestScore) {
+          highestScore = score;
+          bestMatch = entry.key;
+        }
+      }
+
+      state = state.copyWith(isProcessing: false, bestMatchResult: bestMatch);
     } catch (e) {
       debugPrint("AI Engine: Error occurred while processing user query: $e");
-      if (!ref.mounted) return;
-      state = state.copyWith(
-        isProcessing: false,
-        bestMatchResult: "Error occurred while processing query",
-      );
+      if (ref.mounted) {
+        state = state.copyWith(isProcessing: false);
+      }
+      rethrow;
     }
   }
 }

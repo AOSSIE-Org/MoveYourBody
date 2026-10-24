@@ -1,6 +1,6 @@
 import 'package:move_your_body/data/repositories/exercise_repository.dart';
 import 'package:move_your_body/data/repositories/session_repository.dart';
-import 'package:move_your_body/data/services/safety_filter_service.dart';
+import 'package:move_your_body/utils/safety_filter_service.dart';
 import 'package:move_your_body/data/repositories/user_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:move_your_body/data/services/recommendation_service.dart';
