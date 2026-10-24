@@ -1,6 +1,6 @@
 import 'package:move_your_body/domain/models/exercise_data.dart';
 
-class CalorieCalculatorService {
+class CalorieCalculator {
   static double _getBaseMetForType(ExerciseType type) {
     switch (type) {
       case ExerciseType.cardio:

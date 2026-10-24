@@ -121,11 +121,7 @@ class DatabaseService {
     ConflictAlgorithm? conflictAlgorithm,
   }) async {
     final db = await _userDatabaseFuture;
-    return await db.insert(
-      table,
-      values,
-      conflictAlgorithm: conflictAlgorithm,
-    );
+    return await db.insert(table, values, conflictAlgorithm: conflictAlgorithm);
   }
 
   Future<int> updateUserDb(
@@ -151,11 +147,7 @@ class DatabaseService {
     List<Object?>? whereArgs,
   }) async {
     final db = await _userDatabaseFuture;
-    return await db.delete(
-      table,
-      where: where,
-      whereArgs: whereArgs,
-    );
+    return await db.delete(table, where: where, whereArgs: whereArgs);
   }
 
   Future<List<Map<String, dynamic>>> rawQueryUserDb(

@@ -34,13 +34,10 @@ class UserRepository {
     String newDifficulty,
     String newIntensity,
   ) async {
-    await _dbService.updateUserDb(
-      UserTable.tableName,
-      {
-        UserTable.difficulty: newDifficulty,
-        UserTable.intensity: newIntensity,
-      },
-    );
+    await _dbService.updateUserDb(UserTable.tableName, {
+      UserTable.difficulty: newDifficulty,
+      UserTable.intensity: newIntensity,
+    });
   }
 
   Future<void> deleteUserData() async {

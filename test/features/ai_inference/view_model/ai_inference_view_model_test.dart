@@ -111,21 +111,24 @@ void main() {
       );
     });
 
-    test('processUserQuery should catch exceptions from repository and rethrow', () async {
-      final notifier = container.read(aiInferenceViewModelProvider.notifier);
-      notifier.setEngineReady();
+    test(
+      'processUserQuery should catch exceptions from repository and rethrow',
+      () async {
+        final notifier = container.read(aiInferenceViewModelProvider.notifier);
+        notifier.setEngineReady();
 
-      when(
-        () => mockRepo.generateEmbedding('error_trigger'),
-      ).thenThrow(Exception('Simulated Crash'));
+        when(
+          () => mockRepo.generateEmbedding('error_trigger'),
+        ).thenThrow(Exception('Simulated Crash'));
 
-      expect(
-        () => notifier.processUserQuery(
-          query: 'error_trigger',
-          targetEmbeddingsDb: {},
-        ),
-        throwsA(isA<Exception>()),
-      );
-    });
+        expect(
+          () => notifier.processUserQuery(
+            query: 'error_trigger',
+            targetEmbeddingsDb: {},
+          ),
+          throwsA(isA<Exception>()),
+        );
+      },
+    );
   });
 }

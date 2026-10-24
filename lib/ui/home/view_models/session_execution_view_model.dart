@@ -5,7 +5,6 @@ import 'package:move_your_body/domain/models/exercise_data.dart';
 import 'package:move_your_body/data/repositories/session_repository.dart';
 import 'package:move_your_body/utils/calorie_calculator.dart';
 import 'package:move_your_body/data/services/tts_service.dart';
-import 'package:move_your_body/data/services/voice_command_service.dart';
 import 'package:move_your_body/ui/home/view_models/session_details_view_model.dart';
 import 'package:move_your_body/data/repositories/user_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,17 +15,15 @@ part 'generated/session_execution_view_model.g.dart';
 @riverpod
 class SessionExecutionViewModel extends _$SessionExecutionViewModel {
   Timer? _timer;
-  final TtsService _ttsService = TtsService();
-  late final VoiceCommandService _voiceService;
+  late final TtsService _ttsService;
 
   @override
   SessionExecutionState build(int sessionId) {
-    _voiceService = VoiceCommandService(ttsService: _ttsService);
+    _ttsService = ref.read(ttsServiceProvider);
 
     ref.onDispose(() {
       _timer?.cancel();
-      _voiceService.dispose();
-      _ttsService.dispose();
+      _ttsService.stop();
     });
 
     Future.microtask(() => _init());
@@ -60,10 +57,8 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
 
     final sessionRepo = ref.read(sessionRepositoryProvider);
     await sessionRepo.updateSessionStatus(sessionId, SessionStatus.inProgress);
-    await _ttsService.init();
-    await _voiceService.init();
-    _voiceService.onCommandDetected = _handleVoiceCommand;
-    _voiceService.startListening();
+    _ttsService.onCommandDetected = _handleVoiceCommand;
+    _ttsService.startListening();
 
     _startPhase(ExecutionPhase.preparation);
   }
@@ -229,7 +224,6 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
   Future<void> _finishSession() async {
     _timer?.cancel();
     _ttsService.stop();
-    _voiceService.stopListening();
 
     state = state.copyWith(
       currentPhase: ExecutionPhase.finished,
@@ -348,7 +342,7 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
 
     for (var exercise in state.exercises) {
       final duration = state.exerciseDurations[exercise.exerciseId] ?? 30;
-      totalCalories += CalorieCalculatorService.calculateCaloriesBurned(
+      totalCalories += CalorieCalculator.calculateCaloriesBurned(
         exercise: exercise,
         userWeightKg: userData.weight,
         durationInSeconds: duration,

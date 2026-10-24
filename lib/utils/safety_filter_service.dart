@@ -2,11 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:move_your_body/domain/models/exercise_data.dart';
 import 'package:move_your_body/domain/models/user_data.dart';
 
-final safetyFilterServiceProvider = Provider<SafetyFilterService>((ref) {
-  return SafetyFilterService();
+final safetyFilterProvider = Provider<SafetyFilter>((ref) {
+  return SafetyFilter();
 });
 
-class SafetyFilterService {
+class SafetyFilter {
   static const int sessionsToSkip = 6;
   List<Exercise> filterExercises({
     required List<Exercise> exercises,

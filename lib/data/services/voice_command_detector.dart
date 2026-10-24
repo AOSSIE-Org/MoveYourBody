@@ -3,13 +3,24 @@ import 'dart:math' as math;
 import 'package:fftea/fftea.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:record/record.dart';
-import 'voice_command_service.dart';
+
+enum VoiceCommand { resume, pause, skip }
+
+final voiceCommandDetectorProvider = Provider<VoiceCommandDetector>((ref) {
+  final detector = VoiceCommandDetector();
+  ref.onDispose(() => detector.dispose());
+  return detector;
+});
 
 class VoiceCommandDetector {
-  VoiceCommandDetector({required this.onCommandDetected});
+  VoiceCommandDetector({this.onCommandDetected}) {
+    _initFuture = _loadTemplates();
+  }
 
-  final ValueChanged<VoiceCommand> onCommandDetected;
+  ValueChanged<VoiceCommand>? onCommandDetected;
+  late final Future<void> _initFuture;
 
   final AudioRecorder _recorder = AudioRecorder();
 
@@ -38,12 +49,11 @@ class VoiceCommandDetector {
 
   Timer? _processingTimer;
 
-  Future<void> init() async {
-    await _loadTemplates();
-  }
+  Future<void> init() => _initFuture;
 
   Future<void> start() async {
     if (_isRunning) return;
+    await _initFuture;
 
     final hasPermission = await _recorder.hasPermission();
 
@@ -206,7 +216,7 @@ class VoiceCommandDetector {
           'distance=${bestDistance.toStringAsFixed(3)}',
         );
 
-        onCommandDetected(bestCommand);
+        onCommandDetected?.call(bestCommand);
       }
     } catch (e, stackTrace) {
       debugPrint('VoiceDetector processing error: $e');

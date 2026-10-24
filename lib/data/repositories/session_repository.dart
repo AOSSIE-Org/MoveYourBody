@@ -5,105 +5,16 @@ import 'package:move_your_body/data/database/tables/session_exercises_table.dart
 import 'package:move_your_body/data/database/tables/session_schedule_table.dart';
 import 'package:move_your_body/domain/models/exercise_data.dart';
 import 'package:move_your_body/domain/models/session_data.dart';
-import 'package:move_your_body/data/services/recommendation_service.dart';
-import 'package:move_your_body/utils/safety_filter_service.dart';
-import 'package:move_your_body/domain/models/user_data.dart';
 
 final sessionRepositoryProvider = Provider<SessionRepository>((ref) {
-  return SessionRepository(
-    recommendationService: ref.read(recommendationServiceProvider),
-    dbService: ref.read(databaseServiceProvider),
-  );
+  return SessionRepository(dbService: ref.read(databaseServiceProvider));
 });
 
 class SessionRepository {
-  final RecommendationService _recommendationService;
   final DatabaseService _dbService;
 
-  SessionRepository({
-    required RecommendationService recommendationService,
-    required DatabaseService dbService,
-  }) : _recommendationService = recommendationService,
-       _dbService = dbService;
-
-  Future<Session?> createSession() async {
-    try {
-      final userRecords = await _dbService.getUserRecords();
-      if (userRecords.isEmpty) {
-        return null;
-      }
-      final userData = UserData.fromMap(userRecords.first);
-
-      final recentExerciseIds = await getRecentExerciseIds(
-        SafetyFilterService.sessionsToSkip,
-      );
-      final recommendedExercises = await _recommendationService
-          .recommendExercises(userData, recentExerciseIds);
-
-      return await _dbService.transactionUserDb<Session?>((txn) async {
-        final now = DateTime.now();
-
-        final sessionMap = {
-          SessionScheduleTable.createdAt: now.toIso8601String(),
-          SessionScheduleTable.sessionStatus: SessionStatus.created.name,
-          SessionScheduleTable.sessionDuration: 0,
-          SessionScheduleTable.caloriesBurned: 0.0,
-        };
-
-        final sessionId = await txn.insert(
-          SessionScheduleTable.tableName,
-          sessionMap,
-        );
-
-        final List<SessionExercise> sessionExercises = [];
-
-        for (int i = 0; i < recommendedExercises.length; i++) {
-          final exercise = recommendedExercises[i];
-          final sessionExerciseMap = {
-            SessionExercisesTable.sessionId: sessionId,
-            SessionExercisesTable.exerciseId: exercise.exerciseId,
-            SessionExercisesTable.orderIndex: i,
-            SessionExercisesTable.liked: 0,
-            SessionExercisesTable.performedDuration: 0,
-            SessionExercisesTable.exerciseStatus:
-                ExerciseStatus.notStarted.name,
-            SessionExercisesTable.completedAt: null,
-          };
-
-          final exerciseSessionId = await txn.insert(
-            SessionExercisesTable.tableName,
-            sessionExerciseMap,
-          );
-
-          sessionExercises.add(
-            SessionExercise(
-              id: exerciseSessionId,
-              sessionId: sessionId,
-              exerciseId: exercise.exerciseId,
-              orderIndex: i,
-              liked: false,
-              performedDuration: 0,
-              exerciseStatus: ExerciseStatus.notStarted,
-              completedAt: null,
-            ),
-          );
-        }
-
-        return Session(
-          id: sessionId,
-          createdAt: now,
-          sessionDuration: 0,
-          sessionStatus: SessionStatus.created,
-          caloriesBurned: 0.0,
-          exercises: sessionExercises,
-        );
-      });
-    } catch (e, stackTrace) {
-      debugPrint('Error creating session: $e');
-      debugPrint('Stacktrace: $stackTrace');
-      return null;
-    }
-  }
+  SessionRepository({required DatabaseService dbService})
+    : _dbService = dbService;
 
   Future<Session?> getLatestIncompleteSession() async {
     try {

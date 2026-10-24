@@ -1,11 +1,25 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+
+import 'voice_command_detector.dart';
+
+export 'voice_command_detector.dart' show VoiceCommand;
+
+final ttsServiceProvider = Provider<TtsService>((ref) {
+  final detector = ref.read(voiceCommandDetectorProvider);
+  final service = TtsService(detector: detector);
+  ref.onDispose(() => service.dispose());
+  return service;
+});
 
 typedef SpeakingStateCallback = void Function(bool isSpeaking);
 
 class TtsService {
-  final FlutterTts _tts = FlutterTts();
+  final FlutterTts _tts;
+  final VoiceCommandDetector _detector;
+
   Timer? _gapTimer;
   Completer<void>? _gapCompleter;
   bool _isStopped = false;
@@ -16,10 +30,28 @@ class TtsService {
 
   Completer<void>? _speechCompleter;
 
-  Future<void> init() async {
-    await _tts.setLanguage('en-US');
-    await _tts.setSpeechRate(0.45);
-    await _tts.setPitch(1.0);
+  bool Function(VoiceCommand)? onCommandDetected;
+  bool _isVoiceListeningActive = false;
+
+  static const _postTtsBuffer = Duration(milliseconds: 500);
+
+  static const Map<VoiceCommand, String> _confirmations = {
+    VoiceCommand.resume: 'Resuming',
+    VoiceCommand.pause: 'Paused',
+    VoiceCommand.skip: 'Skipping',
+  };
+
+  TtsService({FlutterTts? tts, VoiceCommandDetector? detector})
+    : _tts = tts ?? FlutterTts(),
+      _detector = detector ?? VoiceCommandDetector() {
+    _initTts();
+    _detector.onCommandDetected = _onCommandDetected;
+  }
+
+  void _initTts() {
+    _tts.setLanguage('en-US');
+    _tts.setSpeechRate(0.45);
+    _tts.setPitch(1.0);
 
     _tts.setCompletionHandler(() {
       _setSpeaking(false);
@@ -30,6 +62,47 @@ class TtsService {
       debugPrint('TTS Error: $error');
       _setSpeaking(false);
       _speechCompleter?.completeError(error);
+    });
+  }
+
+  void startListening() {
+    if (_isVoiceListeningActive) return;
+    _isVoiceListeningActive = true;
+    if (!_isSpeaking) {
+      unawaited(_detector.start());
+    }
+  }
+
+  void stopListening() {
+    _isVoiceListeningActive = false;
+    unawaited(_detector.stop());
+  }
+
+  void _onCommandDetected(VoiceCommand command) {
+    if (!_isVoiceListeningActive) return;
+
+    debugPrint('TtsService: detected ${command.name}');
+    final shouldConfirm = onCommandDetected?.call(command) ?? true;
+    if (shouldConfirm) {
+      _speakConfirmationAndRestart(command);
+    }
+  }
+
+  Future<void> _speakConfirmationAndRestart(VoiceCommand command) async {
+    final message = _confirmations[command];
+    if (message == null) return;
+
+    await _detector.stop();
+    if (!_isVoiceListeningActive) return;
+
+    await speakConfirmation(message);
+    if (!_isVoiceListeningActive) return;
+
+    Future.delayed(_postTtsBuffer, () {
+      if (!_isVoiceListeningActive) return;
+      if (!_isSpeaking) {
+        unawaited(_detector.start());
+      }
     });
   }
 
@@ -61,6 +134,9 @@ class TtsService {
 
   Future<void> stop() async {
     _isStopped = true;
+    _isVoiceListeningActive = false;
+    unawaited(_detector.stop());
+
     _gapTimer?.cancel();
     _gapTimer = null;
 
@@ -81,10 +157,13 @@ class TtsService {
   Future<void> dispose() async {
     await stop();
     await _tts.stop();
+    await _detector.dispose();
   }
 
   Future<void> _speak(String text) async {
     if (_isStopped) return;
+
+    unawaited(_detector.stop());
 
     _speechCompleter = Completer<void>();
     _setSpeaking(true);
@@ -105,5 +184,13 @@ class TtsService {
     if (_isSpeaking == value) return;
     _isSpeaking = value;
     onSpeakingChanged?.call(value);
+
+    if (!value && _isVoiceListeningActive) {
+      Future.delayed(_postTtsBuffer, () {
+        if (_isVoiceListeningActive && !_isSpeaking) {
+          unawaited(_detector.start());
+        }
+      });
+    }
   }
 }

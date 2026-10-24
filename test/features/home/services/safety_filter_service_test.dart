@@ -9,11 +9,11 @@ class MockExercise extends Mock implements Exercise {}
 class MockUserData extends Mock implements UserData {}
 
 void main() {
-  group('SafetyFilterService', () {
-    late SafetyFilterService service;
+  group('SafetyFilter', () {
+    late SafetyFilter service;
 
     setUp(() {
-      service = SafetyFilterService();
+      service = SafetyFilter();
     });
 
     test(
