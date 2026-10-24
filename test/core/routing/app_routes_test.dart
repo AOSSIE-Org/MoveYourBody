@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/core/routing/app_routes.dart';
+import 'package:move_your_body/routing/app_routes.dart';
 
 void main() {
   group('AppRoutes Tests', () {

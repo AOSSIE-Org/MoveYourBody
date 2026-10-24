@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:move_your_body/features/onboarding/view/resultscreen.dart';
+import 'package:move_your_body/ui/onboarding/widgets/resultscreen.dart';
 
 void main() {
   Widget createWidgetUnderTest() {

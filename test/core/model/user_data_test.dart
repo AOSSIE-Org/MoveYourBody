@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/core/model/user_data.dart';
-import 'package:move_your_body/features/onboarding/model/onboarding_data.dart';
+import 'package:move_your_body/domain/models/user_data.dart';
+import 'package:move_your_body/domain/models/onboarding_data.dart';
 
 void main() {
   group('UserData Model Tests', () {

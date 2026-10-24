@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/core/model/quick_plan_data.dart';
+import 'package:move_your_body/domain/models/quick_plan_data.dart';
 
 void main() {
   group('QuickPlan Model Tests', () {

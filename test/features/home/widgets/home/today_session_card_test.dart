@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:move_your_body/features/home/widgets/home/today_session_card.dart';
-import 'package:move_your_body/features/home/view_model/home_view_model.dart';
-import 'package:move_your_body/features/home/models/home_state.dart';
-import 'package:move_your_body/core/model/exercise_data.dart';
+import 'package:move_your_body/ui/home/widgets/home/today_session_card.dart';
+import 'package:move_your_body/ui/home/view_models/home_view_model.dart';
+import 'package:move_your_body/domain/models/home_state.dart';
+import 'package:move_your_body/domain/models/exercise_data.dart';
 
 class MockExercise extends Mock implements Exercise {}
 

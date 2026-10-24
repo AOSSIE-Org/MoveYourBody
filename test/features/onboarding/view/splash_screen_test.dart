@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:move_your_body/features/onboarding/view/splash_screen.dart';
+import 'package:move_your_body/ui/onboarding/widgets/splash_screen.dart';
 
 void main() {
   setUpAll(() {

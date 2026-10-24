@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/core/widgets/feature_chip.dart';
+import 'package:move_your_body/ui/common/feature_chip.dart';
 
 void main() {
   group('FeatureChip Widget Tests', () {

@@ -1,19 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:move_your_body/features/home/services/safety_filter_service.dart';
-import 'package:move_your_body/core/model/exercise_data.dart';
-import 'package:move_your_body/core/model/user_data.dart';
+import 'package:move_your_body/utils/safety_filter_service.dart';
+import 'package:move_your_body/domain/models/exercise_data.dart';
+import 'package:move_your_body/domain/models/user_data.dart';
 
 class MockExercise extends Mock implements Exercise {}
 
 class MockUserData extends Mock implements UserData {}
 
 void main() {
-  group('SafetyFilterService', () {
-    late SafetyFilterService service;
+  group('SafetyFilter', () {
+    late SafetyFilter service;
 
     setUp(() {
-      service = SafetyFilterService();
+      service = SafetyFilter();
     });
 
     test(

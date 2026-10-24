@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:move_your_body/features/stats/widgets/activity_calendar.dart';
+import 'package:move_your_body/ui/stats/widgets/activity_calendar.dart';
 
 void main() {
   Widget createWidgetUnderTest(List<DateTime> activeDates) {

@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/features/ai_inference/services/onnx_service.dart';
+import 'package:move_your_body/data/services/onnx_service.dart';
 
 void main() {
   setUpAll(() {

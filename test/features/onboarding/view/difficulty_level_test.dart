@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:move_your_body/features/onboarding/view/difficulty_level.dart';
-import 'package:move_your_body/core/widgets/button_card.dart';
+import 'package:move_your_body/ui/onboarding/widgets/difficulty_level.dart';
+import 'package:move_your_body/ui/common/button_card.dart';
 
 void main() {
   Widget createWidgetUnderTest() {

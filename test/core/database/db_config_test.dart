@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:move_your_body/core/database/db_config.dart';
-import 'package:move_your_body/core/database/tables/user_table.dart';
-import 'package:move_your_body/core/database/tables/session_schedule_table.dart';
-import 'package:move_your_body/core/database/tables/session_exercises_table.dart';
-import 'package:move_your_body/core/database/tables/quick_plan_table.dart';
+import 'package:move_your_body/data/database/db_config.dart';
+import 'package:move_your_body/data/database/tables/user_table.dart';
+import 'package:move_your_body/data/database/tables/session_schedule_table.dart';
+import 'package:move_your_body/data/database/tables/session_exercises_table.dart';
+import 'package:move_your_body/data/database/tables/quick_plan_table.dart';
 
 void main() {
   setUpAll(() {
@@ -15,7 +15,7 @@ void main() {
 
   group('DatabaseService Tests', () {
     test('userDatabase initializes and creates required tables', () async {
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await DatabaseService().userDatabase;
 
       final tables = await db.rawQuery(
         "SELECT name FROM sqlite_master WHERE type='table'",
