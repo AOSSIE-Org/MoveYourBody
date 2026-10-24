@@ -63,7 +63,10 @@ class _AnimationPreviewState extends ConsumerState<AnimationPreview> {
       final url = widget.exercise.animationLink.toLowerCase();
 
       if (url.endsWith('.mp4')) {
-        _videoController = VideoPlayerController.file(file);
+        _videoController = VideoPlayerController.file(
+          file,
+          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+        );
 
         await _videoController!.initialize();
         await _videoController!.setLooping(true);

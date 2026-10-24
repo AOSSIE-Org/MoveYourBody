@@ -24,6 +24,7 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
     ref.onDispose(() {
       _timer?.cancel();
       _ttsService.stop();
+      _ttsService.stopListening();
     });
 
     Future.microtask(() => _init());
@@ -224,6 +225,7 @@ class SessionExecutionViewModel extends _$SessionExecutionViewModel {
   Future<void> _finishSession() async {
     _timer?.cancel();
     _ttsService.stop();
+    _ttsService.stopListening();
 
     state = state.copyWith(
       currentPhase: ExecutionPhase.finished,

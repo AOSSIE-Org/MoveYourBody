@@ -134,8 +134,6 @@ class TtsService {
 
   Future<void> stop() async {
     _isStopped = true;
-    _isVoiceListeningActive = false;
-    unawaited(_detector.stop());
 
     _gapTimer?.cancel();
     _gapTimer = null;
@@ -156,6 +154,7 @@ class TtsService {
 
   Future<void> dispose() async {
     await stop();
+    stopListening();
     await _tts.stop();
     await _detector.dispose();
   }
