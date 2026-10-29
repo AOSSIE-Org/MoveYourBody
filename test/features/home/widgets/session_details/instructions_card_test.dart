@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/features/home/widgets/session_details/instructions_card.dart';
+import 'package:move_your_body/ui/home/widgets/session_details/instructions_card.dart';
 
 void main() {
   testWidgets('InstructionsCard renders correctly', (

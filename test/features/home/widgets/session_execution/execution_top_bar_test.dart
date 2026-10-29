@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:move_your_body/features/home/models/session_execution_state.dart';
-import 'package:move_your_body/features/home/widgets/session_execution/execution_top_bar.dart';
-import 'package:move_your_body/features/home/view_model/session_execution_view_model.dart';
+import 'package:move_your_body/domain/models/session_execution_state.dart';
+import 'package:move_your_body/ui/home/widgets/session_execution/execution_top_bar.dart';
+import 'package:move_your_body/ui/home/view_models/session_execution_view_model.dart';
 
 class MockSessionExecutionState extends Mock implements SessionExecutionState {}
 

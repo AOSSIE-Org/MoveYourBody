@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/features/home/widgets/session_execution/phase_indicator.dart';
-import 'package:move_your_body/features/home/models/session_execution_state.dart';
+import 'package:move_your_body/ui/home/widgets/session_execution/phase_indicator.dart';
+import 'package:move_your_body/domain/models/session_execution_state.dart';
 
 void main() {
   group('PhaseIndicator', () {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/core/widgets/button_card.dart';
+import 'package:move_your_body/ui/common/button_card.dart';
 
 void main() {
   group('ButtonCard Widget Tests', () {

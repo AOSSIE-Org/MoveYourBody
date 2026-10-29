@@ -45,6 +45,10 @@
 
 <div align="center">
 <h1>MoveYourBody</h1>
+<a href="https://play.google.com/store/apps/details?id=org.aossie.move"><img src="https://img.shields.io/badge/Google_Play-Get_It_On-green?style=for-the-badge&logo=google-play&logoColor=white" alt="Google Play"></a>
+<br/>
+<br/>
+<a href="https://securityscorecards.dev/viewer/?url=github.com/AOSSIE-Org/MoveYourBody"><img src="https://api.securityscorecards.dev/projects/github.com/AOSSIE-Org/MoveYourBody/badge" alt="OpenSSF Scorecard"></a>
 </div>
 
 **MoveYourBody** is a privacy-first, on-device fitness application designed to help you stay consistent with your goals. It provides personalized, short micro-workout sessions (5–7 minutes) that adapt based on your feedback and health conditions. By running completely offline, MoveYourBody combines rule-based filtering and lightweight semantic matching to ensure your workout data stays entirely private while delivering safe, relevant, and engaging exercises.
@@ -82,14 +86,20 @@
 - **Tokenization**: Dart WordPiece
 - **Models**: [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) (Quantized ONNX model running directly on-device via `assets/models/model_quantized.onnx`)
 
+### Audio & Offline Voice Pipeline
+- **Text-to-Speech (TTS)**: `flutter_tts` for voice coaching and exercise announcements
+- **Audio Recording**: `record` (PCM 16-bit 16kHz audio stream)
+- **Feature Extraction**: `fftea` (Fast Fourier Transform for Mel-Frequency Cepstral Coefficients / MFCC)
+- **Pattern Matching**: Dynamic Time Warping (DTW) for real-time on-device keyword recognition (e.g., "pause", "resume", "skip")
+
 ---
 
 ## ✅ Project Checklist
 
 - [x] **The mobile app**:
    - [ ] has an _About_ page containing the Stability Nexus's logo and pointing to the social media accounts of the Stability Nexus.
-   - [ ] is available for download as a release in this repo.
-   - [ ] is available in the relevant app stores.
+   - [x] is available for download as a release in this repo.
+   - [x] is available in the relevant app stores ([Google Play Store](https://play.google.com/store/apps/details?id=org.aossie.move)).
 - [x] **The AI/ML components**:
    - [x] LLM/model selection and configuration are documented.
       - **Model Selection**: [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) was chosen because it is designed specifically for sentence similarity tasks. It provides low latency and fast inference which is highly suitable for on-device cases (see [Research Paper](https://www.researchgate.net/publication/377627749_Performance_of_4_Pre-Trained_Sentence_Transformer_Models_in_the_Semantic_Query_of_a_Systematic_Review_Dataset_on_Peri-Implantitis)).
@@ -118,48 +128,62 @@ graph TD
     %% Define Styles
     classDef ui fill:#1A2E1A,stroke:#4CAF50,stroke-width:2px,color:#fff;
     classDef vm fill:#254025,stroke:#81C784,stroke-width:2px,color:#fff;
-    classDef model fill:#122412,stroke:#2E7D32,stroke-width:2px,color:#fff;
+    classDef domain fill:#122412,stroke:#2E7D32,stroke-width:2px,color:#fff;
     classDef data fill:#0A1A0A,stroke:#66BB6A,stroke-width:2px,color:#fff;
+    classDef service fill:#1b381b,stroke:#81C784,stroke-width:1.5px,color:#fff;
 
-    subgraph View Layer [View Layer]
-        UI[Flutter UI / Screens]:::ui
-        Widgets[Custom Widgets]:::ui
+    subgraph ViewLayer ["View Layer (lib/ui/)"]
+        UI["Flutter UI / Screens"]:::ui
+        Widgets["Custom Widgets"]:::ui
     end
 
-    subgraph ViewModel Layer [ViewModel Layer]
-        Riverpod[Riverpod Notifiers & Providers]:::vm
-        Router[GoRouter State]:::vm
+    subgraph ViewModelLayer ["ViewModel Layer (lib/ui/**/view_models/)"]
+        Riverpod["Riverpod Notifiers & Providers"]:::vm
+        Router["GoRouter State"]:::vm
     end
 
-    subgraph Model Layer [Model Layer]
-        DataModels[Domain Data Models]:::model
-        Repository[Repositories / Data Handlers]:::model
-        AI[ONNX Runtime / WordPiece Tokenizer]:::model
+    subgraph DomainLayer ["Domain Layer (lib/domain/)"]
+        DomainModels["Domain Models (Exercise, Userdata, Session, DayPlan)"]:::domain
     end
 
-    subgraph Data Layer [Data & Local Storage]
-        DB[(SQLite / sqflite)]:::data
-        Cache[(Shared Preferences)]:::data
+    subgraph DataLayer ["Data Layer (lib/data/)"]
+        Repositories["Repositories (UserRepository, SessionRepository, etc.)"]:::data
+        
+        subgraph Services ["Services (lib/data/services/)"]
+            AIServices["OnnxService & TokenizerService"]:::service
+            VoiceServices["VoiceCommandDetector & TtsService"]:::service
+            NotifServices["NotificationService"]:::service
+            CacheServices["AnimationCacheService"]:::service
+        end
+
+        subgraph LocalStorage ["Local Storage"]
+            DB[("SQLite (sqflite)")]:::data
+            Cache[("Shared Preferences")]:::data
+        end
     end
 
-    %% Flow of MVVM
-    UI -->|User Intent / Actions| Riverpod
+    %% Flow of MVVM & Clean Architecture
+    UI -->|User Intent & UI Events| Riverpod
     Riverpod -->|Reactive State Updates| UI
     
-    Riverpod -->|Fetch / Process Request| Repository
-    Repository -->|Parsed Domain Data| Riverpod
+    Riverpod -->|Fetch / Process Business Logic| Repositories
+    Riverpod -->|Voice Control & Audio Coaching| VoiceServices
+    Riverpod -->|Schedule Workout Reminders| NotifServices
     
-    Repository -->|Query| DB
-    Repository -->|Cache| Cache
-    
-    Riverpod -->|Search Query / Embeddings| AI
-    AI -->|Semantic Match Results| DataModels
+    Repositories -->|Uses Entities| DomainModels
+    Repositories -->|Query / Mutate| DB
+    Repositories -->|Cache Data| Cache
+    Repositories -->|Semantic Embeddings & Tokenization| AIServices
+    AIServices -->|Inference Results| DomainModels
 ```
 
-- **View Layer**: Contains the modular Flutter screens and reusable UI components. Responsible only for rendering state and capturing user input.
-- **ViewModel Layer (Riverpod)**: Acts as the bridge between the View and Model. It holds the business logic, manages the state of the UI, and interacts with repositories.
-- **Model Layer**: Contains the core domain structures (Data Models) and the **Repositories**, which abstract the logic required to access data sources. Includes ONNX inference logic.
-- **Data Layer**: Manages local persistence using SQLite for offline-first capabilities and Shared Preferences for caching.
+- **View Layer (`lib/ui/`)**: Contains modular Flutter screens and reusable UI components. Responsible solely for rendering state and capturing user input and gesture events.
+- **ViewModel Layer (`lib/ui/**/view_models/` & `lib/routing/`)**: Acts as the reactive bridge between the View and Data/Domain layers. Holds presentation logic, manages UI state via Riverpod, coordinates audio coaching/voice command services, and handles navigation via GoRouter.
+- **Domain Layer (`lib/domain/`)**: Contains core domain entities and data models (`Exercise`, `Userdata`, `WorkoutSession`, `DayPlan`, etc.) independent of external libraries or frameworks.
+- **Data Layer (`lib/data/`)**: Handles all data coordination and operations:
+  - **Repositories (`lib/data/repositories/`)**: Abstract data access and provide unified APIs for user profiles, workout sessions, exercise recommendations, and AI models.
+  - **Services (`lib/data/services/`)**: Encapsulate device-level capabilities such as on-device AI embedding inference (`OnnxService`), tokenization (`TokenizerService`), offline voice keyword detection (`VoiceCommandDetector`), text-to-speech coaching (`TtsService`), local scheduled reminders (`NotificationService`), and media caching (`AnimationCacheService`).
+  - **Local Storage (`lib/data/database/`)**: Manages offline persistence with SQLite (`sqflite`) and user preferences caching with `SharedPreferences`.
 
 ### 2. Custom Input to Tags Pipeline
 
@@ -241,6 +265,21 @@ Ensure you have a simulator running or a device connected.
 
 ```bash
 flutter run
+```
+
+#### 6. Code Quality & Testing (CI Checks)
+
+To verify that your code adheres to project standards and passes CI ([`.github/workflows/test.yml`](.github/workflows/test.yml)):
+
+```bash
+# Format code
+dart format .
+
+# Run static analysis
+flutter analyze
+
+# Run automated tests
+flutter test
 ```
 
 ---

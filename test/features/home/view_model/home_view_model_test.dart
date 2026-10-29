@@ -1,13 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:move_your_body/features/home/repositories/exercise_repository.dart';
-import 'package:move_your_body/features/home/repositories/session_repository.dart';
-import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
-import 'package:move_your_body/features/home/services/recommendation_service.dart';
-import 'package:move_your_body/features/home/view_model/home_view_model.dart';
-import 'package:move_your_body/core/model/session_data.dart';
-import 'package:move_your_body/core/model/user_data.dart';
+import 'package:move_your_body/data/repositories/exercise_repository.dart';
+import 'package:move_your_body/data/repositories/session_repository.dart';
+import 'package:move_your_body/data/repositories/user_repository.dart';
+import 'package:move_your_body/ui/home/view_models/home_view_model.dart';
+import 'package:move_your_body/domain/models/session_data.dart';
+import 'package:move_your_body/domain/models/user_data.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class MockSessionRepository extends Mock implements SessionRepository {}
@@ -15,8 +14,6 @@ class MockSessionRepository extends Mock implements SessionRepository {}
 class MockExerciseRepository extends Mock implements ExerciseRepository {}
 
 class MockUserRepository extends Mock implements UserRepository {}
-
-class MockRecommendationService extends Mock implements RecommendationService {}
 
 class MockUserData extends Mock implements UserData {}
 
@@ -32,22 +29,17 @@ void main() {
     late MockSessionRepository mockSessionRepo;
     late MockExerciseRepository mockExerciseRepo;
     late MockUserRepository mockUserRepo;
-    late MockRecommendationService mockRecommendationService;
 
     setUp(() {
       mockSessionRepo = MockSessionRepository();
       mockExerciseRepo = MockExerciseRepository();
       mockUserRepo = MockUserRepository();
-      mockRecommendationService = MockRecommendationService();
 
       container = ProviderContainer(
         overrides: [
           sessionRepositoryProvider.overrideWithValue(mockSessionRepo),
           exerciseRepositoryProvider.overrideWithValue(mockExerciseRepo),
           userRepositoryProvider.overrideWithValue(mockUserRepo),
-          recommendationServiceProvider.overrideWithValue(
-            mockRecommendationService,
-          ),
         ],
       );
     });
@@ -58,11 +50,17 @@ void main() {
       ).thenAnswer((_) async => null);
       final user = MockUserData();
       when(() => mockUserRepo.getUserData()).thenAnswer((_) async => user);
+      when(() => user.goalTags).thenReturn([]);
+      when(() => user.targetBodyRegion).thenReturn([]);
+      when(() => user.difficulty).thenReturn('');
+      when(() => user.intensity).thenReturn('');
+      when(() => user.healthIssueTags).thenReturn([]);
+      when(() => user.equipments).thenReturn([]);
       when(
         () => mockSessionRepo.getRecentExerciseIds(any()),
       ).thenAnswer((_) async => []);
       when(
-        () => mockRecommendationService.recommendExercises(user, []),
+        () => mockExerciseRepo.getAllExercises(),
       ).thenAnswer((_) async => []);
 
       container.listen(homeViewModelProvider, (_, _) {});

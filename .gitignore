@@ -348,3 +348,12 @@ build/
 .flutter-plugins-dependencies
 lib/generated/
 assets/exercises.db
+
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Security review reports (unremediated)
+unremediated-security-reviews/

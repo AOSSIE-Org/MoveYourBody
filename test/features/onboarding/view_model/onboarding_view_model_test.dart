@@ -1,13 +1,15 @@
+import 'package:move_your_body/data/database/db_config.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
-import 'package:move_your_body/core/model/user_data.dart';
-import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
-import 'package:move_your_body/features/onboarding/view_model/onboarding_view_model.dart';
+import 'package:move_your_body/domain/models/user_data.dart';
+import 'package:move_your_body/data/repositories/user_repository.dart';
+import 'package:move_your_body/ui/onboarding/view_models/onboarding_view_model.dart';
 
 class FakeUserRepository extends UserRepository {
+  FakeUserRepository() : super(DatabaseService());
   UserData? savedUser;
 
   @override

@@ -13,6 +13,9 @@ Fixes #(issue number)
 
 ## Checklist
 <!-- Mark items with [x] to indicate completion -->
+- [ ] My code is formatted (`dart format .`)
+- [ ] Static analysis passes with zero warnings or errors (`flutter analyze`)
+- [ ] All unit and widget tests pass (`flutter test`)
 - [ ] My code follows the project's code style and conventions
 - [ ] I have made corresponding changes to the documentation
 - [ ] My changes generate no new warnings or errors

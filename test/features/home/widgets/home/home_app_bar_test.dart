@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/features/home/widgets/home/home_app_bar.dart';
+import 'package:move_your_body/ui/home/widgets/home/home_app_bar.dart';
 
 void main() {
   testWidgets('HomeAppBar renders username correctly', (

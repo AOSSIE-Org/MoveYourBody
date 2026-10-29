@@ -26,11 +26,12 @@ Flutter/Dart mobile application.
 
 We follow a strict Model-View-ViewModel (MVVM) with Repository Pattern.
 
-`lib/features/` — contains a folder for each individual feature. Each feature should contain its own UI, ViewModels (Riverpod), and Repositories.
-
-`lib/generated/` — contains auto-generated code.
-
-Keep feature-specific logic inside its respective feature directory.
+- `lib/data/` — contains database configurations, tables, schemas, repositories, and services.
+- `lib/domain/` — contains core domain data models and state definitions.
+- `lib/ui/` — contains UI screens, feature widgets, and ViewModels (Riverpod).
+- `lib/routing/` — contains GoRouter configuration and route definitions.
+- `lib/utils/` — contains themes, constants, and helper utilities.
+- `lib/l10n/` — contains localization files.
 
 Database logic should be kept separate from UI and feature presentation code, abstracted within the Repository layer.
 

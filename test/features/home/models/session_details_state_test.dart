@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/features/home/models/session_details_state.dart';
-import 'package:move_your_body/core/model/session_data.dart';
+import 'package:move_your_body/domain/models/session_details_state.dart';
+import 'package:move_your_body/domain/models/session_data.dart';
 
 void main() {
   group('SessionDetailsState', () {

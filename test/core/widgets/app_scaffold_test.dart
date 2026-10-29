@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/core/widgets/app_scaffold.dart';
+import 'package:move_your_body/ui/common/app_scaffold.dart';
 
 void main() {
   group('AppScaffold Widget Tests', () {

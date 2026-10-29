@@ -1,18 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:move_your_body/features/home/repositories/session_repository.dart';
-import 'package:move_your_body/core/model/session_data.dart';
-import 'package:move_your_body/core/model/user_data.dart';
-import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
-import 'package:move_your_body/features/home/services/recommendation_service.dart';
+import 'package:move_your_body/data/repositories/session_repository.dart';
+import 'package:move_your_body/domain/models/session_data.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:move_your_body/core/database/db_config.dart';
-
-class MockUserRepository extends Mock implements UserRepository {}
-
-class MockRecommendationService extends Mock implements RecommendationService {}
-
-class MockUserData extends Mock implements UserData {}
+import 'package:move_your_body/data/database/db_config.dart';
 
 void main() {
   setUpAll(() {
@@ -23,45 +13,27 @@ void main() {
 
   group('SessionRepository', () {
     late SessionRepository repo;
-    late MockUserRepository mockUserRepository;
-    late MockRecommendationService mockRecommendationService;
 
     setUp(() async {
-      mockUserRepository = MockUserRepository();
-      mockRecommendationService = MockRecommendationService();
-      repo = SessionRepository(
-        userRepository: mockUserRepository,
-        recommendationService: mockRecommendationService,
-      );
+      repo = SessionRepository(dbService: DatabaseService());
 
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await DatabaseService().userDatabase;
       try {
         await db.delete('session_schedule');
         await db.delete('session_exercise');
       } catch (_) {}
     });
 
-    test('createSession returns null when user data is null', () async {
-      when(
-        () => mockUserRepository.getUserData(),
-      ).thenAnswer((_) async => null);
-    });
+    test(
+      'createSessionFromExercises creates session with given exercises',
+      () async {
+        final session = await repo.createSessionFromExercises([]);
 
-    test('createSession creates session when user data exists', () async {
-      final mockUserData = MockUserData();
-      when(
-        () => mockUserRepository.getUserData(),
-      ).thenAnswer((_) async => mockUserData);
-      when(
-        () => mockRecommendationService.recommendExercises(mockUserData, any()),
-      ).thenAnswer((_) async => []);
-
-      final session = await repo.createSession();
-
-      expect(session, isA<Session>());
-      expect(session?.exercises, isEmpty);
-      expect(session?.sessionStatus, SessionStatus.created);
-    });
+        expect(session, isA<Session>());
+        expect(session?.exercises, isEmpty);
+        expect(session?.sessionStatus, SessionStatus.created);
+      },
+    );
 
     test(
       'getLatestIncompleteSession returns null when database is empty',

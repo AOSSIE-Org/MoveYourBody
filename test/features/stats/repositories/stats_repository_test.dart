@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:move_your_body/features/stats/repositories/stats_repository.dart';
-import 'package:move_your_body/core/database/db_config.dart';
-import 'package:move_your_body/core/database/tables/session_schedule_table.dart';
-import 'package:move_your_body/core/model/session_data.dart';
+import 'package:move_your_body/data/repositories/stats_repository.dart';
+import 'package:move_your_body/data/database/db_config.dart';
+import 'package:move_your_body/data/database/tables/session_schedule_table.dart';
+import 'package:move_your_body/domain/models/session_data.dart';
 
 void main() {
   setUpAll(() {
@@ -16,16 +16,16 @@ void main() {
     late StatsRepository repository;
 
     setUp(() async {
-      repository = StatsRepository();
+      repository = StatsRepository(DatabaseService());
 
-      final db = await DatabaseService.instance.userDatabase;
+      final db = await DatabaseService().userDatabase;
       await db.delete(SessionScheduleTable.tableName);
     });
 
     test(
       'getCompletedSessions should return only completed sessions',
       () async {
-        final db = await DatabaseService.instance.userDatabase;
+        final db = await DatabaseService().userDatabase;
 
         final completedSession = Session(
           createdAt: DateTime.now().subtract(const Duration(days: 1)),
@@ -62,7 +62,7 @@ void main() {
     test(
       'getCompletedSessions should return empty list if no completed sessions exist',
       () async {
-        final db = await DatabaseService.instance.userDatabase;
+        final db = await DatabaseService().userDatabase;
 
         final inProgressSession = Session(
           createdAt: DateTime.now(),

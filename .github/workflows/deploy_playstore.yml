@@ -92,7 +92,7 @@ jobs:
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
-          packageName: org.aossie.move_your_body
+          packageName: org.aossie.move
           releaseFiles: ${{ env.AAB_PATH }}
           track: internal
 

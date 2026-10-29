@@ -75,22 +75,22 @@
 
 ### Version Numbering
 
-- [~] 🔴 **version_unique** — Each release has a unique version identifier (e.g., v1.0.0).
-  - *Evidence URL:* `[~]` N/A — *Justification:* No public releases have been made yet.
+- [x] 🔴 **version_unique** — Each release has a unique version identifier (e.g., v1.0.0).
+  - *Evidence URL:* [GitHub Releases](https://github.com/AOSSIE-Org/MoveYourBody/releases) (e.g., `v1.0.0+3`) and [Google Play Store](https://play.google.com/store/apps/details?id=org.aossie.move) (`1.0.0+4`).
 
-- [ ] 🔵 **version_semver** — Project uses [SemVer](https://semver.org) or [CalVer](https://calver.org/) format. *(SUGGESTED)*
-  - *Note:* 
+- [x] 🔵 **version_semver** — Project uses [SemVer](https://semver.org) or [CalVer](https://calver.org/) format. *(SUGGESTED)*
+  - *Note:* Follows Semantic Versioning with Flutter build metadata (`MAJOR.MINOR.PATCH+BUILD`) as tracked in `VERSION` (`1.0.0`) and `pubspec.yaml` (`1.0.0+4`).
 
-- [ ] 🔵 **version_tags** — Releases are tagged in the VCS (e.g., `git tag v1.0.0`). *(SUGGESTED)*
-  - *Evidence URL:* 
+- [x] 🔵 **version_tags** — Releases are tagged in the VCS (e.g., `git tag v1.0.0`). *(SUGGESTED)*
+  - *Evidence URL:* [GitHub Tags](https://github.com/AOSSIE-Org/MoveYourBody/tags) (e.g., `v1.0.0`, `v1.0.0+3`).
 
 ### Release Notes
 
-- [~] 🔴 **release_notes** — Each release includes human-readable release notes summarizing major changes. Raw `git log` output is NOT acceptable.
-  - *Evidence URL:* `[~]` N/A — *Justification:* No public releases have been made yet as the project is in active initial development.
+- [x] 🔴 **release_notes** — Each release includes human-readable release notes summarizing major changes. Raw `git log` output is NOT acceptable.
+  - *Evidence URL:* [GitHub Releases](https://github.com/AOSSIE-Org/MoveYourBody/releases) provides curated, human-readable release summaries for published versions.
 
 - [~] 🔴 **release_notes_vulns** — Release notes identify every publicly known vulnerability (with CVE) fixed in that release.
-  - *Evidence URL:* `[~]` N/A — *Justification:* No public releases or known CVEs yet.
+  - *Evidence URL:* `[~]` N/A — *Justification:* No publicly known vulnerabilities or CVEs exist for this application to date.
 
 ---
 
@@ -115,14 +115,14 @@
 
 ### Vulnerability Reporting
 
-- [~] 🔴 **vulnerability_report_process** — A vulnerability reporting process is documented (e.g., `SECURITY.md`).
-  - *Evidence URL:* `[~]` N/A — *Justification:* Project is building from scratch and not publicly released yet.
+- [x] 🔴 **vulnerability_report_process** — A vulnerability reporting process is documented (e.g., `SECURITY.md`).
+  - *Evidence URL:* [SECURITY.md](./SECURITY.md)
 
-- [~] 🟡 **vulnerability_report_private** — If private vulnerability reporting is supported, the method for private submission is documented.
-  - *Evidence URL:* `[~]` N/A — *Justification:* Project is building from scratch and not publicly released yet.
+- [x] 🟡 **vulnerability_report_private** — If private vulnerability reporting is supported, the method for private submission is documented.
+  - *Evidence URL:* [SECURITY.md](./SECURITY.md) (Section: *Private Submission Process*)
 
-- [~] 🔴 **vulnerability_report_response** — Initial response to any vulnerability report received in the last 6 months was within 14 days.
-  - *Self-certification note:* `[~]` N/A — *Justification:* Project is building from scratch and not publicly released yet.
+- [x] 🔴 **vulnerability_report_response** — Initial response to any vulnerability report received in the last 6 months was within 14 days.
+  - *Self-certification note:* Documented in [SECURITY.md](./SECURITY.md) with a 48–72 hour acknowledgement and 14-day fix commitment. No vulnerability reports have been received to date.
 
 ---
 
@@ -144,8 +144,8 @@
 - [x] 🔵 **test_invocation** — The test suite can be invoked in a standard way for the language (e.g., `npm test`, `pytest`, `cargo test`). *(SUGGESTED)*
   - *Evidence URL:* `flutter test`
 
-- [ ] 🔵 **test_most** — The test suite covers most code branches, input fields, and functionality. *(SUGGESTED)*
-  - *Estimated coverage %:* 
+- [x] 🔵 **test_most** — The test suite covers most code branches, input fields, and functionality. *(SUGGESTED)*
+  - *Estimated coverage %:* Extensive suite of 80+ unit and widget test files across `test/core/` and `test/features/` covering domain models, repositories, viewmodels, services, and UI screens.
 
 ### New Functionality Testing Policy
 
@@ -155,8 +155,8 @@
 - [x] 🔴 **tests_are_added** — Evidence exists that the test policy has been followed in recent major changes (e.g., PRs include tests).
   - *Evidence URL:* See recent PR: https://github.com/AOSSIE-Org/MoveYourBody/pull/19
 
-- [ ] 🔵 **tests_documented_added** — The test policy is documented in contribution instructions. *(SUGGESTED)*
-  - *Evidence URL:* 
+- [x] 🔵 **tests_documented_added** — The test policy is documented in contribution instructions. *(SUGGESTED)*
+  - *Evidence URL:* [CONTRIBUTING.md](./CONTRIBUTING.md) (Section: *3. Verify Your Code & Tests (CI Requirements)*)
 
 ### Linting / Warning Flags
 
@@ -175,11 +175,11 @@
 
 ### Secure Development Knowledge
 
-- [ ] 🔴 **know_secure_design** — At least one primary developer knows how to design secure software (familiar with OWASP, threat modeling, secure-by-default principles).
-  - *Self-certification note:* 
+- [x] 🔴 **know_secure_design** — At least one primary developer knows how to design secure software (familiar with OWASP, threat modeling, secure-by-default principles).
+  - *Self-certification note:* Primary developers apply OWASP Mobile Application Security principles, Privacy-by-Design (fully offline, zero telemetry, local on-device SQLite storage), and the Principle of Least Privilege (minimal system permissions requested).
 
-- [ ] 🔴 **know_common_errors** — At least one primary developer knows common vulnerability types for this software's category and how to mitigate them (e.g., injection, XSS, reentrancy for Solidity, prompt injection for AI).
-  - *Self-certification note:* 
+- [x] 🔴 **know_common_errors** — At least one primary developer knows common vulnerability types for this software's category and how to mitigate them (e.g., injection, XSS, reentrancy for Solidity, prompt injection for AI).
+  - *Self-certification note:* Team actively mitigates mobile risks: parameterized SQL queries prevent SQL injection in SQLite repositories, input sanitization prevents crashes in the local ONNX/tokenizer pipeline, and debug logging is barred in production via strict lint rules.
 
 ### Cryptography (mark N/A if project does not handle cryptography)
 
@@ -210,14 +210,14 @@
 
 ### Static Code Analysis
 
-- [ ] 🔴 **static_analysis_fixed** — All medium+ severity vulnerabilities found by static analysis are fixed in a timely manner after confirmation.
-  - *Note:* 
+- [x] 🔴 **static_analysis_fixed** — All medium+ severity vulnerabilities found by static analysis are fixed in a timely manner after confirmation.
+  - *Note:* Enforced via GitHub Actions CI ('flutter analyze' in test.yml). All static analysis warnings and linter issues must be resolved before any pull request can be merged.
 
 - [x] 🔵 **static_analysis_common_vulnerabilities** — The static analysis tool includes checks for common vulnerabilities in the language/environment (e.g., eslint-plugin-security, bandit, Slither). *(SUGGESTED)*
   - *Tool + ruleset:* `flutter analyze` catches standard Dart vulnerabilities.
 
-- [ ] 🔵 **static_analysis_often** — Static analysis runs on every commit or at least daily (CI integration). *(SUGGESTED)*
-  - *Evidence URL:* 
+- [x] 🔵 **static_analysis_often** — Static analysis runs on every commit or at least daily (CI integration). *(SUGGESTED)*
+  - *Evidence URL:* [test.yml](.github/workflows/test.yml) executes `flutter analyze` on every pull request and push to `main`.
 
 ### Dynamic Code Analysis
 
@@ -227,8 +227,8 @@
 - [x] 🔵 **dynamic_analysis_enable_assertions** — Dynamic analysis / testing runs with assertions enabled (not just production mode). *(SUGGESTED)*
   - *Note:* Flutter runs in debug mode with assertions enabled by default.
 
-- [ ] 🔴 **dynamic_analysis_fixed** — Medium+ severity vulnerabilities found by dynamic analysis are fixed in a timely manner.
-  - *Note:* 
+- [~] 🔴 **dynamic_analysis_fixed** — Medium+ severity vulnerabilities found by dynamic analysis are fixed in a timely manner.
+  - *Note:* `[~]` N/A — *Justification:* As noted in `dynamic_analysis` above, external dynamic analysis tools (e.g., web/API fuzzers) do not apply to this fully offline Flutter client. Any runtime regressions or assertion failures caught during automated test runs (`flutter test`) are resolved immediately.
 
 - [~] 🔵 **dynamic_analysis_unsafe** — If the project uses memory-unsafe languages (C/C++), memory safety tools (Valgrind, AddressSanitizer) are used. *(SUGGESTED)*
   - *Note:* `[~]` N/A — *Justification:* Project uses Dart, which is a memory-safe language.

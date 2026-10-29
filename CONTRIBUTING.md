@@ -73,7 +73,11 @@ MoveYourBody/
 ├── public/             # Static assets for README (logos, diagrams)
 ├── scripts/            # Python utility scripts (e.g., DB generation)
 ├── lib/
-│   ├── features/       # Feature-driven modules (UI, State, Repositories)
+│   ├── data/           # Database, repositories, and services
+│   ├── domain/         # Data models and entities
+│   ├── ui/             # Screens, ViewModels (Riverpod), and widgets
+│   ├── routing/        # App navigation and routes
+│   ├── utils/          # Theme, helpers, and constants
 │   ├── l10n/           # Localization files
 │   └── main.dart       # Flutter entry point
 ├── pubspec.yaml        # Flutter dependencies
@@ -138,14 +142,31 @@ git checkout -b fix/your-bug-fix
 - Add comments where necessary
 - Update documentation if needed
 
-### 3. Test Your Changes
+### 3. Verify Your Code & Tests (CI Requirements)
 
-Ensure all tests pass and there are no analyzer issues:
+Every Pull Request must pass the automated GitHub Actions CI pipeline ([`.github/workflows/test.yml`](.github/workflows/test.yml)). To avoid failing PR builds, run these verification steps locally before committing or pushing:
 
+#### A. Format Code
+CI runs `dart format --output=none --set-exit-if-changed .` and will fail if any file is unformatted. Format your entire codebase:
 ```bash
-flutter test
+dart format .
+```
+
+#### B. Static Analysis
+Ensure there are no compile warnings, lint errors, or deprecated usage:
+```bash
 flutter analyze
 ```
+
+#### C. Run Tests
+Ensure all unit and widget tests pass:
+```bash
+flutter test
+```
+> **Note:** If your changes touch exercise models, seeds, or database schemas, regenerate the SQLite database before running tests:
+> ```bash
+> python scripts/generate_exercise_db.py
+> ```
 
 ### 4. Commit Your Changes
 
@@ -185,6 +206,9 @@ git push origin feature/your-feature-name
 
 ### Before Submitting
 
+- [ ] Code is formatted properly (`dart format .`)
+- [ ] Code passes static analysis without warnings or errors (`flutter analyze`)
+- [ ] All unit and widget tests pass (`flutter test`)
 - [ ] Your code follows the project's style guidelines
 - [ ] You've tested your changes thoroughly
 - [ ] You've updated relevant documentation
@@ -216,10 +240,13 @@ Closes #issue_number
 ## Screenshots/Video (if applicable)
 Add screenshots here
 
-## Testing(if applicable)
+## Testing (if applicable)
 Steps to test the changes
 
 ## Checklist
+- [ ] Code formatted with `dart format .`
+- [ ] Static analysis passed with `flutter analyze`
+- [ ] All tests passed with `flutter test`
 - [ ] Code follows style guidelines
 - [ ] Self-review completed
 - [ ] Documentation updated

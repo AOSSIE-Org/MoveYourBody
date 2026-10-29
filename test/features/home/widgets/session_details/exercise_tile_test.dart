@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/features/home/widgets/session_details/exercise_tile.dart';
+import 'package:move_your_body/ui/home/widgets/session_details/exercise_tile.dart';
 
 void main() {
   group('ExerciseTile', () {

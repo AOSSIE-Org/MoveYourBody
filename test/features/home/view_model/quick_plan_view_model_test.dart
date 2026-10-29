@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:move_your_body/features/home/repositories/quick_plan_repository.dart';
-import 'package:move_your_body/features/home/view_model/quick_plan_view_model.dart';
-import 'package:move_your_body/core/model/session_data.dart';
-import 'package:move_your_body/core/model/quick_plan_data.dart';
+import 'package:move_your_body/data/repositories/quick_plan_repository.dart';
+import 'package:move_your_body/ui/home/view_models/quick_plan_view_model.dart';
+import 'package:move_your_body/domain/models/session_data.dart';
+import 'package:move_your_body/domain/models/quick_plan_data.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class MockQuickPlanRepository extends Mock implements QuickPlanRepository {}

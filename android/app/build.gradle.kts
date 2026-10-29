@@ -15,7 +15,7 @@ plugins {
 }
 
 android {
-    namespace = "org.aossie.move_your_body"
+    namespace = "org.aossie.move"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -26,7 +26,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "org.aossie.move_your_body"
+        applicationId = "org.aossie.move"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
