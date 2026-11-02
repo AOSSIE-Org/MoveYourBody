@@ -39,7 +39,7 @@ dependencies:
   go_router: ^17.3.0
   freezed_annotation: ^3.1.0
   riverpod_annotation: ^4.0.2
-  flutter_onnxruntime: ^1.8.0
+  flutter_onnxruntime: ^1.9.0
   dart_wordpiece: ^1.2.0
   sqflite: ^2.4.3
   path: ^1.9.1
