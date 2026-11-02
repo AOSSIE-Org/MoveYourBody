@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:move_your_body/features/home/view_model/session_execution_view_model.dart';
+import 'package:move_your_body/ui/home/view_models/session_execution_view_model.dart';
 import 'package:flutter/services.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 

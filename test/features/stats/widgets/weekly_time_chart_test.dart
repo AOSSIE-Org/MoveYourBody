@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:move_your_body/features/stats/widgets/weekly_time_chart.dart';
-import 'package:move_your_body/core/model/session_data.dart';
+import 'package:move_your_body/ui/stats/widgets/weekly_time_chart.dart';
+import 'package:move_your_body/domain/models/session_data.dart';
+import 'package:move_your_body/domain/models/enums/session_enums.dart';
 
 void main() {
   Widget createWidgetUnderTest(List<Session> sessions) {

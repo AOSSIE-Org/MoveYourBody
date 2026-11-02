@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:move_your_body/features/onboarding/view/goal_screen.dart';
-import 'package:move_your_body/core/widgets/feature_chip.dart';
-import 'package:move_your_body/core/routing/app_routes.dart';
+import 'package:move_your_body/ui/onboarding/widgets/goal_screen.dart';
+import 'package:move_your_body/ui/core/feature_chip.dart';
+import 'package:move_your_body/routing/app_routes.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
@@ -69,6 +69,10 @@ void main() {
     ) async {
       final mockObserver = MockNavigatorObserver();
       await tester.pumpWidget(createWidgetWithRouter(mockObserver));
+      await tester.pumpAndSettle();
+
+      final fatBurnChip = find.widgetWithText(FeatureChip, 'Burn Fat');
+      await tester.tap(fatBurnChip);
       await tester.pumpAndSettle();
 
       final continueButton = find.text('Continue');

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:move_your_body/features/home/widgets/exercise_info/animation_preview.dart';
-import 'package:move_your_body/core/model/exercise_data.dart';
+import 'package:move_your_body/ui/home/widgets/exercise_info/animation_preview.dart';
+import 'package:move_your_body/domain/models/exercise_data.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class MockExercise extends Mock implements Exercise {}

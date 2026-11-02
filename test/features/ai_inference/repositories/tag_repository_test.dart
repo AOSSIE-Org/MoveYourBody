@@ -1,21 +1,24 @@
+import 'package:move_your_body/data/database/db_config.dart';
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:move_your_body/features/ai_inference/repositories/tag_repository.dart';
-import 'package:move_your_body/core/model/tag_data.dart';
+import 'package:move_your_body/data/repositories/tag_repository.dart';
+import 'package:move_your_body/domain/models/enums/tag_enums.dart';
 
 void main() {
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
+    SharedPreferences.setMockInitialValues({});
   });
 
   group('TagRepository Tests', () {
     late TagRepository repository;
 
     setUp(() {
-      repository = TagRepository();
+      repository = TagRepository(DatabaseService());
     });
 
     test(

@@ -1,0 +1,1 @@
+enum TagType { goal, injury }

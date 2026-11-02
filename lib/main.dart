@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:move_your_body/core/routing/app_router.dart';
-import 'package:move_your_body/features/notifications/services/notification_service.dart';
+import 'package:move_your_body/routing/app_router.dart';
+import 'package:move_your_body/data/services/notification_service.dart';
 
-import 'core/theme/app_themes.dart';
+import 'utils/theme/app_themes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {

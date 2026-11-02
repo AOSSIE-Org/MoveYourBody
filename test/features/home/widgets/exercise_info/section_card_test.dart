@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/features/home/widgets/exercise_info/section_card.dart';
+import 'package:move_your_body/ui/home/widgets/exercise_info/section_card.dart';
 
 void main() {
   testWidgets('SectionCard renders title and child correctly', (

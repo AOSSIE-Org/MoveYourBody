@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:move_your_body/features/notifications/repositories/notification_repository.dart';
-import 'package:move_your_body/features/notifications/services/notification_service.dart';
-import 'package:move_your_body/features/notifications/view_model/notification_settings_view_model.dart';
+import 'package:move_your_body/data/repositories/notification_repository.dart';
+import 'package:move_your_body/data/services/notification_service.dart';
+import 'package:move_your_body/ui/notifications/view_models/notification_settings_view_model.dart';
 
 class MockNotificationRepository extends Mock
     implements NotificationRepository {}

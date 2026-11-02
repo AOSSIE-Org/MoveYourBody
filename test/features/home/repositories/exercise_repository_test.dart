@@ -1,6 +1,7 @@
+import 'package:move_your_body/data/database/db_config.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/features/home/repositories/exercise_repository.dart';
-import 'package:move_your_body/core/model/exercise_data.dart';
+import 'package:move_your_body/data/repositories/exercise_repository.dart';
+import 'package:move_your_body/domain/models/exercise_data.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -27,7 +28,7 @@ void main() {
     late ExerciseRepository repo;
 
     setUp(() {
-      repo = ExerciseRepository();
+      repo = ExerciseRepository(DatabaseService());
     });
 
     test('getAllExercises returns a List<Exercise>', () async {

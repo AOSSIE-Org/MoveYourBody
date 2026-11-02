@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/features/home/models/home_state.dart';
+import 'package:move_your_body/domain/models/home_state.dart';
 
 void main() {
   group('HomeState', () {
@@ -14,11 +14,9 @@ void main() {
         selectedDate: baseDate,
         currentWeekDays: weekDays,
       );
-      expect(state.isLoading, false);
       expect(state.isCreatingSession, false);
       expect(state.recommendedExercises, isEmpty);
       expect(state.hasIncompleteSession, false);
-      expect(state.errorMessage, isNull);
       expect(state.currentSession, isNull);
     });
 
@@ -34,9 +32,12 @@ void main() {
         selectedDate: baseDate,
         currentWeekDays: weekDays,
       );
-      final edited = original.copyWith(isLoading: true, errorMessage: 'Oops');
-      expect(edited.isLoading, true);
-      expect(edited.errorMessage, 'Oops');
+      final edited = original.copyWith(
+        isCreatingSession: true,
+        hasIncompleteSession: true,
+      );
+      expect(edited.isCreatingSession, true);
+      expect(edited.hasIncompleteSession, true);
       expect(edited.selectedDate, original.selectedDate);
       expect(edited, isNot(equals(original)));
     });

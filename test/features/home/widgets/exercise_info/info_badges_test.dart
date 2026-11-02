@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/features/home/widgets/exercise_info/info_badges.dart';
+import 'package:move_your_body/ui/home/widgets/exercise_info/info_badges.dart';
 
 void main() {
   group('Info Badges', () {

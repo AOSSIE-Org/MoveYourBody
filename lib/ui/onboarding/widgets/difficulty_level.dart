@@ -1,0 +1,102 @@
+import 'package:flutter/material.dart';
+import 'package:move_your_body/ui/core/onboarding_progress.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:move_your_body/routing/app_routes.dart';
+import 'package:move_your_body/ui/core/button_card.dart';
+import 'package:go_router/go_router.dart';
+import 'package:move_your_body/ui/core/app_toast.dart';
+import 'package:move_your_body/ui/core/app_scaffold.dart';
+import 'package:move_your_body/ui/onboarding/view_models/onboarding_view_model.dart';
+import 'package:move_your_body/domain/models/enums/exercise_enums.dart';
+
+class DifficultyScreen extends ConsumerWidget {
+  const DifficultyScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = Theme.of(context).textTheme;
+
+    final selectedDifficulty = ref.watch(
+      onboardingViewModelProvider.select((state) => state.difficulty),
+    );
+
+    final onboardingNotifier = ref.read(onboardingViewModelProvider.notifier);
+
+    return AppScaffold(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            /// Progress
+            const OnboardingProgress(currentStep: 2),
+
+            const SizedBox(height: 10),
+
+            Text(
+              'Choose your Difficulty Level',
+              textAlign: TextAlign.center,
+              style: textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            ButtonCard(
+              title: 'Beginner',
+              subtitle:
+                  'New to fitness, rarely exercise or returning after a long break.',
+              selected: selectedDifficulty == Difficulty.beginner.name,
+              onTap: () {
+                onboardingNotifier.setDifficulty(Difficulty.beginner.name);
+              },
+            ),
+
+            const SizedBox(height: 20),
+
+            ButtonCard(
+              title: 'Intermediate',
+              subtitle:
+                  'Exercise regularly and have a basic fitness foundation.',
+              selected: selectedDifficulty == Difficulty.intermediate.name,
+              onTap: () {
+                onboardingNotifier.setDifficulty(Difficulty.intermediate.name);
+              },
+            ),
+
+            const SizedBox(height: 20),
+
+            ButtonCard(
+              title: 'Advanced',
+              subtitle:
+                  'Train consistently with strong endurance and strength.',
+              selected: selectedDifficulty == Difficulty.advanced.name,
+              onTap: () {
+                onboardingNotifier.setDifficulty(Difficulty.advanced.name);
+              },
+            ),
+
+            const SizedBox(height: 40),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (selectedDifficulty == null ||
+                      selectedDifficulty.isEmpty) {
+                    AppToast.show(context, 'Please select a difficulty level');
+                    return;
+                  }
+                  context.push(AppRoutes.intensity);
+                },
+                child: const Text('Continue'),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+}

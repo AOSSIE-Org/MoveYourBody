@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:move_your_body/features/notifications/models/notification_settings_state.dart';
+import 'package:move_your_body/domain/models/notification_settings_state.dart';
 
 void main() {
   group('NotificationSettingsState Tests', () {

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:move_your_body/features/home/widgets/home/week_selector.dart';
-import 'package:move_your_body/features/home/view_model/home_view_model.dart';
-import 'package:move_your_body/features/home/models/home_state.dart';
+import 'package:move_your_body/ui/home/widgets/home/week_selector.dart';
+import 'package:move_your_body/ui/home/view_models/home_view_model.dart';
+import 'package:move_your_body/domain/models/home_state.dart';
 
 class FakeHomeViewModel extends HomeViewModel {
   final HomeState initialState;
@@ -12,7 +12,7 @@ class FakeHomeViewModel extends HomeViewModel {
   FakeHomeViewModel(this.initialState);
 
   @override
-  HomeState build() => initialState;
+  Future<HomeState> build() async => initialState;
 }
 
 void main() {
@@ -35,6 +35,7 @@ void main() {
       );
 
       await tester.pumpWidget(createTestWidget(state));
+      await tester.pump();
 
       expect(find.byType(ListView), findsNothing);
     });
@@ -51,6 +52,7 @@ void main() {
       final state = HomeState(selectedDate: now, currentWeekDays: weekDays);
 
       await tester.pumpWidget(createTestWidget(state));
+      await tester.pump();
 
       expect(find.byType(ListView), findsOneWidget);
       final dayLabel = DateFormat('E').format(now)[0];

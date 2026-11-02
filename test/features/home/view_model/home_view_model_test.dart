@@ -1,22 +1,45 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:move_your_body/features/home/repositories/exercise_repository.dart';
-import 'package:move_your_body/features/home/repositories/session_repository.dart';
-import 'package:move_your_body/features/onboarding/repository/user_repository.dart';
-import 'package:move_your_body/features/home/services/recommendation_service.dart';
-import 'package:move_your_body/features/home/view_model/home_view_model.dart';
-import 'package:move_your_body/core/model/session_data.dart';
-import 'package:move_your_body/core/model/user_data.dart';
+import 'package:move_your_body/data/repositories/exercise_repository.dart';
+import 'package:move_your_body/data/repositories/session_repository.dart';
+import 'package:move_your_body/data/repositories/user_repository.dart';
+import 'package:move_your_body/ui/home/view_models/home_view_model.dart';
+import 'package:move_your_body/domain/models/session_data.dart';
+import 'package:move_your_body/domain/models/user_data.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:move_your_body/domain/models/enums/session_enums.dart';
+import 'package:move_your_body/domain/models/exercise_data.dart';
 
 class MockSessionRepository extends Mock implements SessionRepository {}
 
-class MockExerciseRepository extends Mock implements ExerciseRepository {}
+class FakeExerciseRepository extends ExerciseRepository {
+  List<Exercise> allExercises;
+  FakeExerciseRepository({this.allExercises = const []});
 
-class MockUserRepository extends Mock implements UserRepository {}
+  @override
+  Future<List<Exercise>> build() async => allExercises;
 
-class MockRecommendationService extends Mock implements RecommendationService {}
+  @override
+  Future<List<Exercise>> getAllExercises() async => allExercises;
+
+  @override
+  Future<List<Exercise>> getExercisesByIds(List<String> exerciseIds) async {
+    final map = {for (final e in allExercises) e.exerciseId: e};
+    return exerciseIds.where(map.containsKey).map((id) => map[id]!).toList();
+  }
+}
+
+class FakeUserRepository extends UserRepository {
+  UserData? user;
+  FakeUserRepository({this.user});
+
+  @override
+  Future<UserData?> build() async => user;
+
+  @override
+  Future<UserData?> getUserData() async => user;
+}
 
 class MockUserData extends Mock implements UserData {}
 
@@ -30,24 +53,19 @@ void main() {
   group('HomeViewModel', () {
     late ProviderContainer container;
     late MockSessionRepository mockSessionRepo;
-    late MockExerciseRepository mockExerciseRepo;
-    late MockUserRepository mockUserRepo;
-    late MockRecommendationService mockRecommendationService;
+    late FakeExerciseRepository fakeExerciseRepo;
+    late FakeUserRepository fakeUserRepo;
 
     setUp(() {
       mockSessionRepo = MockSessionRepository();
-      mockExerciseRepo = MockExerciseRepository();
-      mockUserRepo = MockUserRepository();
-      mockRecommendationService = MockRecommendationService();
+      fakeExerciseRepo = FakeExerciseRepository();
+      fakeUserRepo = FakeUserRepository();
 
       container = ProviderContainer(
         overrides: [
           sessionRepositoryProvider.overrideWithValue(mockSessionRepo),
-          exerciseRepositoryProvider.overrideWithValue(mockExerciseRepo),
-          userRepositoryProvider.overrideWithValue(mockUserRepo),
-          recommendationServiceProvider.overrideWithValue(
-            mockRecommendationService,
-          ),
+          exerciseRepositoryProvider.overrideWith(() => fakeExerciseRepo),
+          userRepositoryProvider.overrideWith(() => fakeUserRepo),
         ],
       );
     });
@@ -57,25 +75,20 @@ void main() {
         () => mockSessionRepo.getLatestIncompleteSession(),
       ).thenAnswer((_) async => null);
       final user = MockUserData();
-      when(() => mockUserRepo.getUserData()).thenAnswer((_) async => user);
+      fakeUserRepo.user = user;
+      when(() => user.goalTags).thenReturn([]);
+      when(() => user.targetBodyRegion).thenReturn([]);
+      when(() => user.difficulty).thenReturn('');
+      when(() => user.intensity).thenReturn('');
+      when(() => user.healthIssueTags).thenReturn([]);
+      when(() => user.equipments).thenReturn([]);
       when(
         () => mockSessionRepo.getRecentExerciseIds(any()),
       ).thenAnswer((_) async => []);
-      when(
-        () => mockRecommendationService.recommendExercises(user, []),
-      ).thenAnswer((_) async => []);
 
-      container.listen(homeViewModelProvider, (_, _) {});
-      final state = container.read(homeViewModelProvider);
-
+      final state = await container.read(homeViewModelProvider.future);
       expect(state.currentWeekDays.length, 7);
-      expect(state.isLoading, isFalse);
-
-      await Future.delayed(const Duration(milliseconds: 50));
-
-      final nextState = container.read(homeViewModelProvider);
-      expect(nextState.isLoading, isFalse);
-      expect(nextState.hasIncompleteSession, isFalse);
+      expect(state.hasIncompleteSession, isFalse);
     });
 
     test('loads incomplete session if exists', () async {
@@ -89,15 +102,8 @@ void main() {
       when(
         () => mockSessionRepo.getLatestIncompleteSession(),
       ).thenAnswer((_) async => session);
-      when(
-        () => mockExerciseRepo.getExercisesByIds([]),
-      ).thenAnswer((_) async => []);
 
-      container.listen(homeViewModelProvider, (_, _) {});
-      container.read(homeViewModelProvider);
-      await Future.delayed(const Duration(milliseconds: 50));
-
-      final state = container.read(homeViewModelProvider);
+      final state = await container.read(homeViewModelProvider.future);
       expect(state.hasIncompleteSession, isTrue);
       expect(state.currentSession, session);
     });

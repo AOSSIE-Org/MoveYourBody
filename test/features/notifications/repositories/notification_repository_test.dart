@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:move_your_body/features/notifications/repositories/notification_repository.dart';
+import 'package:move_your_body/data/repositories/notification_repository.dart';
 
 void main() {
   group('NotificationRepository Tests', () {

@@ -2,15 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:move_your_body/features/stats/screens/past_session_details_screen.dart';
-import 'package:move_your_body/features/home/repositories/session_repository.dart';
-import 'package:move_your_body/features/home/repositories/exercise_repository.dart';
-import 'package:move_your_body/core/model/session_data.dart';
-import 'package:move_your_body/core/model/exercise_data.dart';
+import 'package:move_your_body/ui/stats/widgets/past_session_details_screen.dart';
+import 'package:move_your_body/data/repositories/session_repository.dart';
+import 'package:move_your_body/data/repositories/exercise_repository.dart';
+import 'package:move_your_body/domain/models/session_data.dart';
+import 'package:move_your_body/domain/models/exercise_data.dart';
+import 'package:move_your_body/domain/models/enums/exercise_enums.dart';
+import 'package:move_your_body/domain/models/enums/session_enums.dart';
 
 class MockSessionRepository extends Mock implements SessionRepository {}
 
-class MockExerciseRepository extends Mock implements ExerciseRepository {}
+class MockExerciseRepository extends ExerciseRepository with Mock {
+  @override
+  Future<List<Exercise>> build() async => [];
+
+  @override
+  Future<List<Exercise>> getExercisesByIds(List<String> exerciseIds) =>
+      super.noSuchMethod(Invocation.method(#getExercisesByIds, [exerciseIds]));
+}
 
 void main() {
   late MockSessionRepository mockSessionRepo;
@@ -25,7 +34,7 @@ void main() {
     return ProviderScope(
       overrides: [
         sessionRepositoryProvider.overrideWithValue(mockSessionRepo),
-        exerciseRepositoryProvider.overrideWithValue(mockExerciseRepo),
+        exerciseRepositoryProvider.overrideWith(() => mockExerciseRepo),
       ],
       child: MaterialApp(home: PastSessionDetailsScreen(sessionId: sessionId)),
     );
