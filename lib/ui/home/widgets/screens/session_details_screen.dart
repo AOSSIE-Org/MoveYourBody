@@ -1,24 +1,58 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_your_body/domain/models/exercise_data.dart';
 import 'package:move_your_body/utils/theme/app_themes.dart';
 import 'package:move_your_body/routing/app_routes.dart';
 import 'package:move_your_body/ui/core/app_scaffold.dart';
 import 'package:move_your_body/ui/home/view_models/session_details_view_model.dart';
+import 'package:move_your_body/ui/home/widgets/exercise_info/animation_preview.dart';
 import '../session_details/exercise_tile.dart';
 import '../session_details/instructions_card.dart';
 import '../session_details/timing_settings_card.dart';
 
-class SessionDetailsScreen extends ConsumerWidget {
+class SessionDetailsScreen extends ConsumerStatefulWidget {
   final int sessionId;
 
   const SessionDetailsScreen({super.key, required this.sessionId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(sessionDetailsViewModelProvider(sessionId));
+  ConsumerState<SessionDetailsScreen> createState() =>
+      _SessionDetailsScreenState();
+}
+
+class _SessionDetailsScreenState extends ConsumerState<SessionDetailsScreen> {
+  final _queuedAnimationIds = <String>{};
+
+  void _scheduleAnimationPreload(List<Exercise> exercises) {
+    final pending = exercises
+        .where(
+          (exercise) =>
+              exercise.isLottie && _queuedAnimationIds.add(exercise.exerciseId),
+        )
+        .toList();
+    if (pending.isEmpty) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) unawaited(_preloadAnimations(pending));
+    });
+  }
+
+  Future<void> _preloadAnimations(List<Exercise> exercises) async {
+    try {
+      await preloadExerciseAnimations(context, exercises);
+    } catch (_) {
+      // The visible preview handles a missing or malformed asset.
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(sessionDetailsViewModelProvider(widget.sessionId));
     final viewModel = ref.read(
-      sessionDetailsViewModelProvider(sessionId).notifier,
+      sessionDetailsViewModelProvider(widget.sessionId).notifier,
     );
     final bottomInset = MediaQuery.of(context).padding.bottom;
 
@@ -44,6 +78,7 @@ class SessionDetailsScreen extends ConsumerWidget {
     }
 
     final exercises = state.exercises;
+    _scheduleAnimationPreload(exercises);
 
     return AppScaffold(
       child: SingleChildScrollView(
@@ -143,7 +178,7 @@ class SessionDetailsScreen extends ConsumerWidget {
 
             ElevatedButton(
               onPressed: () {
-                context.push(AppRoutes.sessionExecutionPath(sessionId));
+                context.push(AppRoutes.sessionExecutionPath(widget.sessionId));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,

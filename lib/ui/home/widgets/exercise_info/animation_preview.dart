@@ -7,6 +7,23 @@ import 'package:move_your_body/ui/home/view_models/session_details_view_model.da
 import 'package:move_your_body/utils/theme/app_themes.dart';
 import 'package:video_player/video_player.dart';
 
+String exerciseAnimationAsset(Exercise exercise) =>
+    'assets/animations/${exercise.exerciseId}.json';
+
+Future<void> preloadExerciseAnimations(
+  BuildContext context,
+  Iterable<Exercise> exercises,
+) async {
+  final assets = exercises
+      .where((exercise) => exercise.isLottie)
+      .map(exerciseAnimationAsset)
+      .toSet();
+
+  for (final asset in assets) {
+    await AssetLottie(asset, backgroundLoading: true).load(context: context);
+  }
+}
+
 class AnimationPreview extends ConsumerStatefulWidget {
   final Exercise exercise;
   final double? height;
@@ -110,8 +127,12 @@ class _AnimationPreviewState extends ConsumerState<AnimationPreview> {
   Widget _buildContent() {
     if (widget.exercise.isLottie) {
       return Lottie.asset(
-        'assets/animations/${widget.exercise.exerciseId}.json',
+        exerciseAnimationAsset(widget.exercise),
+        backgroundLoading: true,
         fit: BoxFit.contain,
+        frameBuilder: (_, child, composition) => composition == null
+            ? const Center(child: CircularProgressIndicator())
+            : child,
         errorBuilder: (_, _, _) => _placeholder('Animation not available'),
       );
     }
