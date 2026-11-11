@@ -270,10 +270,12 @@ class _SessionFeedbackScreenState extends ConsumerState<SessionFeedbackScreen>
             child: Lottie.asset(
               'assets/animations/Confetti.json',
               controller: _confettiController,
+              backgroundLoading: true,
+              frameRate: FrameRate.max,
               onLoaded: (composition) {
                 _confettiController
-                  ..duration = composition.duration * 10
-                  ..forward();
+                  ..duration = composition.duration
+                  ..forward(from: 0);
               },
               fit: BoxFit.cover,
               width: MediaQuery.of(context).size.width,
