@@ -18,12 +18,16 @@ void main() {
 
   setUp(Lottie.cache.clear);
 
-  testWidgets('preloads each lottie composition once', (
+  testWidgets('continues preloading after an asset fails', (
     WidgetTester tester,
   ) async {
-    final mockExercise = MockExercise();
-    when(() => mockExercise.exerciseId).thenReturn('Ex15');
-    when(() => mockExercise.isLottie).thenReturn(true);
+    final missingExercise = MockExercise();
+    when(() => missingExercise.exerciseId).thenReturn('missing');
+    when(() => missingExercise.isLottie).thenReturn(true);
+
+    final validExercise = MockExercise();
+    when(() => validExercise.exerciseId).thenReturn('Ex15');
+    when(() => validExercise.isLottie).thenReturn(true);
 
     late BuildContext context;
     await tester.pumpWidget(
@@ -38,7 +42,11 @@ void main() {
     );
 
     await tester.runAsync(
-      () => preloadExerciseAnimations(context, [mockExercise, mockExercise]),
+      () => preloadExerciseAnimations(context, [
+        missingExercise,
+        validExercise,
+        validExercise,
+      ]),
     );
 
     expect(Lottie.cache.count, 1);

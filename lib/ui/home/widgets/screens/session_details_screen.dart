@@ -36,16 +36,10 @@ class _SessionDetailsScreenState extends ConsumerState<SessionDetailsScreen> {
     if (pending.isEmpty) return;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) unawaited(_preloadAnimations(pending));
+      if (mounted) {
+        unawaited(preloadExerciseAnimations(context, pending));
+      }
     });
-  }
-
-  Future<void> _preloadAnimations(List<Exercise> exercises) async {
-    try {
-      await preloadExerciseAnimations(context, exercises);
-    } catch (_) {
-      // The visible preview handles a missing or malformed asset.
-    }
   }
 
   @override

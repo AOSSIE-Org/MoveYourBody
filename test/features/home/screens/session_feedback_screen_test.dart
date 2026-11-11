@@ -61,9 +61,19 @@ void main() {
     expect(provider.backgroundLoading, isTrue);
     expect(animation.frameRate, FrameRate.max);
 
-    animation.onLoaded!(composition);
-
     final controller = animation.controller! as AnimationController;
+    await tester.pump();
+
     expect(controller.duration, composition.duration);
+    expect(controller.value, 0);
+
+    await tester.pump(
+      Duration(milliseconds: composition.duration.inMilliseconds ~/ 2),
+    );
+    expect(controller.value, greaterThan(0));
+    expect(controller.value, lessThan(1));
+
+    await tester.pump(composition.duration);
+    expect(controller.isCompleted, isTrue);
   });
 }

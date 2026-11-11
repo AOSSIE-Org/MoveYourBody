@@ -20,7 +20,11 @@ Future<void> preloadExerciseAnimations(
       .toSet();
 
   for (final asset in assets) {
-    await AssetLottie(asset, backgroundLoading: true).load(context: context);
+    try {
+      await AssetLottie(asset, backgroundLoading: true).load(context: context);
+    } catch (_) {
+      // The visible preview handles a missing or malformed asset.
+    }
   }
 }
 
